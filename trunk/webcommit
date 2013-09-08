@@ -1,0 +1,35 @@
+#!/bin/bash
+
+echo Checking remote system
+
+DIR=`pwd | sed -e 's/.*\///'`
+DRYDOCK=`pwd | grep drydock`
+if [ "$DRYDOCK" == "" ]; then
+  echo COMMITTING LIVE
+else
+  DIR=drydock_$DIR
+fi
+echo $DIR
+ssh $DIR "cd ~/public_html && bzr status" > tmp.out
+cat tmp.out
+VAL=`cat tmp.out`
+rm tmp.out
+if [ -n "$VAL" ]; then
+    read -p "Continue? (y/n)" CONT
+
+    if [ "$CONT" == "y" ]; then
+	echo Continuing
+    else
+    	exit 1
+    fi
+fi
+
+echo Unlocking...
+ssh root@$DIR "/root/unlock `./ssh_config.py $DIR user`"
+
+bzr add
+bzr commit $1 $2 $3 $4 && ssh $DIR "cd ~/public_html && bzr update"
+
+echo Locking...
+ssh root@$DIR "/root/lock `./ssh_config.py $DIR user`"
+
