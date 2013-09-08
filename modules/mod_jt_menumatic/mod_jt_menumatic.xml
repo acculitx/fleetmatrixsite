@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension
+	type="module"
+	version="1.7"
+	client="site"
+	method="upgrade">
+	<name>MenuMatic</name>
+	<author>JTemplate.ru</author>
+	<creationDate>July 2011</creationDate>
+	<copyright>Copyright (C) 2011 Jtemplate.ru. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>jtemplateru@yandex.ru</authorEmail>
+	<authorUrl>www.jtemplate.ru</authorUrl>
+	<version>1.0</version>
+	<description>MenuMatic is a MooTools 1.x class that takes a sematic ordered or unordered list of links and turns it into a dynamic drop down menu system.</description>
+	<files>
+		<filename module="mod_jt_menumatic">mod_jt_menumatic.php</filename>
+		<folder>tmpl</folder>
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>js</folder>
+		<folder>admin</folder>
+		<filename>helper.php</filename>
+		<filename>index.html</filename>
+		<filename>mod_jt_menumatic.xml</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB.mod_jt_menumatic.ini</language>
+		<language tag="en-GB">en-GB.mod_jt_menumatic.sys.ini</language>
+		<language tag="ru-RU">ru-RU.mod_jt_menumatic.ini</language>
+		<language tag="ru-RU">ru-RU.mod_jt_menumatic.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic" addfieldpath="/modules/mod_jt_menumatic/admin/elements">
+			
+				<field type="asset" path="modules/mod_jt_menumatic/admin/" />
+			
+				<field
+					name="menutype"
+					type="menu"
+					label="MOD_MENU_FIELD_MENUTYPE_LABEL"
+					description="MOD_MENU_FIELD_MENUTYPE_DESC" />
+				<field
+					name="jtmenu"
+					type="list"
+					default="1"
+					label="MOD_MENU_FIELD_JTMENU_LABEL"
+					description="MOD_MENU_FIELD_JTMENU_DESC" 
+				>
+					<option value="0">css</option>
+					<option value="1">mootools</option>
+				</field>
+				
+				<field
+					name="mootools"
+					type="list"
+					default="0"
+					label="MOD_MENU_FIELD_MOOTOOLS_LABEL"
+					description="MOD_MENU_FIELD_MOOTOOLS_DESC" 
+				>
+					<option value="0">NOT_LOADED_MOOTOOLS</option>
+					<option value="1">MOOTOOLS_YOUR_SERVER</option>
+					<option value="2">MOOTOOLS_GOGLE_SERVER</option>
+				</field>
+				
+				<field
+					name="stylemenu"
+					type="list"
+					default="0"
+					label="MOD_MENU_FIELD_STYLEMENU_LABEL"
+					description="MOD_MENU_FIELD_STYLEMENU_DESC" 
+				>
+					<option value="0">STYLE_HORIZONTAL</option>
+					<option value="1">STYLE_VERTICAL</option>
+				</field>
+										
+				<field
+					name="opacity"
+					type="text"
+					default="95"
+					label="MOD_MENU_FIELD_OPACITY_LABEL"
+					description="MOD_MENU_FIELD_OPACITY_DESC" />
+							
+				<field
+					name="hidedelay"
+					type="text"
+					default="1000"
+					label="MOD_MENU_FIELD_HIDEDELAY_LABEL"
+					description="MOD_MENU_FIELD_HIDEDELAY_DESC" />
+				<field 
+					name="physics" 
+					type="list" 
+					default="Fx.Transitions.Pow.easeOut"
+					filter="raw" 
+					label="MOD_MENU_FIELD_PHYSICS_LABEL" 
+					description="MOD_MENU_FIELD_PHYSICS_DESC"
+				>
+					<option value="Fx.Transitions.linear">linear</option>
+					<option value="Fx.Transitions.quartOut">QuartOut</option>
+					<option value="Fx.Transitions.Quad.easeIn">Quad.easeIn</option>
+					<option value="Fx.Transitions.Quad.easeOut">Quad.easeOut</option>
+					<option value="Fx.Transitions.Quad.easeInOut">Quad.easeInOut</option>
+					<option value="Fx.Transitions.Cubic.easeIn">Cubic.easeIn</option>
+					<option value="Fx.Transitions.Cubic.easeOut">Cubic.easeOut</option>
+					<option value="Fx.Transitions.Cubic.easeInOut">Cubic.easeInOut</option>
+					<option value="Fx.Transitions.Quart.easeIn">Quart.easeIn</option>
+					<option value="Fx.Transitions.Quart.easeOut">Quart.easeOut</option>
+					<option value="Fx.Transitions.Quart.easeInOut">Quart.easeInOut</option>
+					<option value="Fx.Transitions.Quint.easeIn">Quint.easeIn</option>
+					<option value="Fx.Transitions.Quint.easeOut">Quint.easeOut</option>
+					<option value="Fx.Transitions.Quint.easeInOut">Quint.easeInOut</option>
+					<option value="Fx.Transitions.Pow.easeIn">Pow.easeIn</option>
+					<option value="Fx.Transitions.Pow.easeOut">Pow.easeOut</option>
+					<option value="Fx.Transitions.Pow.easeInOut">Pow.easeInOut</option>
+					<option value="Fx.Transitions.Expo.easeIn">Expo.easeIn</option>
+					<option value="Fx.Transitions.Expo.easeOut">Expo.easeOut</option>
+					<option value="Fx.Transitions.Expo.easeInOut">Expo.easeInOut</option>
+					<option value="Fx.Transitions.Circ.easeIn">Circ.easeIn</option>
+					<option value="Fx.Transitions.Circ.easeOut">Circ.easeOut</option>
+					<option value="Fx.Transitions.Circ.easeInOut">Circ.easeInOut</option>
+					<option value="Fx.Transitions.Sine.easeIn">Sine.easeIn</option>
+					<option value="Fx.Transitions.Sine.easeOut">Sine.easeOut</option>
+					<option value="Fx.Transitions.Sine.easeInOut">Sine.easeInOut</option>
+					<option value="Fx.Transitions.Back.easeIn">Back.easeIn</option>
+					<option value="Fx.Transitions.Back.easeOut">Back.easeOut</option>
+					<option value="Fx.Transitions.Back.easeInOut">Back.easeInOut</option>
+					<option value="Fx.Transitions.Bounce.easeIn">Bounce.easeIn</option>
+					<option value="Fx.Transitions.Bounce.easeOut">Bounce.easeOut</option>
+					<option value="Fx.Transitions.Bounce.easeInOut">Bounce.easeInOut</option>
+					<option value="Fx.Transitions.Elastic.easeIn">Elastic.easeIn</option>
+					<option value="Fx.Transitions.Elastic.easeOut">Elastic.easeOut</option>
+					<option value="Fx.Transitions.Elastic.easeInOut">Elastic.easeInOut</option>			
+					<option value="Fx.Transitions.Pow.easeOut">Fx.Transitions.Pow.easeOut</option>
+					<option value="Fx.Transitions.Pow.easeIn">Fx.Transitions.Pow.easeIn</option>
+        		</field>
+				
+				<field 
+					name="effect" 
+					type="list" 
+					default="slide &amp; fade" 
+					label="MOD_MENU_FIELD_EFFECT_LABEL" 
+					description="MOD_MENU_FIELD_EFFECT_DESC"
+				>
+					<option value="slide &amp; fade">Slide And Fade</option>
+					<option value="slide">Slide</option>
+					<option value="fade">Fade</option>
+        		</field>
+					
+				<field
+					name="duration"
+					type="text"
+					default="600"
+					label="MOD_MENU_FIELD_DURATION_LABEL"
+					description="MOD_MENU_FIELD_DURATION_DESC" />
+					
+					
+								
+				<field
+					name="startLevel"
+					type="list"
+					default="1"
+					label="MOD_MENU_FIELD_STARTLEVEL_LABEL"
+					description="MOD_MENU_FIELD_STARTLEVEL_DESC" 
+				>
+					<option value="1">J1</option>
+					<option value="2">J2</option>
+					<option value="3">J3</option>
+					<option value="4">J4</option>
+					<option value="5">J5</option>
+					<option value="6">J6</option>
+					<option value="7">J7</option>
+					<option value="8">J8</option>
+					<option value="9">J9</option>
+					<option value="10">J10</option>
+				</field>
+
+				<field
+					name="endLevel"
+					type="list"
+					default="0"
+					label="MOD_MENU_FIELD_ENDLEVEL_LABEL"
+					description="MOD_MENU_FIELD_ENDLEVEL_DESC" 
+					>
+					<option value="0">JALL</option>
+					<option value="1">J1</option>
+					<option value="2">J2</option>
+					<option value="3">J3</option>
+					<option value="4">J4</option>
+					<option value="5">J5</option>
+					<option value="6">J6</option>
+					<option value="7">J7</option>
+					<option value="8">J8</option>
+					<option value="9">J9</option>
+					<option value="10">J10</option>
+				</field>
+
+				<field
+					name="showAllChildren"
+					type="radio"
+					default="1"
+					label="MOD_MENU_FIELD_ALLCHILDREN_LABEL"
+					description="MOD_MENU_FIELD_ALLCHILDREN_DESC">
+					<option
+						value="0">JNO</option>
+					<option
+						value="1">JYES</option>
+				</field>
+			</fieldset>
+
+			<fieldset
+				name="advanced" addfieldpath="/modules/mod_jt_menumatic/admin/elements">
+				
+				<field
+					name="class_sfx"
+					type="text"
+					label="MOD_MENU_FIELD_CLASS_LABEL"
+					description="MOD_MENU_FIELD_CLASS_DESC" />
+
+				<field
+					name="window_open"
+					type="text"
+					label="MOD_MENU_FIELD_TARGET_LABEL"
+					description="MOD_MENU_FIELD_TARGET_DESC" />
+
+				<field
+					name="layout"
+					type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+
+				<field
+					name="moduleclass_sfx"
+					type="text"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+
+				<field
+					name="cache"
+					type="list"
+					default="1"
+					label="COM_MODULES_FIELD_CACHING_LABEL"
+					description="COM_MODULES_FIELD_CACHING_DESC">
+					<option
+						value="1">JGLOBAL_USE_GLOBAL</option>
+					<option
+						value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+				<field
+					name="cache_time"
+					type="text"
+					default="900"
+					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+				<field
+					name="cachemode"
+					type="hidden"
+					default="itemid">
+					<option
+						value="itemid"></option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

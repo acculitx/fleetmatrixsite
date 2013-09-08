@@ -1,0 +1,20 @@
+#!/bin/bash
+
+DIR=`pwd | sed -e 's/.*\///'`
+DRYDOCK=`pwd | grep drydock`
+if [ "$DRYDOCK" == "" ]; then
+  echo UPDATING LIVE
+else
+  DIR=drydock_$DIR
+fi
+
+echo $DIR
+
+echo Unlocking...
+ssh root@$DIR "/root/unlock `./ssh_config.py $DIR user`"
+
+ssh -t $DIR "cd ~/public_html && bzr update && bzr add; bzr commit"; bzr update
+
+echo Locking...
+ssh root@$DIR "/root/lock `./ssh_config.py $DIR user`"
+

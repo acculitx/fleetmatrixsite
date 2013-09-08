@@ -1,0 +1,13 @@
+#!/bin/bash
+
+DIR=`whoami`
+cd ~/public_html
+bzr status > /tmp/$DIR.out
+VAL=`cat /tmp/$DIR.out`
+rm /tmp/$DIR.out
+if [ -n "$VAL" ]; then
+#    bzr up
+    bzr add
+    bzr commit -m "automatic file update notice" 2>&1 | mail bpollifrone@caltechsol.com cconant@krisland.com tdickson@caltechsol.com kland@krisland.com -s "$DIR change"
+fi
+

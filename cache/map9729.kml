@@ -1,0 +1,124 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Style id="trackStyle0">
+   <LineStyle>
+       <color>FF000000</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+ <Style id="trackStyle1">
+   <LineStyle>
+       <color>FF14B400</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="trackStyle2">
+   <LineStyle>
+       <color>FF1400D2</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="trackStyle3">
+   <LineStyle>
+       <color>FF14E7FF</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="trackStyle4">
+   <LineStyle>
+       <color>FFF00014</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="trackStyle5">
+   <LineStyle>
+       <color>FF146AFF</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="trackStyle6">
+   <LineStyle>
+       <color>FF781414</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="trackStyle7">
+   <LineStyle>
+       <color>FF7800F0</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="trackStyle8">
+   <LineStyle>
+       <color>FFF0FF14</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="trackStyle9">
+   <LineStyle>
+       <color>FFFF78F0</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="startStyle">
+    <IconStyle>
+        <Icon>
+            <href>http://www.google.com/intl/en_us/mapfiles/ms/icons/green-dot.png</href>
+        </Icon>
+        <BalloonStyle>
+            <text>&lt;b&gt;$[name]&lt;/b&gt;&lt;br&gt;$[description]</text>
+        </BalloonStyle>
+    </IconStyle>
+</Style>
+<Style id="endStyle">
+    <IconStyle>
+        <Icon>
+            <href>http://www.google.com/intl/en_us/mapfiles/ms/icons/red-dot.png</href>
+        </Icon>
+        <BalloonStyle>
+            <text>&lt;b&gt;$[name]&lt;/b&gt;&lt;br&gt;$[description]</text>
+        </BalloonStyle>
+    </IconStyle>
+</Style><Placemark>
+    <styleUrl>#trackStyle0</styleUrl>
+    <name>Trip #9729</name>
+    <description></description>
+    <LineString>
+        <coordinates>
+-117.078815000,32.910778333
+-117.073693333,32.913133333
+-117.070038333,32.917221667
+-117.067800000,32.922521667
+-117.059551667,32.922711667
+-117.056383333,32.928935000
+-117.060086667,32.934933333
+-117.063668333,32.940658333
+-117.062511667,32.949768333
+-117.062510000,32.951620000
+-117.069123333,32.950348333
+-117.082218333,32.945681667
+-117.089336667,32.946365000
+-117.097441667,32.951778333
+-117.098500000,32.955536667
+-117.097675000,32.958465000
+        </coordinates>
+    </LineString>
+</Placemark><Placemark>
+    <styleUrl>#startStyle</styleUrl>
+    <name>Start of Trip #9729</name>
+    <description>2013-06-12 06:53:59</description>
+    <Point>
+        <coordinates>
+-117.078815000,32.910778333
+        </coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <styleUrl>#endStyle</styleUrl>
+    <name>End of Trip #9729</name>
+    <description>2013-06-12 07:09:08</description>
+    <Point>
+        <coordinates>
+-117.097675000,32.958465000
+        </coordinates>
+    </Point>
+</Placemark></kml>

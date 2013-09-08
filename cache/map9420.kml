@@ -1,0 +1,326 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Style id="trackStyle0">
+   <LineStyle>
+       <color>FF000000</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+ <Style id="trackStyle1">
+   <LineStyle>
+       <color>FF14B400</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="trackStyle2">
+   <LineStyle>
+       <color>FF1400D2</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="trackStyle3">
+   <LineStyle>
+       <color>FF14E7FF</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="trackStyle4">
+   <LineStyle>
+       <color>FFF00014</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="trackStyle5">
+   <LineStyle>
+       <color>FF146AFF</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="trackStyle6">
+   <LineStyle>
+       <color>FF781414</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="trackStyle7">
+   <LineStyle>
+       <color>FF7800F0</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="trackStyle8">
+   <LineStyle>
+       <color>FFF0FF14</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="trackStyle9">
+   <LineStyle>
+       <color>FFFF78F0</color>
+       <width>3</width>
+   </LineStyle>
+</Style>
+<Style id="startStyle">
+    <IconStyle>
+        <Icon>
+            <href>http://www.google.com/intl/en_us/mapfiles/ms/icons/green-dot.png</href>
+        </Icon>
+        <BalloonStyle>
+            <text>&lt;b&gt;$[name]&lt;/b&gt;&lt;br&gt;$[description]</text>
+        </BalloonStyle>
+    </IconStyle>
+</Style>
+<Style id="endStyle">
+    <IconStyle>
+        <Icon>
+            <href>http://www.google.com/intl/en_us/mapfiles/ms/icons/red-dot.png</href>
+        </Icon>
+        <BalloonStyle>
+            <text>&lt;b&gt;$[name]&lt;/b&gt;&lt;br&gt;$[description]</text>
+        </BalloonStyle>
+    </IconStyle>
+</Style><Placemark>
+    <styleUrl>#trackStyle0</styleUrl>
+    <name>Trip #9416</name>
+    <description></description>
+    <LineString>
+        <coordinates>
+-117.079943333,32.912400000
+-117.081521667,32.914966667
+-117.087931667,32.913385000
+-117.098011667,32.911503333
+-117.109716667,32.911713333
+        </coordinates>
+    </LineString>
+</Placemark><Placemark>
+    <styleUrl>#startStyle</styleUrl>
+    <name>Start of Trip #9416</name>
+    <description>2013-05-30 15:58:03</description>
+    <Point>
+        <coordinates>
+-117.079943333,32.912400000
+        </coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <styleUrl>#endStyle</styleUrl>
+    <name>End of Trip #9416</name>
+    <description>2013-05-30 16:03:10</description>
+    <Point>
+        <coordinates>
+-117.109716667,32.911713333
+        </coordinates>
+    </Point>
+</Placemark><Placemark>
+    <styleUrl>#trackStyle1</styleUrl>
+    <name>Trip #9417</name>
+    <description></description>
+    <LineString>
+        <coordinates>
+-117.109731667,32.911706667
+        </coordinates>
+    </LineString>
+</Placemark><Placemark>
+    <styleUrl>#startStyle</styleUrl>
+    <name>Start of Trip #9417</name>
+    <description>2013-05-30 16:03:26</description>
+    <Point>
+        <coordinates>
+-117.109731667,32.911706667
+        </coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <styleUrl>#endStyle</styleUrl>
+    <name>End of Trip #9417</name>
+    <description>2013-05-30 16:04:05</description>
+    <Point>
+        <coordinates>
+-117.109731667,32.911706667
+        </coordinates>
+    </Point>
+</Placemark><Placemark>
+    <styleUrl>#trackStyle2</styleUrl>
+    <name>Trip #9418</name>
+    <description></description>
+    <LineString>
+        <coordinates>
+-117.111666667,32.911456667
+        </coordinates>
+    </LineString>
+</Placemark><Placemark>
+    <styleUrl>#startStyle</styleUrl>
+    <name>Start of Trip #9418</name>
+    <description>2013-05-30 16:04:25</description>
+    <Point>
+        <coordinates>
+-117.111666667,32.911456667
+        </coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <styleUrl>#endStyle</styleUrl>
+    <name>End of Trip #9418</name>
+    <description>2013-05-30 16:04:37</description>
+    <Point>
+        <coordinates>
+-117.111666667,32.911456667
+        </coordinates>
+    </Point>
+</Placemark><Placemark>
+    <styleUrl>#trackStyle3</styleUrl>
+    <name>Trip #9419</name>
+    <description></description>
+    <LineString>
+        <coordinates>
+-117.111798333,32.911631667
+-117.111715000,32.910925000
+-117.109516667,32.911628333
+-117.099158333,32.911525000
+-117.088776667,32.912321667
+-117.083621667,32.913915000
+-117.079000000,32.915323333
+-117.079938333,32.910645000
+        </coordinates>
+    </LineString>
+</Placemark><Placemark>
+    <styleUrl>#startStyle</styleUrl>
+    <name>Start of Trip #9419</name>
+    <description>2013-05-30 16:04:54</description>
+    <Point>
+        <coordinates>
+-117.111798333,32.911631667
+        </coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <styleUrl>#endStyle</styleUrl>
+    <name>End of Trip #9419</name>
+    <description>2013-05-30 16:12:23</description>
+    <Point>
+        <coordinates>
+-117.079938333,32.910645000
+        </coordinates>
+    </Point>
+</Placemark><Placemark>
+    <styleUrl>#trackStyle4</styleUrl>
+    <name>Trip #9420</name>
+    <description></description>
+    <LineString>
+        <coordinates>
+-117.079988333,32.912256667
+-117.081186667,32.915010000
+-117.087511667,32.913125000
+-117.095018333,32.911246667
+-117.106760000,32.911710000
+-117.110273333,32.911568333
+        </coordinates>
+    </LineString>
+</Placemark><Placemark>
+    <styleUrl>#startStyle</styleUrl>
+    <name>Start of Trip #9420</name>
+    <description>2013-05-30 16:52:52</description>
+    <Point>
+        <coordinates>
+-117.079988333,32.912256667
+        </coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <styleUrl>#endStyle</styleUrl>
+    <name>End of Trip #9420</name>
+    <description>2013-05-30 16:59:31</description>
+    <Point>
+        <coordinates>
+-117.110273333,32.911568333
+        </coordinates>
+    </Point>
+</Placemark><Placemark>
+    <styleUrl>#trackStyle5</styleUrl>
+    <name>Trip #9421</name>
+    <description></description>
+    <LineString>
+        <coordinates>
+-117.109158333,32.911723333
+-117.099745000,32.911636667
+-117.090805000,32.912003333
+-117.084933333,32.913856667
+-117.080346667,32.915523333
+-117.080166667,32.911936667
+        </coordinates>
+    </LineString>
+</Placemark><Placemark>
+    <styleUrl>#startStyle</styleUrl>
+    <name>Start of Trip #9421</name>
+    <description>2013-05-30 17:04:17</description>
+    <Point>
+        <coordinates>
+-117.109158333,32.911723333
+        </coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <styleUrl>#endStyle</styleUrl>
+    <name>End of Trip #9421</name>
+    <description>2013-05-30 17:11:18</description>
+    <Point>
+        <coordinates>
+-117.080166667,32.911936667
+        </coordinates>
+    </Point>
+</Placemark><Placemark>
+    <styleUrl>#trackStyle6</styleUrl>
+    <name>Trip #9422</name>
+    <description></description>
+    <LineString>
+        <coordinates>
+-117.083021667,32.909153333
+        </coordinates>
+    </LineString>
+</Placemark><Placemark>
+    <styleUrl>#startStyle</styleUrl>
+    <name>Start of Trip #9422</name>
+    <description>2013-05-31 06:27:17</description>
+    <Point>
+        <coordinates>
+-117.083021667,32.909153333
+        </coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <styleUrl>#endStyle</styleUrl>
+    <name>End of Trip #9422</name>
+    <description>2013-05-31 06:29:08</description>
+    <Point>
+        <coordinates>
+-117.083021667,32.909153333
+        </coordinates>
+    </Point>
+</Placemark><Placemark>
+    <styleUrl>#trackStyle7</styleUrl>
+    <name>Trip #9423</name>
+    <description></description>
+    <LineString>
+        <coordinates>
+-117.082873333,32.909431667
+        </coordinates>
+    </LineString>
+</Placemark><Placemark>
+    <styleUrl>#startStyle</styleUrl>
+    <name>Start of Trip #9423</name>
+    <description>2013-05-31 06:36:08</description>
+    <Point>
+        <coordinates>
+-117.082873333,32.909431667
+        </coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <styleUrl>#endStyle</styleUrl>
+    <name>End of Trip #9423</name>
+    <description>2013-05-31 06:38:06</description>
+    <Point>
+        <coordinates>
+-117.082873333,32.909431667
+        </coordinates>
+    </Point>
+</Placemark></kml>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form name="user">
+	<fieldset name="user">
+
+        <field name="username"
+               type="text"
+               label="Username"
+               description="The login username of the user"
+               maxlength="255"
+               required="true"
+               size="50" ></field>
+
+        <field name="password"
+               type="password"
+               label="Password"
+               description="The login password of the user"
+               maxlength="255"
+               required="false"
+               size="50" ></field>
+
+        <field name="confirmpassword"
+               type="password"
+               label="Confirm Password"
+               description="Confirm the login password of the user"
+               class="validate-confirmpassword"
+               maxlength="255"
+               required="false"
+               size="50" ></field>
+
+        <field name="name"
+                type="text"
+                label="Name"
+                description="The full name of the user"
+                maxlength="255"
+        	    required="true"
+                size="50" ></field>
+
+        <field name="phone"
+                type="Tel"
+                label="Phone"
+                description="The phone number of the user"
+                maxlength="255"
+                size="50" ></field>
+
+        <field name="fax"
+                type="Tel"
+                label="Fax"
+                description="The fax number of the user"
+                maxlength="255"
+                size="50" ></field>
+
+        <field name="email"
+                type="Email"
+                label="Email"
+                description="The email address for the user"
+                maxlength="255"
+        	    required="true"
+                size="50" ></field>
+
+        <field name="entity_type"
+               label="Entity Type"
+               type="entitytype"
+               ></field>
+
+        <field name="entity_id"
+               type="sql"
+               label="Entity"
+               required="true"
+               description="The entity to assign the user to"
+               query="select id, name from #__fleet_entity"
+               key_field="id"
+               value_field="name" >
+            <option value="0">Select an Entity</option>
+        </field>
+
+	</fieldset>
+</form>
