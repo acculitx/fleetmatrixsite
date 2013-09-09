@@ -10,7 +10,7 @@ class FleetMatrixModelManageDevicesEdit extends FleetMatrixModelBaseEdit
     protected $table_name = '#__fleet_subscription';
 
     private function calcSubId($company, $last=0) {
-		$db		= $this->getDbo();
+		/*$db		= $this->getDbo();
         $query	= $db->getQuery(true);
         $query->clear();
 
@@ -37,7 +37,18 @@ class FleetMatrixModelManageDevicesEdit extends FleetMatrixModelBaseEdit
         $sub_id = sprintf("%05d", $last);
 
         $ret = sprintf('%s-%s', $parent_id, $sub_id);
-        return $ret;
+        return $ret;*/
+    	$db = $this->getDbo();
+    	$query  = $db->getQuery(true);
+    	$query->clear();
+    	
+    	$parent_id = 100;
+    	$query->select('COUNT(*)')->from('#__fleet_subscription');
+    	$db->setQuery((string)$query);
+    	$sub_id = sprintf("%05d", $db->loadResult()+1);
+    	
+    	$ret = sprintf('%s-%s', $parent_id, $sub_id);
+    	return $ret;
     }
 
     protected function removeDevice($data, $cmd=NULL) {
