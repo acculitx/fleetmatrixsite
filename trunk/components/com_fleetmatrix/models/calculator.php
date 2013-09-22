@@ -234,13 +234,14 @@ class ScoreCalculator
         }
 
         $query = $db->getQuery(true)
-            ->select(sprintf("sum(%s)/count(%s)",$avtype,$avtype))
+            ->select(sprintf("sum(IF(%s > 10, 10, %s))/count(%s)",$avtype,$avtype,$avtype))
             ->from($table)
             ;
         if (property_exists($item, 'driver_id')) {
-            $query = $query->leftJoin('#__fleet_trip_driver as d on b.driver_id = d.driver_id')
+            /*$query = $query->leftJoin('#__fleet_trip_driver as d on b.driver_id = d.driver_id')
                 ->where('d.driver_id='.$item->driver_id)
-                ;
+                ;*/
+        	$query = $query->where('b.driver_id='.$item->driver_id);
         } else {
             $query = $query->leftJoin('#__fleet_trip_subscription as e on e.subscription_id = b.subscription_id')
                 ->leftJoin('#__fleet_subscription as a on e.subscription_id = a.id')
@@ -286,9 +287,10 @@ class ScoreCalculator
             ->from($table)
             ;
         if (property_exists($item, 'driver_id')) {
-            $query = $query->leftJoin('#__fleet_trip_driver as d on b.driver_id = d.driver_id')
+            /*$query = $query->leftJoin('#__fleet_trip_driver as d on b.driver_id = d.driver_id')
                 ->where('d.driver_id='.$item->driver_id)
-                ;
+                ;*/
+        	$query = $query->where('b.driver_id='.$item->driver_id);
         } else {
             $query = $query->leftJoin('#__fleet_trip_subscription as e on e.subscription_id = b.subscription_id')
                 ->leftJoin('#__fleet_subscription as a on e.subscription_id = a.id')
