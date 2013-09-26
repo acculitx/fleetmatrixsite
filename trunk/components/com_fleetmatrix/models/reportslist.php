@@ -576,8 +576,10 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                     if (!array_key_exists($val->date, $dates)) {
                         $dates[$val->date] = $val;
                     } else {
-                        $dates[$val->date]->value += $val->value;
-                        $dates[$val->date]->value /= 2;
+                    	if($val->value != 0) {
+                        	$dates[$val->date]->value += $val->value;
+                        	$dates[$val->date]->value /= 2;
+                    	}
                     }
                 }
                 $a->scores[$field] = $dates;
