@@ -545,7 +545,12 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             if (!property_exists($items[0], $field)) {
                 continue;
             }
+            
+            $total_items = count($items);
+            
+            $i=0;
             foreach($items as $item) {
+            	$i++;
                 if ($g) {
                     $k = $item->$g;
                 } else if ($nn) {
@@ -575,12 +580,16 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                 foreach($item->$field as $val) {
                     if (!array_key_exists($val->date, $dates)) {
                         $dates[$val->date] = $val;
+                        $dates[$val->date]->total_trip = 0;
                     } else {
-                    	if($field == 'accel_score' && $val->value != 0) {
-                        	$dates[$val->date]->value += $val->value;
-                        	$dates[$val->date]->value /= 2;
-                    	}
+                    	$dates[$val->date]->value += $val->value;
                     }
+                    if($val->value != 0) 
+                    	$dates[$val->date]->total_trip += 1;
+                    if($i == $total_items && $dates[$val->date]->total_trip !=0 )
+                    	$dates[$val->date]->value = $dates[$val->date]->value/$dates[$val->date]->total_trip;
+                    //if($i == $total_items)
+                    	//$dates[$val->date]->value = $dates[$val->date]->value/$total_items;
                 }
                 $a->scores[$field] = $dates;
                 $new_items[$k] = $a;
