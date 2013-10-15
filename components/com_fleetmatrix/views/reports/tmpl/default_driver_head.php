@@ -12,13 +12,13 @@ include(JPATH_COMPONENT . DS . 'models' . DS . 'driver_search_controls.php');
 	<td colspan="3" style="text-align: center; color: red;">Red Flags</td>
 </tr>
 <tr>
-	<th style="font-size: 10px;">
+	<th style="font-size: 10px; font-family: inherit; font-weight: bold;">
         <?php echo JText::_('Brake'); ?>
     </th>
-	<th style="font-size: 10px;">
+	<th style="font-size: 10px; font-family: inherit; font-weight: bold;">
         <?php echo JText::_('Accel'); ?>
     </th>
-	<th style="font-size: 10px;">
+	<th style="font-size: 10px; font-family: inherit; font-weight: bold;">
         <?php echo JText::_('Turns'); ?>
     </th>
     <th>
