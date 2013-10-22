@@ -92,8 +92,9 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                         "DATE_SUB(h.end_date, INTERVAL 8 HOUR) as trip_end, ".
                         "h.odo_end - h.odo_start as miles, ".
                         "f.name as assigned_driver,".
-                        "d.driver_id, h.id as trip_id, fr.hard_turns_count, fr.hard_turns_scoretype, fr.accel_count, fr.accel_scoretype, fr.decel_count, fr.decel_scoretype"
-                        ;
+                        "d.driver_id, h.id as trip_id, fr.hard_turns_count, fr.hard_turns_scoretype, fr.accel_count, fr.accel_scoretype, fr.decel_count, fr.decel_scoretype, ".
+                        "idle.idle_time"
+                		;
                 $query = $query->select($clause)
                     ->from('fleet_trip as h')
                     ->leftJoin('#__fleet_trip_subscription as e on e.trip_id = h.id')
@@ -104,6 +105,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                     ->leftJoin('#__fleet_driver as f on d.driver_id = f.id')
                     ->leftJoin('#__fleet_entity as a on f.entity_id = a.id')
                     ->leftJoin('fleet_redflag_report fr ON h.id = fr.tripid')
+                    ->leftJoin('fleet_idletime as idle ON h.id = idle.trip_id')
                     ->group('h.id')
                     #->where('c.visible')
                     ->where('f.visible')

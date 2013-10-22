@@ -39,4 +39,7 @@ include(JPATH_COMPONENT . DS . 'models' . DS . 'driver_search_controls.php');
     <th>
         <?php echo JText::_('Assigned Driver'); ?>
     </th>
+    <th>
+        <?php echo JText::_('Idle Time'); ?>
+    </th>
 </tr>
