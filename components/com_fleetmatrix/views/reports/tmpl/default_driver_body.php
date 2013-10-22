@@ -58,6 +58,9 @@ defined('_JEXEC') or die('Restricted Access');
         <td>
             <?php echo $item->assigned_driver; ?>
         </td>
+        <td>
+            <?php echo $item->idle_time; ?>
+        </td>
 	</tr>
 <?php endforeach; ?>
 
