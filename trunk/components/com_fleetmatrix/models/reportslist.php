@@ -141,6 +141,26 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                     ->where('UNIX_TIMESTAMP(h.end_date)-UNIX_TIMESTAMP(h.start_date)>60')
                     ;
                 break;
+            case 'idletime':
+            	$clause = "distinct b.name as driver_name, ".
+            			"SUM(idle.idle_time) as idle_time,".
+            			"COUNT(h.subscriber_id) as trip_count, ".
+            			"SUM(h.odo_end - h.odo_start) as miles "
+            			;
+            	$query = $query->select($clause)
+            			->from('fleet_trip as h')
+            			->leftJoin('#__fleet_trip_subscription as e on e.trip_id = h.id')
+            			->join('left outer', '#__fleet_subscription as s on e.subscription_id = s.id')
+            			->leftJoin('#__fleet_trip_driver as d on h.id = d.trip_id')
+            			->leftJoin('#__fleet_driver as b on d.driver_id = b.id')
+            			->leftJoin('#__fleet_entity as a on b.entity_id = a.id')
+            			->leftJoin('fleet_idletime as idle ON h.id = idle.trip_id')
+            			->group('b.id')
+            			#->where('c.visible')
+            			->where('b.visible')
+            			->where('UNIX_TIMESTAMP(h.end_date)-UNIX_TIMESTAMP(h.start_date)>60')
+            		;
+            	break;
             default:
                 $query = $query->select('1=0');
                 return $query;
@@ -197,6 +217,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
         }
         $vehicle = JRequest::getInt('vehicle', 0);
         $driver = JRequest::getInt('driver', 0);
+        $idletime = JRequest::getInt('idletime', 0);
 
         switch ($cmd) {
             case 'vehicle':
