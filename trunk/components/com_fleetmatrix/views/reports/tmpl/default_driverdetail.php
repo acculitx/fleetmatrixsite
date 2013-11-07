@@ -1,4 +1,8 @@
 <?php
+ $document = JFactory::getDocument();
+ $document->addScript('sorttable.js');
+?>
+<?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
 
@@ -12,7 +16,7 @@ JHtml::_('behavior.tooltip');
 
 <form action="<?php echo JRoute::_($this->getRoute()); ?>" method="post" name="adminForm">
 
-	<table class="adminlist">
+	<table class="adminlist sortable">
 		<thead><?php echo $this->loadTemplate('driverdetail_head');?></thead>
 		<tfoot><?php echo $this->loadTemplate('driverdetail_foot');?></tfoot>
 		<tbody><?php echo $this->loadTemplate('driverdetail_body');?></tbody>

@@ -22,7 +22,6 @@ class FleetMatrixViewReports extends FleetMatrixBaseView
         $this->group = JRequest::getInt('group', 0);
         $this->vehicle = JRequest::getInt('vehicle', 0);
         $this->driver = JRequest::getInt('driver', 0);
-
         return parent::display($tpl);
 	}
 

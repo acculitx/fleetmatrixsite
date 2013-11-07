@@ -1,4 +1,8 @@
 <?php
+ $document = JFactory::getDocument();
+ $document->addScript('sorttable.js');
+?>
+<?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
 
@@ -8,10 +12,12 @@ include(JPATH_COMPONENT . DS . 'models' . DS . 'driver_search_controls.php');
 <script src="/colorbox/colorbox/jquery.colorbox-min.js"></script>
 
 <link rel="stylesheet" href="/colorbox/example1/colorbox.css" />
-<tr style="background: #f7f7f7; border: none;">
-	<td colspan="3" style="text-align: center; color: red;">Red Flags</td>
-</tr>
-<tr>
+
+<br><br> 
+
+<p><font color="red"> Red Flags </font></p>
+
+<tr class = "sortable">
 	<th style="font-size: 10px; font-family: inherit; font-weight: bold;">
         <?php echo JText::_('Brake'); ?>
     </th>
