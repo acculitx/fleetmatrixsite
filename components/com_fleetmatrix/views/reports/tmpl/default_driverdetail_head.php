@@ -7,7 +7,7 @@ include(JPATH_COMPONENT . DS . 'models' . DS . 'search_controls.php');
 
 ?>
 
-<tr>
+<tr class = "sortable">
     <th>
         <?php echo JText::_('Driver Name'); ?>
     </th>

@@ -1,10 +1,14 @@
 <?php
+ $document = JFactory::getDocument();
+ $document->addScript('sorttable.js');
+?>
+<?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
 
 include(JPATH_COMPONENT . DS . 'models' . DS . 'search_controls.php');
 ?>
-<tr>
+<tr class = "sortable">
 	<th width="80">
         <?php echo JText::_('Vehicle Name'); ?>
     </th>

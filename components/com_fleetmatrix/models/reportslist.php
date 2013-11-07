@@ -37,6 +37,11 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
     var $model_key = 'Reports';
 
     public function __construct() {
+//     	$config['filter_fields'] = array(
+//     			'Driver Name', 'driver_name',
+//     			'Idle Time (minutes)', 'idle_time',
+//     			'Miles Driven', 'miles'
+//     	);
         parent::__construct();
         //$this->averages = array();
         $this->calculator = new ScoreCalculator();
@@ -159,6 +164,8 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             			#->where('c.visible')
             			->where('b.visible')
             			->where('UNIX_TIMESTAMP(h.end_date)-UNIX_TIMESTAMP(h.start_date)>60')
+//             			->order($db->escape($this->getState('list.ordering', 'driver_name')).' '.
+//             					$db->escape($this->getState('list.direction', 'DESC')))
             		;
             	break;
             default:
