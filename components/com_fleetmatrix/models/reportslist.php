@@ -93,8 +93,8 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                 break;
             case 'driver':
                 $clause = "distinct s.name as vehicle_name, ".
-                        "DATE_SUB(h.start_date, INTERVAL 8 HOUR) as trip_start, ".
-                        "DATE_SUB(h.end_date, INTERVAL 8 HOUR) as trip_end, ".
+                        "DATE_ADD(h.start_date, INTERVAL h.time_zone HOUR) as trip_start, ".
+                        "DATE_ADD(h.end_date, INTERVAL h.time_zone HOUR) as trip_end, ".
                         "h.odo_end - h.odo_start as miles, ".
                         "f.name as assigned_driver,".
                         "d.driver_id, h.id as trip_id, fr.hard_turns_count, fr.hard_turns_scoretype, fr.accel_count, fr.accel_scoretype, fr.decel_count, fr.decel_scoretype, ".
