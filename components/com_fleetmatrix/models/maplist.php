@@ -18,7 +18,7 @@ class FleetMatrixModelMapList extends FleetMatrixModelBaseList
 
         // find the subscriber id and date
         $query = $db->getQuery(true)
-            ->select('subscription_id, DATE(end_date) as end_date')
+            ->select('subscription_id, DATE_ADD(end_date, INTERVAL a.time_zone HOUR) as end_date')
             ->from('fleet_trip as a')
             ->leftJoin('#__fleet_trip_subscription as b on a.id = b.trip_id')
             ->where('a.id='.$id)
@@ -37,7 +37,7 @@ class FleetMatrixModelMapList extends FleetMatrixModelBaseList
             ->from('fleet_trip as a')
             ->leftJoin('#__fleet_trip_subscription as b on a.id = b.trip_id')
             ->where('subscription_id='.$row->subscription_id)
-            ->where('DATE(end_date)="'.$date.'"')
+            ->where('DATE_ADD(end_date, INTERVAL a.time_zone HOUR)="'.$date.'"')
             ;
         //var_dump((string)$query);
         $db->setQuery($query);
