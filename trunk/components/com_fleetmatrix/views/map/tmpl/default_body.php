@@ -164,7 +164,7 @@ foreach ($this->items as $trip => $item) {
     $kml .= $endpoints;
 
     $query = $db->getQuery(true)
-        ->select('id, DATE_SUB(start_date, INTERVAL 8 HOUR) as start_date, DATE_SUB(end_date, INTERVAL 8 HOUR) as end_date')
+        ->select('id, DATE_ADD(start_date, INTERVAL a.time_zone HOUR) as start_date, DATE_ADD(end_date, INTERVAL a.time_zone HOUR) as end_date')
         ->from('fleet_trip as a')
         ->where('a.id='.$trip)
         ;
