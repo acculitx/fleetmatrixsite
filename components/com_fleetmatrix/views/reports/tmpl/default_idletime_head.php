@@ -14,16 +14,16 @@ include(JPATH_COMPONENT . DS . 'models' . DS . 'search_controls.php');
 ?>
 
 <tr class="sortable">
-    <th>
+    <th title="Click to sort by this column">
 		<?php echo JText::_('Driver Name'); ?>
 	</th>
-    <th>
+    <th title="Click to sort by this column">
 		<?php echo JText::_('Idle Time (minutes)'); ?>
 	</th>
-    <th>
+    <th title="Click to sort by this column">
 		<?php echo JText::_('Miles Driven'); ?>
 	</th>
-	<th>
+	<th title="Click to sort by this column">
 		<?php echo JText::_('Number of trips'); ?>
 	</th>
 </tr>
