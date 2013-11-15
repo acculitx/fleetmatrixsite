@@ -25,7 +25,7 @@ class JFormFieldSelectCompany extends JFormFieldList {
         $options = array();
 
         $options[] = JHtml::_('select.option', 0, 'Select a Company');
-
+        
         $db = JFactory::getDBO();
         $query = $db->getQuery(true)
             ->select('id, name')
@@ -36,10 +36,14 @@ class JFormFieldSelectCompany extends JFormFieldList {
                 "id in (".implode(',', $GLOBALS['user_companies']).")"
             );
         }
+        
         $db->setQuery((string)$query);
         $companies = $db->loadObjectList();
         if ($companies)
         {
+        	if (sizeof($companies) == 1) {
+                $options = array();
+            }
                 foreach($companies as $company)
                 {
                         $options[] = JHtml::_('select.option', $company->id, $company->name);

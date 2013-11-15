@@ -11,7 +11,7 @@
 <select name="company" id="company">
 <?php
     require_once(JPATH_COMPONENT . DS . 'models' . DS . 'fields' . DS . 'searchcompany.php');
-
+    
     $ctrl = new JFormFieldSearchCompany();
     foreach ($ctrl->getCompanies() as $option) {
         $selected = '';
@@ -42,17 +42,26 @@
 <script>
     function groupChange() {
         var val = jQuery('#group').val();
-        if (val != "0" && val != undefined) {
-            url = "<?php echo JRoute::_($this->getRoute().'&layout=json&format=raw&task=company&val='); ?>"+val;
-            jQuery.getJSON(url, function(data) {
-                jQuery('#company').html(data);
-            });
-        }
+       
+//         if (val != "0" && val != undefined) {
+//            url = "
+  <?php// echo JRoute::_($this->getRoute().'&layout=json&format=raw&task=group&val='); ?>"+val;
+//             jQuery.getJSON(url, function(data) {
+//             	alert(data);
+//                 jQuery('#group').html(data);
+//                 if (data!='<option value="0">Select a Group</option>') {
+//                     jQuery('#group').show();
+//                 } else {
+//                     jQuery('#group').hide();
+//                 }
+//             });
+//         }
         if (jQuery('#vehicle').length) {
             var cval = jQuery('#vehicle').val();
             url = "<?php echo JRoute::_($this->getRoute().'&layout=json&format=raw&task=vehicle&val='); ?>"+val+"&cval="+cval;
             jQuery.getJSON(url, function(data) {
                 jQuery('#vehicle').html(data);
+                
                 if (data!='<option value="0">Select Company and Group</option>') {
                     jQuery('#vehicle').show();
                 } else {
@@ -65,6 +74,7 @@
             url = "<?php echo JRoute::_($this->getRoute().'&layout=json&format=raw&task=driver&val='); ?>"+val+"&cval="+cval;
             jQuery.getJSON(url, function(data) {
                 jQuery('#driver').html(data);
+                
                 if (data!='<option value="0">Select Company and Group</option>') {
                     jQuery('#driver').show();
                 } else {
