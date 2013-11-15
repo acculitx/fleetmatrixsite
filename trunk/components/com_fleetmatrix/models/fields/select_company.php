@@ -18,6 +18,7 @@ class JFormFieldSelectCompany extends JFormFieldList {
 
 	public function getInput() {
 		// code that returns HTML that will be shown as the form field
+		
         return parent::getInput();
 	}
 
@@ -40,6 +41,7 @@ class JFormFieldSelectCompany extends JFormFieldList {
             ->where('h.entity_type_id=3');
         $db->setQuery((string)$query);
         $companies = $db->loadObjectList();
+       	
         if ($companies)
         {
                 foreach($companies as $company)
