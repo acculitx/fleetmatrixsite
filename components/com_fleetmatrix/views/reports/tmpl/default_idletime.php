@@ -1,6 +1,7 @@
 <?php
  $document = JFactory::getDocument();
  $document->addScript('sorttable.js');
+ 
 ?>
 
 
