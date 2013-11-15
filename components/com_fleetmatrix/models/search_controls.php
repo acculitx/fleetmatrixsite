@@ -44,8 +44,7 @@
         var val = jQuery('#group').val();
        
 //         if (val != "0" && val != undefined) {
-//            url = "
-  <?php// echo JRoute::_($this->getRoute().'&layout=json&format=raw&task=group&val='); ?>"+val;
+//            url = 
 //             jQuery.getJSON(url, function(data) {
 //             	alert(data);
 //                 jQuery('#group').html(data);
