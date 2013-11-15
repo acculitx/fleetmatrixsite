@@ -1,6 +1,7 @@
 <?php
  $document = JFactory::getDocument();
  $document->addScript('sorttable.js');
+ 
 ?>
 
 
@@ -13,7 +14,7 @@ include(JPATH_COMPONENT . DS . 'models' . DS . 'search_controls.php');
  
 ?>
 
-<tr class="sortable">
+<tr>
     <th title="Click to sort by this column">
 		<?php echo JText::_('Driver Name'); ?>
 	</th>
