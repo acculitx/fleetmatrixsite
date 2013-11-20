@@ -9,9 +9,7 @@ defined('_JEXEC') or die('Restricted Access');
 		<td style="font-weight: bold; font-size: 15px;">
 			<?php if($item->decel_scoretype == 0) {
 				echo "<span style='color: #f5e100;'>";
-			} else if($item->decel_scoretype == 1) {
-				echo "<span style='color: #ffa500;'>";
-			} else { 
+			} else {
 				echo "<span style='color: #ff0000;'>";
 			} 
 					echo ($item->decel_count == 0)?'':$item->decel_count;
@@ -21,9 +19,7 @@ defined('_JEXEC') or die('Restricted Access');
 		<td style="font-weight: bold; font-size: 15px;">
 			<?php if($item->accel_scoretype == 0) {
 				echo "<span style='color: #f5e100;'>";
-			} else if($item->accel_scoretype == 1) {
-				echo "<span style='color: #ffa500;'>";
-			} else { 
+			} else {
 				echo "<span style='color: #ff0000;'>";
 			} 
 					echo ($item->accel_count == 0)?'':$item->accel_count;
@@ -33,9 +29,7 @@ defined('_JEXEC') or die('Restricted Access');
 		<td style="font-weight: bold; font-size: 15px;">
 			<?php if($item->hard_turns_scoretype == 0) {
 				echo "<span style='color: #f5e100;'>";
-			} else if($item->hard_turns_scoretype == 1) {
-				echo "<span style='color: #ffa500;'>";
-			} else { 
+			} else {
 				echo "<span style='color: #ff0000;'>";
 			} 
 					echo ($item->hard_turns_count == 0)?'':$item->hard_turns_count;
