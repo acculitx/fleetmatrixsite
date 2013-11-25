@@ -1,7 +1,6 @@
 <form action="<?php echo JRequest::getVar('REQUEST_URL', '', 'server'); ?>" >
 <select name="window" id="window_select">
     <option value="7" <?php if($this->window==7) {echo "selected";}?> >Last 7 days</option>
-    <option value="1" <?php if($this->window==1) {echo "selected";}?> >Last 24 hours</option>
     <option value="30" <?php if($this->window==30) {echo "selected";}?> >Last 30 days</option>
     <option value="90" <?php if($this->window==90) {echo "selected";}?> >Last 90 days</option>
     <option value="180" <?php if($this->window==180) {echo "selected";}?> >Last 180 days</option>

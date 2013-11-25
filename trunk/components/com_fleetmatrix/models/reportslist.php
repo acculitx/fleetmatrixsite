@@ -168,6 +168,42 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
 //             					$db->escape($this->getState('list.direction', 'DESC')))
             		;
             	break;
+            case 'vigilance':
+            	$clause = "distinct b.name as driver_name, ".
+              			"a.name as group_name, ".
+              			"aa.name as company_name, ".
+            			"SUM(thScore.hard_turns_count) as turns_hard,".
+            			"SUM(tsScore.hard_turns_count) as turns_severe,".
+            			"SUM(ahScore.accel_count) as accel_hard,".
+            			"SUM(asScore.accel_count) as accel_severe,".
+            			"SUM(dhScore.decel_count) as decel_hard,".
+            			"SUM(dsScore.decel_count) as decel_severe,".
+            			"SUM(shScore.speedscore) as speed_hard,".
+            			"SUM(ssScore.speedscore) as speed_severe,".
+            			"COUNT(h.subscriber_id) as trip_count, ".
+            			"SUM(h.odo_end - h.odo_start) as miles "
+            			;
+            	$query = $query->select($clause)
+            			->from('fleet_trip as h')
+            			->leftJoin('#__fleet_trip_subscription as e on e.trip_id = h.id')
+            			->join('left outer', '#__fleet_subscription as s on e.subscription_id = s.id')
+            			->leftJoin('#__fleet_trip_driver as d on h.id = d.trip_id')
+            			->leftJoin('#__fleet_driver as b on b.id = d.driver_id')
+            			->leftJoin('#__fleet_entity as a on a.id = b.entity_id')
+            			->leftJoin('#__fleet_entity as aa on a.parent_entity_id = aa.id')
+            			->leftJoin('fleet_redflag_report as thScore ON h.id = thScore.tripid AND thScore.hard_turns_scoretype=0')
+            			->leftJoin('fleet_redflag_report as tsScore ON h.id = tsScore.tripid AND tsScore.hard_turns_scoretype=1')
+            			->leftJoin('fleet_redflag_report as ahScore ON h.id = ahScore.tripid AND ahScore.accel_scoretype=0')
+            			->leftJoin('fleet_redflag_report as asScore ON h.id = asScore.tripid AND asScore.accel_scoretype=1')
+            			->leftJoin('fleet_redflag_report as dhScore ON h.id = dhScore.tripid AND dhScore.decel_scoretype=0')
+            			->leftJoin('fleet_redflag_report as dsScore ON h.id = dsScore.tripid AND dsScore.decel_scoretype=1')
+            			->leftJoin('fleet_redflag_speed as shScore ON h.id = shScore.tripid AND shScore.scoretype=1')
+            			->leftJoin('fleet_redflag_speed as ssScore ON h.id = ssScore.tripid AND ssScore.scoretype=2')
+            			->group('b.id')
+            			->where('b.visible')
+            			->where('UNIX_TIMESTAMP(h.end_date)-UNIX_TIMESTAMP(h.start_date)>60')
+            		;
+            	break;
             default:
                 $query = $query->select('1=0');
                 return $query;
@@ -205,6 +241,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
         }
 
         #var_dump((string)$query);
+//         echo $query;
 		return $query;
 	}
 
