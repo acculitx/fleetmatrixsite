@@ -118,7 +118,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                     ->order('h.end_date DESC')
                     ;
                 break;
-            case 'driverdetail':
+            case 'tendency':
             case 'drivertrend':
                 $clause = "distinct b.name as driver_name, ".
                         "a.name as group_name, s.id as vehicle_id, ".
@@ -274,15 +274,15 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                     $item->not_connected = $this->not_connected($item, $window);
                 }
                 break;
-            case 'driverdetail':
+            case 'tendency':
                 foreach ($items as &$item) {
                     #$item->gallons = $this->getVehicleFuelUsage($item, $window);
                     #$item->mpg = $this->calcMPG($item);
                     $item->accel_score = $this->calculator->getDriverAccelScore($item, $window, 'accel');
                     $item->decel_score = $this->calculator->getDriverAccelScore($item, $window, 'decel');
                     $item->hard_turns = $this->calculator->getDriverAccelScore($item, $window, 'hard_turns');
-                    $item->speed_score = $this->calculator->getDriverSpeedScore($item, $window);
-                    $item->overall_score = $this->calculator->getOverall($item);
+//                     $item->speed_score = $this->calculator->getDriverSpeedScore($item, $window);
+//                     $item->overall_score = $this->calculator->getOverall($item);
                 }
                 break;
             case 'vehicletrend':
