@@ -8,7 +8,6 @@ $trend = JRequest::getCmd('trend', $driver?'all':'overall');
 ?>
 
 <select name="trend" id="trend">
-    <option value="overall" <?php if($trend=='overall') {echo "selected";} ?>>Overall Score</option>
     <option value="accel" <?php if($trend=='accel') {echo "selected";} ?>>Acceleration</option>
     <option value="decel" <?php if($trend=='decel') {echo "selected";} ?>>Deceleration</option>
     <option value="hard_turns" <?php if($trend=='hard_turns') {echo "selected";} ?>>Hard Turns</option>

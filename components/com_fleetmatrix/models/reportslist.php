@@ -94,9 +94,19 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             case 'driver':
                 $clause = "distinct s.name as vehicle_name, ".
                         "DATE_ADD(h.start_date, INTERVAL h.time_zone HOUR) as trip_start, ".
-                        "DATE_ADD(h.end_date, INTERVAL h.time_zone HOUR) as trip_end, ".
+//                         "DATE_ADD(h.end_date, INTERVAL h.time_zone HOUR) as trip_end, ".
                         "h.odo_end - h.odo_start as miles, ".
                         "f.name as assigned_driver,".
+                        "a.name as group_name, ".
+                        "aa.name as company_name, ".
+                        "thScore.hard_turns_count as turns_hard,".
+                        "tsScore.hard_turns_count as turns_severe,".
+                        "ahScore.accel_count as accel_hard,".
+                        "asScore.accel_count as accel_severe,".
+                        "dhScore.decel_count as decel_hard,".
+                        "dsScore.decel_count as decel_severe,".
+                        "shScore.speedscore as speed_hard,".
+                        "ssScore.speedscore as speed_severe,".
                         "d.driver_id, h.id as trip_id, fr.hard_turns_count, fr.hard_turns_scoretype, fr.accel_count, fr.accel_scoretype, fr.decel_count, fr.decel_scoretype, ".
                         "idle.idle_time"
                 		;
@@ -111,6 +121,15 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                     ->leftJoin('#__fleet_entity as a on f.entity_id = a.id')
                     ->leftJoin('fleet_redflag_report fr ON h.id = fr.tripid')
                     ->leftJoin('fleet_idletime as idle ON h.id = idle.trip_id')
+                    ->leftJoin('#__fleet_entity as aa on a.parent_entity_id = aa.id')
+                    ->leftJoin('fleet_redflag_report as thScore ON h.id = thScore.tripid AND thScore.hard_turns_scoretype=0')
+                    ->leftJoin('fleet_redflag_report as tsScore ON h.id = tsScore.tripid AND tsScore.hard_turns_scoretype=1')
+                    ->leftJoin('fleet_redflag_report as ahScore ON h.id = ahScore.tripid AND ahScore.accel_scoretype=0')
+                    ->leftJoin('fleet_redflag_report as asScore ON h.id = asScore.tripid AND asScore.accel_scoretype=1')
+                    ->leftJoin('fleet_redflag_report as dhScore ON h.id = dhScore.tripid AND dhScore.decel_scoretype=0')
+                    ->leftJoin('fleet_redflag_report as dsScore ON h.id = dsScore.tripid AND dsScore.decel_scoretype=1')
+                    ->leftJoin('fleet_redflag_speed as shScore ON h.id = shScore.tripid AND shScore.scoretype=1')
+                    ->leftJoin('fleet_redflag_speed as ssScore ON h.id = ssScore.tripid AND ssScore.scoretype=2')
                     ->group('h.id')
                     #->where('c.visible')
                     ->where('f.visible')
@@ -126,7 +145,6 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                         "d.driver_id,".
                         "COUNT(h.subscriber_id) as trip_count, ".
                         "'N/A' as mpg, ".
-                        "'N/A' as overall, ".
                         "'N/A' as accel_score, ".
                         "'N/A' as decel_score, ".
                         "'N/A' as hard_turns, ".
