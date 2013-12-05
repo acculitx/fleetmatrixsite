@@ -105,8 +105,8 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                         "asScore.accel_count as accel_severe,".
                         "dhScore.decel_count as decel_hard,".
                         "dsScore.decel_count as decel_severe,".
-                        "count(shScore.speedscore) as speed_hard,".
-                        "count(ssScore.speedscore) as speed_severe,".
+                        "SUM(CASE sScore.scoretype WHEN 1 THEN 1 ELSE 0 END) as speed_hard,".
+                        "SUM(CASE sScore.scoretype WHEN 2 THEN 1 ELSE 0 END) as speed_severe,".
                         "d.driver_id, h.id as trip_id, fr.hard_turns_count, fr.hard_turns_scoretype, fr.accel_count, fr.accel_scoretype, fr.decel_count, fr.decel_scoretype, ".
                         "idle.idle_time"
                 		;
@@ -128,8 +128,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                     ->leftJoin('fleet_redflag_report as asScore ON h.id = asScore.tripid AND asScore.accel_scoretype=1')
                     ->leftJoin('fleet_redflag_report as dhScore ON h.id = dhScore.tripid AND dhScore.decel_scoretype=0')
                     ->leftJoin('fleet_redflag_report as dsScore ON h.id = dsScore.tripid AND dsScore.decel_scoretype=1')
-                    ->leftJoin('fleet_redflag_speed as shScore ON h.id = shScore.tripid AND shScore.scoretype=1')
-                    ->leftJoin('fleet_redflag_speed as ssScore ON h.id = ssScore.tripid AND ssScore.scoretype=2')
+                    ->leftJoin('fleet_redflag_speed as sScore ON h.id = sScore.tripid ')
                     ->group('h.id')
                     #->where('c.visible')
                     ->where('f.visible')
@@ -196,8 +195,8 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             			"SUM(asScore.accel_count) as accel_severe,".
             			"SUM(dhScore.decel_count) as decel_hard,".
             			"SUM(dsScore.decel_count) as decel_severe,".
-            			"count(shScore.speedscore) as speed_hard,".
-            			"count(ssScore.speedscore) as speed_severe,".
+            			"SUM(CASE sScore.scoretype WHEN 1 THEN 1 ELSE 0 END) as speed_hard,".
+            			"SUM(CASE sScore.scoretype WHEN 2 THEN 1 ELSE 0 END) as speed_severe,".
             			"COUNT(h.subscriber_id) as trip_count, ".
             			"SUM(h.odo_end - h.odo_start) as miles "
             			;
@@ -215,8 +214,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             			->leftJoin('fleet_redflag_report as asScore ON h.id = asScore.tripid AND asScore.accel_scoretype=1')
             			->leftJoin('fleet_redflag_report as dhScore ON h.id = dhScore.tripid AND dhScore.decel_scoretype=0')
             			->leftJoin('fleet_redflag_report as dsScore ON h.id = dsScore.tripid AND dsScore.decel_scoretype=1')
-            			->leftJoin('fleet_redflag_speed as shScore ON h.id = shScore.tripid AND shScore.scoretype=1')
-            			->leftJoin('fleet_redflag_speed as ssScore ON h.id = ssScore.tripid AND ssScore.scoretype=2')
+            			->leftJoin('fleet_redflag_speed as sScore ON h.id = sScore.tripid ')
             			->group('b.id')
             			->where('b.visible')
             			->where('UNIX_TIMESTAMP(h.end_date)-UNIX_TIMESTAMP(h.start_date)>60')
