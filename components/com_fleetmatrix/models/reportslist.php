@@ -196,8 +196,8 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             			"SUM(asScore.accel_count) as accel_severe,".
             			"SUM(dhScore.decel_count) as decel_hard,".
             			"SUM(dsScore.decel_count) as decel_severe,".
-            			"SUM(shScore.speedscore) as speed_hard,".
-            			"SUM(ssScore.speedscore) as speed_severe,".
+            			"count(shScore.speedscore) as speed_hard,".
+            			"count(ssScore.speedscore) as speed_severe,".
             			"COUNT(h.subscriber_id) as trip_count, ".
             			"SUM(h.odo_end - h.odo_start) as miles "
             			;
