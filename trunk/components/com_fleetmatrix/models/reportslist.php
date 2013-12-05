@@ -105,8 +105,8 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                         "asScore.accel_count as accel_severe,".
                         "dhScore.decel_count as decel_hard,".
                         "dsScore.decel_count as decel_severe,".
-                        "shScore.speedscore as speed_hard,".
-                        "ssScore.speedscore as speed_severe,".
+                        "count(shScore.speedscore) as speed_hard,".
+                        "count(ssScore.speedscore) as speed_severe,".
                         "d.driver_id, h.id as trip_id, fr.hard_turns_count, fr.hard_turns_scoretype, fr.accel_count, fr.accel_scoretype, fr.decel_count, fr.decel_scoretype, ".
                         "idle.idle_time"
                 		;
