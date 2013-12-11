@@ -99,15 +99,15 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                         "f.name as assigned_driver,".
                         "a.name as group_name, ".
                         "aa.name as company_name, ".
-                        "thScore.hard_turns_count as turns_hard,".
-                        "tsScore.hard_turns_count as turns_severe,".
-                        "ahScore.accel_count as accel_hard,".
-                        "asScore.accel_count as accel_severe,".
-                        "dhScore.decel_count as decel_hard,".
-                        "dsScore.decel_count as decel_severe,".
+            			"redflag.hard_turns_hard_count as turns_hard,".
+            			"redflag.hard_turns_severe_count as turns_severe,".
+            			"redflag.accel_hard_count as accel_hard,".
+            			"redflag.accel_severe_count as accel_severe,".
+            			"redflag.decel_hard_count as decel_hard,".
+            			"redflag.decel_severe_count as decel_severe,".
                         "SUM(CASE sScore.scoretype WHEN 1 THEN 1 ELSE 0 END) as speed_hard,".
                         "SUM(CASE sScore.scoretype WHEN 2 THEN 1 ELSE 0 END) as speed_severe,".
-                        "d.driver_id, h.id as trip_id, fr.hard_turns_count, fr.hard_turns_scoretype, fr.accel_count, fr.accel_scoretype, fr.decel_count, fr.decel_scoretype, ".
+                        "d.driver_id, h.id as trip_id,  ".
                         "idle.idle_time"
                 		;
                 $query = $query->select($clause)
@@ -122,12 +122,12 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                     ->leftJoin('fleet_redflag_report fr ON h.id = fr.tripid')
                     ->leftJoin('fleet_idletime as idle ON h.id = idle.trip_id')
                     ->leftJoin('#__fleet_entity as aa on a.parent_entity_id = aa.id')
-                    ->leftJoin('fleet_redflag_report as thScore ON h.id = thScore.tripid AND thScore.hard_turns_scoretype=0')
-                    ->leftJoin('fleet_redflag_report as tsScore ON h.id = tsScore.tripid AND tsScore.hard_turns_scoretype=1')
-                    ->leftJoin('fleet_redflag_report as ahScore ON h.id = ahScore.tripid AND ahScore.accel_scoretype=0')
-                    ->leftJoin('fleet_redflag_report as asScore ON h.id = asScore.tripid AND asScore.accel_scoretype=1')
-                    ->leftJoin('fleet_redflag_report as dhScore ON h.id = dhScore.tripid AND dhScore.decel_scoretype=0')
-                    ->leftJoin('fleet_redflag_report as dsScore ON h.id = dsScore.tripid AND dsScore.decel_scoretype=1')
+                    ->leftJoin('fleet_redflag_report as redflag ON h.id = redflag.tripid')
+//                     ->leftJoin('fleet_redflag_report as tsScore ON h.id = tsScore.tripid AND tsScore.hard_turns_scoretype=1')
+//                     ->leftJoin('fleet_redflag_report as ahScore ON h.id = ahScore.tripid AND ahScore.accel_scoretype=0')
+//                     ->leftJoin('fleet_redflag_report as asScore ON h.id = asScore.tripid AND asScore.accel_scoretype=1')
+//                     ->leftJoin('fleet_redflag_report as dhScore ON h.id = dhScore.tripid AND dhScore.decel_scoretype=0')
+//                     ->leftJoin('fleet_redflag_report as dsScore ON h.id = dsScore.tripid AND dsScore.decel_scoretype=1')
                     ->leftJoin('fleet_redflag_speed as sScore ON h.id = sScore.tripid ')
                     ->group('h.id')
                     #->where('c.visible')
@@ -135,6 +135,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                     ->where('UNIX_TIMESTAMP(h.end_date)-UNIX_TIMESTAMP(h.start_date)>60')
                     ->order('h.end_date DESC')
                     ;
+//                 echo ($query);
                 break;
             case 'tendency':
             case 'drivertrend':
@@ -189,12 +190,12 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             	$clause = "distinct b.name as driver_name, ".
               			"a.name as group_name, ".
               			"aa.name as company_name, ".
-            			"SUM(thScore.hard_turns_count) as turns_hard,".
-            			"SUM(tsScore.hard_turns_count) as turns_severe,".
-            			"SUM(ahScore.accel_count) as accel_hard,".
-            			"SUM(asScore.accel_count) as accel_severe,".
-            			"SUM(dhScore.decel_count) as decel_hard,".
-            			"SUM(dsScore.decel_count) as decel_severe,".
+            			"SUM(redflag.hard_turns_hard_count) as turns_hard,".
+            			"SUM(redflag.hard_turns_severe_count) as turns_severe,".
+            			"SUM(redflag.accel_hard_count) as accel_hard,".
+            			"SUM(redflag.accel_severe_count) as accel_severe,".
+            			"SUM(redflag.decel_hard_count) as decel_hard,".
+            			"SUM(redflag.decel_severe_count) as decel_severe,".
             			"SUM(CASE sScore.scoretype WHEN 1 THEN 1 ELSE 0 END) as speed_hard,".
             			"SUM(CASE sScore.scoretype WHEN 2 THEN 1 ELSE 0 END) as speed_severe,".
             			"COUNT(h.subscriber_id) as trip_count, ".
@@ -208,12 +209,12 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             			->leftJoin('#__fleet_driver as b on b.id = d.driver_id')
             			->leftJoin('#__fleet_entity as a on a.id = b.entity_id')
             			->leftJoin('#__fleet_entity as aa on a.parent_entity_id = aa.id')
-            			->leftJoin('fleet_redflag_report as thScore ON h.id = thScore.tripid AND thScore.hard_turns_scoretype=0')
-            			->leftJoin('fleet_redflag_report as tsScore ON h.id = tsScore.tripid AND tsScore.hard_turns_scoretype=1')
-            			->leftJoin('fleet_redflag_report as ahScore ON h.id = ahScore.tripid AND ahScore.accel_scoretype=0')
-            			->leftJoin('fleet_redflag_report as asScore ON h.id = asScore.tripid AND asScore.accel_scoretype=1')
-            			->leftJoin('fleet_redflag_report as dhScore ON h.id = dhScore.tripid AND dhScore.decel_scoretype=0')
-            			->leftJoin('fleet_redflag_report as dsScore ON h.id = dsScore.tripid AND dsScore.decel_scoretype=1')
+            			->leftJoin('fleet_redflag_report as redflag ON h.id = redflag.tripid')
+//             			->leftJoin('fleet_redflag_report as tsScore ON h.id = tsScore.tripid AND tsScore.hard_turns_scoretype=1')
+//             			->leftJoin('fleet_redflag_report as ahScore ON h.id = ahScore.tripid AND ahScore.accel_scoretype=0')
+//             			->leftJoin('fleet_redflag_report as asScore ON h.id = asScore.tripid AND asScore.accel_scoretype=1')
+//             			->leftJoin('fleet_redflag_report as dhScore ON h.id = dhScore.tripid AND dhScore.decel_scoretype=0')
+//             			->leftJoin('fleet_redflag_report as dsScore ON h.id = dsScore.tripid AND dsScore.decel_scoretype=1')
             			->leftJoin('fleet_redflag_speed as sScore ON h.id = sScore.tripid ')
             			->group('b.id')
             			->where('b.visible')

@@ -19,7 +19,7 @@ defined('_JEXEC') or die('Restricted Access');
 		</td>
 		<td>
 			<?php if ($item->miles == 0) {echo 0;}
-				  else {echo round(($item->accel_severe)/($item->miles) * 100, 1);} ?>
+				  else {echo round(($item->accel_severe)/($item->miles) * 100, 2);} ?>
 		</td>
 		<td>
 			<?php if ($item->miles == 0) {echo 0;}
