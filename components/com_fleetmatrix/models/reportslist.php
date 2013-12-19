@@ -193,8 +193,8 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             			"SUM(redflag.accel_severe_count) as accel_severe,".
             			"SUM(redflag.decel_hard_count) as decel_hard,".
             			"SUM(redflag.decel_severe_count) as decel_severe,".
-            			"speed.hard_count as speed_hard,".
-            			"speed.severe_count as speed_severe,".
+            			"SUM(speed.hard_count) as speed_hard,".
+            			"SUM(speed.severe_count) as speed_severe,".
             			"COUNT(h.subscriber_id) as trip_count, ".
             			"SUM(h.odo_end - h.odo_start) as miles "
             			;
