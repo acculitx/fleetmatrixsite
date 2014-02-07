@@ -11,10 +11,10 @@ defined('_JEXEC') or die('Restricted Access');
 			<?php echo $item->group_name; ?>
 		</td>
 		<td>
-			<?php echo is_numeric($item->overall_score) ? number_format($item->overall_score, 2) : $item->overall_score; ?>
+			<?php echo is_numeric( $item->overall_score) ? number_format($item->overall_score, 2) : $item->overall_score; ?>
 		</td>
 		<td>
-			<?php echo is_numeric($item->accel_score) ? number_format($item->accel_score, 2) : $item->accel_score; ?>
+			<?php echo is_numeric( $item->accel_score) ? number_format($item->accel_score, 2) : $item->accel_score; ?>
 		</td>
 		<td>
 			<?php echo is_numeric($item->decel_score) ? number_format($item->decel_score, 2) : $item->decel_score; ?>
