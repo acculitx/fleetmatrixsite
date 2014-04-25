@@ -71,6 +71,21 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
 
         switch ($cmd) {
             case 'vehicle':
+            	$clause = "distinct s.id as vehicle_id, s.name as vehicle_name, a.name as group_name, ".
+            			"SUM(h.odo_end - h.odo_start) as miles, ".
+            			"COUNT(h.subscriber_id) as trip_count, ".
+            			"SUM(h.gallon_consumed) as gallon_consumed";
+            	$query = $query->select($clause)
+            	->from('#__fleet_subscription as s')
+            	->leftJoin('#__fleet_entity as a on a.id = s.entity_id')
+            	->leftJoin('#__fleet_trip_subscription as e on e.subscription_id = s.id')
+            	->leftJoin('fleet_trip as h on h.id = e.trip_id')
+            	->group('s.id')
+            	->where('s.visible')
+            	->where('UNIX_TIMESTAMP(h.end_date)-UNIX_TIMESTAMP(h.start_date)>60')
+            	;
+//             	echo ($query);
+            	break;
             case 'vehicletrend':
                 $clause = "distinct s.id as vehicle_id, s.subscription_id, a.name as group_name, ".
                         "a.id as group_id, a.parent_entity_id as company_id, ".
@@ -182,6 +197,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             			->where('b.visible')
             			->where('UNIX_TIMESTAMP(h.end_date)-UNIX_TIMESTAMP(h.start_date)>60')
             		;
+//             	echo ($query);
             	break;
             case 'vigilance':
             	$clause = "distinct b.name as driver_name, ".
@@ -277,8 +293,8 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                 foreach ($items as &$item) {
                     $ret = $this->getVehicleFuelUsage($item, $window);
                     #var_dump($ret);
-                    $item->gallons = $ret[0];
-                    $item->mpg = $ret[1];
+//                     $item->gallons = $ret[0];
+//                     $item->mpg = $ret[1];
                     $item->disconnects = $this->getDisconnects($item, $window);
                     $item->not_connected = $this->not_connected($item, $window);
                 }

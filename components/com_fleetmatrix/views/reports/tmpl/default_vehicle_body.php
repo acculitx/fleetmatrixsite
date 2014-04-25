@@ -11,7 +11,7 @@ defined('_JEXEC') or die('Restricted Access');
 			<?php echo $item->group_name; ?>
 		</td>
 		<td>
-			<?php echo is_numeric($item->mpg) ? number_format($item->mpg, 1) : $item->mpg; ?>
+			<?php echo is_numeric($item->gallon_consumed) ? $item->gallon_consumed / $item->miles : $item->gallon_consumed; ?>
 		</td>
         <td>
             <?php echo number_format($item->miles); ?>
@@ -20,7 +20,7 @@ defined('_JEXEC') or die('Restricted Access');
             <?php echo $item->trip_count; ?>
         </td>
         <td>
-            <?php echo is_numeric($item->gallons) ? number_format($item->gallons, 2) : $item->gallons; ?>
+            <?php echo $item->gallon_consumed; ?>
         </td>
         <td>
             <?php echo $item->not_connected; ?>

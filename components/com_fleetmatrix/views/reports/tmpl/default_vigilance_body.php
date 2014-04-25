@@ -15,35 +15,35 @@ defined('_JEXEC') or die('Restricted Access');
         </td>
 		<td>
 			<?php if ($item->miles == 0) {echo 0;}
-				  else {echo round(($item->accel_hard)/($item->miles) * 100, 1);} ?>
+				  else {echo round(($item->accel_hard)* 100/($item->miles), 1);} ?>
 		</td>
 		<td>
 			<?php if ($item->miles == 0) {echo 0;}
-				  else {echo round(($item->accel_severe)/($item->miles) * 100, 2);} ?>
+				  else {echo round(($item->accel_severe)* 100/($item->miles), 2);} ?>
 		</td>
 		<td>
 			<?php if ($item->miles == 0) {echo 0;}
-				  else {echo round(($item->decel_hard)/($item->miles) * 100, 1);} ?>
+				  else {echo round(($item->decel_hard)* 100/($item->miles), 1);} ?>
 		</td>
 		<td>
 			<?php if ($item->miles == 0) {echo 0;}
-				  else {echo round(($item->decel_severe)/($item->miles) * 100, 1);} ?>
+				  else {echo round(($item->decel_severe)* 100/($item->miles), 1);} ?>
 		</td>
 		<td>
 			<?php if ($item->miles == 0) {echo 0;}
-				  else {echo round(($item->turns_hard)/($item->miles) * 100, 1);} ?>
+				  else {echo round(($item->turns_hard)* 100/($item->miles), 1);} ?>
 		</td>
 		<td>
 			<?php if ($item->miles == 0) {echo 0;}
-				  else {echo round(($item->turns_severe)/($item->miles) * 100, 1);} ?>
+				  else {echo round(($item->turns_severe)* 100/($item->miles), 1);} ?>
 		</td>
 		<td>
 			<?php if ($item->miles == 0) {echo 0;}
-				  else {echo round(($item->speed_hard)/($item->miles) * 100, 1);} ?>
+				  else {echo round(($item->speed_hard)* 100/($item->miles), 1);} ?>
 		</td>
 		<td>
 			<?php if ($item->miles == 0) {echo 0;}
-				  else {echo round(($item->speed_severe)/($item->miles) * 100, 1);} ?>
+				  else {echo round(($item->speed_severe)* 100/($item->miles), 1);} ?>
 		</td>
         <td>
             <?php echo number_format($item->miles); ?>
