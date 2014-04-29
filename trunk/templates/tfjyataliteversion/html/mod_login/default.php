@@ -22,8 +22,15 @@ JHtml::_('behavior.keepalive');
 	} endif; ?>
 	</div>
 <?php endif; ?>
+<div style="margin-left:15px;">
+<div class="imge_use"><img src="images/user_image.jpg" width="" height="" /></div>
+<div class="username">User Name</div>
+<div class="clear" style="height:5px;"></div>
+<div class="acc_s"><a href="#" >Account Settings</a></div>
+</div>
 	<div class="logout-button">
-		<input type="submit" name="Submit" class="button" value="<?php echo JText::_('JLOGOUT'); ?>" />
+    
+		<input type="submit" name="Submit" class="new-logout" value="<?php echo JText::_('JLOGOUT'); ?>" />
 	</div>
 
 	<input type="hidden" name="option" value="com_users" />
@@ -37,33 +44,41 @@ JHtml::_('behavior.keepalive');
 	<fieldset class="input">
 	<p id="form-login-username">
 		<label for="modlgn_username"><?php echo JText::_('MOD_LOGIN_VALUE_USERNAME') ?></label>
-		<input id="modlgn_username" type="text" name="username" class="inputbox"  size="18" />
+		<input id="modlgn_username" type="text" name="username" class="new_inp"  size="18" />
 	</p>
 	<p id="form-login-password">
 		<label for="modlgn_passwd"><?php echo JText::_('JGLOBAL_PASSWORD') ?></label>
-		<input id="modlgn_passwd" type="password" name="password" class="inputbox" size="18"  />
+		<input id="modlgn_passwd" type="password" name="password" class="new_inp" size="18"  />
 	</p>
 	<p id="form-login-remember">
+    <div style="width:183px; float:right">
 	<?php if (JPluginHelper::isEnabled('system', 'remember')) : ?>
 		<label for="modlgn_remember"><?php echo JText::_('MOD_LOGIN_REMEMBER_ME') ?></label>
 		<input id="modlgn_remember" type="checkbox" name="remember" class="inputbox" value="yes"/>
 	<?php endif; ?>
-	<input type="submit" name="Submit" class="button" value="<?php echo JText::_('JLOGIN') ?>" />
+	<input type="submit" name="Submit" class="login" value="<?php echo JText::_('JLOGIN') ?>" />
 	<input type="hidden" name="option" value="com_users" />
 	<input type="hidden" name="task" value="user.login" />
 	<input type="hidden" name="return" value="<?php echo $return; ?>" />
 	<?php echo JHtml::_('form.token'); ?>
+    </div>
+    <div class="clear"></div>
 	</p>
 	</fieldset>
 	<div class="pwhelper">
-	<ul>
+    <div>
+     <div class="left_fo acc_s"><a href="<?php echo JRoute::_('index.php?option=com_users&view=reset'); ?>">
+			<?php echo JText::_('MOD_LOGIN_FORGOT_YOUR_PASSWORD'); ?></a></div>
+     <div class="right_fo acc_s"><a href="<?php echo JRoute::_('index.php?option=com_users&view=remind'); ?>">
+			<?php echo JText::_('MOD_LOGIN_FORGOT_YOUR_USERNAME'); ?></a></div>
+     <div class="clear" style="height:10px;"></div>
+    </div>
+	<!--<ul>
 		<li>
-			<a href="<?php echo JRoute::_('index.php?option=com_users&view=reset'); ?>">
-			<?php echo JText::_('MOD_LOGIN_FORGOT_YOUR_PASSWORD'); ?></a>
+			
 		</li>
 		<li>
-			<a href="<?php echo JRoute::_('index.php?option=com_users&view=remind'); ?>">
-			<?php echo JText::_('MOD_LOGIN_FORGOT_YOUR_USERNAME'); ?></a>
+			
 		</li>
 		<?php
 		$usersConfig = JComponentHelper::getParams('com_users');
@@ -73,7 +88,8 @@ JHtml::_('behavior.keepalive');
 				<?php echo JText::_('MOD_LOGIN_REGISTER'); ?></a>
 		</li>
 		<?php endif; ?>
-	</ul>
+	</ul>-->
+    
 	</div>
 	<?php echo $params->get('posttext'); ?>
 </form>
