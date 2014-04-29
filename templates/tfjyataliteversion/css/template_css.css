@@ -639,7 +639,8 @@ form.josForm{
 	padding: 0 15px 15px 15px;
 }
 .adminlist {
-    margin-top: 20px;
+    /*margin-top: 20px;*/
+
 }
 .adminlist thead tr {
     background: #f0f0f0;
@@ -670,11 +671,11 @@ thead tr td{
  	color: #f96150; text-decoration: underline;
  }
 
- tr.even td, tr td, tr.cat-list-row0 td {
+/* tr.even td, tr td, tr.cat-list-row0 td {
 	padding: 5px 15px;
 	border-bottom: 1px solid #e4e4e4;
 }
-
+*/
  tr.odd td, tr.cat-list-row1 td {
 	padding: 5px 15px;
 	border-bottom: 1px solid #e4e4e4;
@@ -1010,7 +1011,7 @@ ul.pagination li{
 }
 
 ul.pagination li a{
-	color: #333;
+	color: #fff;
 	text-decoration: none;
 	padding: 2px;
    font-weight: normal !important;
@@ -1424,22 +1425,37 @@ input#mod_search_searchword{
 }
 
 input.button, button.button, button{
-	background-color: #000;
-	height: 25px;
-	padding: 0 14px;
-	color: #f5e100;
+	background-color:#fce700;
+	padding:3px;
+	color: #000;
 	cursor: pointer;
-	font-size: 14px;
+	font-size: 13px;
+	font-family:Arial, Helvetica, sans-serif;
 	text-transform: uppercase;
-	border: 0;
-	text-shadow: 0 1px 1px #000;
-    border-style: solid;
-    border-width: 1px;
-    height: 25px;
+	border:transparent;
+    /*width:88px;*/
+	min-width:88px;
+	/*text-shadow:2px 3px 1px #cebc00;*/
+	outline:none;
+	height:30px;
+}
+button#reset{
+background-color:#b3b4b5;
+	padding:0;
+	color: #fff;
+	cursor: pointer;
+	font-size: 13px;
+	font-family:Arial, Helvetica, sans-serif;
+	text-transform: uppercase;
+	border:transparent;
+    width:88px;
+	text-shadow:2px 3px 1px #929394;
+	outline:none;
+	height:30px;
 }
 
 input.button:hover, button.button:hover, button:hover{
- 	color: #fff;
+ 	text-decoration:none;
 	border: 0;
 }
 
@@ -3695,7 +3711,7 @@ div.moduletable_login form#login-form fieldset.userdata {}
 p#form-login-username, 
 p#form-login-password, 
 p#form-login-remember {
-    width: 250px;
+    width: 260px;
 }
 
 /* labels */
@@ -3874,14 +3890,14 @@ table.category, table.infotable, div.news-feed{
 #form-login {
     float: right;
     color: #f5e100;
-    width: 250px;
-    height: 154px;
+    /*width: 204px;*/
+	min-width:204px;
+	min-height:120px;
     padding: 0 5px 0 5px;
     overflow: hidden;
-    border-width: 2px;
-    border-style: outset;
-    border-color: #f5e100;
+	border:1px solid #5b5b5c;
     background-image: url(../images/login.png);
+	margin-top:15px;
 }
 #form-login a {
     color: #fff;
@@ -3891,7 +3907,7 @@ table.category, table.infotable, div.news-feed{
     margin-top: -5px;
 }
 .logout-button {
-    margin-top: 125px;
+   /* margin-top: 80px;*/
 }
 #nav ol, #nav ul, #subMenusContainer ul, #subMenusContainer ol {
     border: 0px;
@@ -3917,11 +3933,11 @@ table.category, table.infotable, div.news-feed{
     background: #fff;
 }
 #submit {
-    float: none;
-    margin-left: 20px;
+    float: right;
+    margin-right: 5px;
 }
 #assignment_controls {
-    margin: -2px 250px 0 0;
+   /* margin: -2px 250px 0 0;*/
 }
 
 #graph {
@@ -3942,6 +3958,7 @@ table.category, table.infotable, div.news-feed{
 }
 #window_select, #company, #group, #driver {
     display: inline;
+	background:#fff; border:1px solid #b6b7b9; padding:4px; font:normal 13px/1.2 Arial, Helvetica, sans-serif; color:#4c4d4e; margin-right:10px; height:28px;
 }
 .adminlist {
     width: 100%;
@@ -3950,3 +3967,113 @@ table.category, table.infotable, div.news-feed{
     display: inline-block;
     float: right;
 }
+
+
+
+h2{ font:bold 20px/1.25 Arial, Helvetica, sans-serif; color:#030000; text-transform:capitalize; margin:0; padding:0;  }
+SELECT#window_select{ width:170px;}
+SELECT#company , SELECT#group{ width:230px;}
+table.adminlist{ border-collapse:collapse;}
+table.adminlist tr td{ border:1px solid #eaebeb; padding: 5px 5px;   min-height:44px; height:44px; vertical-align:middle;}
+table.adminlist tr th{ border-right:1px solid #fcae00; padding: 5px 5px; background:#fce700; font:normal 12px/1.25 Arial, Helvetica, sans-serif!important; color:#000; text-transform:capitalize; text-align:left; min-height:55px; height:55px; vertical-align:middle;}
+table{ width:100%;}
+
+
+table.adminlist tr.row0{ background:#fff;}
+table.adminlist tr.row1{ background:#fafbfb;}
+
+.list-footer{ background:#a9a9aa; border-radius:0 0 5px 5px; -moz-border-radius:0 0 5px 5px; -webkit-border-radius:0 0 5px 5px;}
+.limit ,  ul.pagination{ float:left;}
+.limit{ width:250px; padding:18px 0 18px 10px; height:35px;}
+ul.pagination{ width:580px; padding:18px 0;height:35px;}
+.counter{ float:right; width:125px; padding:18px  0;height:35px;}
+.limit ,  ul.pagination , .counter{ font:normal 13px/1.2 Arial, Helvetica, sans-serif; color:#fff; }
+
+
+.list-footer:after {
+     content: "."; 
+     display: block; 
+     height: 0; 
+     clear: both; 
+     visibility: hidden;
+}
+
+.list-footer {display: inline-block;}
+/* Hides from IE-mac \*/
+* html .list-footer {height: 1%;}
+.list-footer {display: block;}
+/* End hide from IE-mac */
+
+SELECT.inputbox{ width:65px; height:23px; padding:2px; background:#fff; border:1px solid #90b3c9; margin:0 0 0 10px;}
+.fieldsbg{ background-image:url(../images/barsbg.jpg); background-repeat:repeat-x; background-position:top; padding:13px;}
+.tempbg{ /*background-color:#e9e9e9;*/ border:1px solid #bdbebf; border-top-left-radius:3px; border-top-right-radius:3px;}
+form#driver{border:none; background:none !important;}
+dt{ float:left; width:100px; padding:5px}
+dd{ /*clear:both*/ padding:5px;}
+.imge_use{
+	float:left;
+	margin-top:15px;
+	margin-left:15px;
+}
+.clear{
+	clear:both;
+}
+.username{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:15px;
+	float:left;
+	padding-left:15px;
+	line-height:47px;
+	margin-top:15px;
+	font-style:italic;
+}
+.acc_s{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#999a9b;
+	float:left;
+	margin-left:10px;
+}
+.acc_s a:link{
+	text-decoration:none;
+	color:#999a9b !important;
+}
+.acc_s a:active{
+	text-decoration:none;
+	color:#999a9b !important;
+}
+.acc_s a:visited{
+	text-decoration:none;
+	color:#999a9b !important;
+}
+.acc_s a:hover{
+	text-decoration:underline;
+	color:#999a9b !important;
+}
+INPUT.new-logout{
+	background-color:#f0f1f2;
+	padding:3px;
+	height:auto !important;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#4e5051;
+	margin-left:10px;
+}
+INPUT.new_inp{
+	background-color:#e8e9ea;
+	width:176px !important;
+}
+INPUT.login{
+	background-image:url(../images/login-bg.jpg);
+	background-repeat:repeat-x;
+	background-position:top;
+	/*padding:5px;*/
+	width:58px;
+	height:24px;
+	border:1px solid #000;
+	}
+fieldset p{ margin:5px 0 11px;}
+.left_fo{ float:left; padding-right:10px;}
+.right_fo{ float:right;}
+
+
