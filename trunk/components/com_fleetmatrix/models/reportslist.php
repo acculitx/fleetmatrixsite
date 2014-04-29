@@ -125,7 +125,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                         "d.driver_id, h.id as trip_id,  ".
                         "idle.idle_time"
                 		;
-                $query = $query->select($clause)
+            $query = $query->select($clause)
                     ->from('fleet_trip as h')
                     ->leftJoin('#__fleet_trip_subscription as e on e.trip_id = h.id')
                     ->join('left outer', '#__fleet_subscription as s on e.subscription_id = s.id')
@@ -166,7 +166,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                         "'N/A' as speed_score, ".
                         "SUM(h.odo_end - h.odo_start) as miles "
                         ;
-                $query = $query->select($clause)
+                    $query = $query->select($clause)
                     ->from('fleet_trip as h')
                     ->leftJoin('#__fleet_trip_subscription as e on e.trip_id = h.id')
                     ->join('left outer', '#__fleet_subscription as s on e.subscription_id = s.id')
@@ -214,7 +214,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             			"COUNT(h.subscriber_id) as trip_count, ".
             			"SUM(h.odo_end - h.odo_start) as miles "
             			;
-            	$query = $query->select($clause)
+          	$query = $query->select($clause)
             			->from('fleet_trip as h')
             			->leftJoin('#__fleet_trip_subscription as e on e.trip_id = h.id')
             			->join('left outer', '#__fleet_subscription as s on e.subscription_id = s.id')
@@ -229,6 +229,50 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             			->where('UNIX_TIMESTAMP(h.end_date)-UNIX_TIMESTAMP(h.start_date)>60')
             		;
             	break;
+				
+				   case 'vigilancetrend':
+			
+
+					
+					$clause = "redflag.hard_turns_hard_count as turns_hard, ".
+              			"redflag.hard_turns_severe_count as turns_severe, ".
+              			"redflag.accel_hard_count as accel_hard, ".
+            			"redflag.accel_severe_count as accel_severe,".
+            			"redflag.decel_hard_count as decel_hard,".
+            			"redflag.decel_severe_count as decel_severe,".
+						"redflag.hard_turns_starttime as hard_turns_starttime,".
+						"redflag.hard_turns_endtime as hard_turns_endtime,".
+						"redflag.accel_starttime as accel_starttime,".
+						"redflag.accel_endtime as accel_endtime,".
+						"redflag.decel_starttime as decel_starttime,".
+						"redflag.decel_endtime as decel_endtime,".
+						"redflag.tripid as tripid,".
+            			"speed.hard_count as speed_hard,".
+            			"speed.severe_count as speed_severe,".
+						"b.name as driver_name, ".
+						"a.name as group_name, ".
+              			"aa.name as company_name, ".
+            			"h.id, ".
+            			"h.odo_end - h.odo_start as miles "
+            			;
+						
+						 	$query = $query->select($clause)
+            			->from('fleet_trip as h')
+            			->leftJoin('fleet_redflag_report as redflag ON h.id = redflag.tripid')
+            			->leftJoin('fleet_redflag_speed_report as speed ON h.id = speed.tripid ')
+						->leftJoin('#__fleet_trip_driver as d on h.id = d.trip_id')
+            			->leftJoin('#__fleet_driver as b on d.driver_id = b.id')
+						->leftJoin('#__fleet_entity as a on a.id = b.entity_id')
+            			->leftJoin('#__fleet_entity as aa on a.parent_entity_id = aa.id')
+						->group('h.id')
+            			->where('UNIX_TIMESTAMP(h.end_date)-UNIX_TIMESTAMP(h.start_date)>60')
+						
+            		;
+						
+		
+		
+            	break;
+				
             default:
                 $query = $query->select('1=0');
                 return $query;
@@ -460,11 +504,11 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
         $ret = array();
         foreach ($range as $d) {
             $date = $d->format('M d');
-            $d = $d->format('Y-m-d');
+           $d = $d->format('Y-m-d');
             if (array_key_exists($d, $fuel)) {
-                $ret[] = new Score($date, $fuel[$d]);
+                $ret[] = new Score($d, $fuel[$d]);
             } else {
-                $ret[] = new Score($date, -1);
+                $ret[] = new Score($d, -1);
             }
         }
 
