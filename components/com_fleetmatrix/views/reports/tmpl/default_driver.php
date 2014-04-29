@@ -14,7 +14,7 @@ JHtml::_('behavior.tooltip');
 
 <h2>Reports - Driver Trip Report</h2>
 <br />
-
+<div class="tempbg">
 <form action="<?php echo JRoute::_($this->getRoute()); ?>" method="post" name="adminForm">
 
 	<table class="adminlist sortable">
@@ -22,5 +22,8 @@ JHtml::_('behavior.tooltip');
 		<tfoot><?php echo $this->loadTemplate('driver_foot');?></tfoot>
 		<tbody><?php echo $this->loadTemplate('driver_body');?></tbody>
 	</table>
+    
+    
 </form>
+</div>
 

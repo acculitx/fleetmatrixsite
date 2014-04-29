@@ -9,9 +9,9 @@ defined('_JEXEC') or die('Restricted Access');
 include(JPATH_COMPONENT . DS . 'models' . DS . 'driver_search_controls.php');
 ?>
 
-<script src="/colorbox/colorbox/jquery.colorbox-min.js"></script>
+<script src="colorbox/colorbox/jquery.colorbox-min.js"></script>
 
-<link rel="stylesheet" href="/colorbox/example1/colorbox.css" />
+<link rel="stylesheet" href="colorbox/example1/colorbox.css" />
  
 <tr>
     <th title="Click to sort by this column">
