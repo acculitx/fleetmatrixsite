@@ -1,6 +1,7 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
+
 ?>
 
 <?php foreach($this->items as $i => $item): ?>
@@ -56,7 +57,7 @@ defined('_JEXEC') or die('Restricted Access');
 		<td>
             <?php echo $item->idle_time; ?>
         </td>
-        <td><a class="map-link" href="/component/fleetmatrix?view=map&trip=<?php echo $item->trip_id; ?>&tmpl=component">(map)</a></td>
+        <td><a class="map-link" href="component/fleetmatrix?view=map&trip=<?php echo $item->trip_id; ?>&tmpl=component">(map)</a></td>
         
 	</tr>
 <?php endforeach; ?>

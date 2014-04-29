@@ -18,7 +18,7 @@ JHtml::_('behavior.tooltip');
 
 <h2>Reports - Idle Time Report</h2>
 <br />
-
+<div class="tempbg">
 <form action="<?php echo JRoute::_($this->getRoute()); ?>" id="adminForm" method="post" name="adminForm">
 	<table id="idletime_table" class="adminlist sortable">
 		<thead><?php echo $this->loadTemplate('idletime_head');?></thead>
@@ -26,6 +26,7 @@ JHtml::_('behavior.tooltip');
 		<tbody><?php echo $this->loadTemplate('idletime_body');?></tbody>
 	</table>
 </form>
+</div>
 
 <br />
 

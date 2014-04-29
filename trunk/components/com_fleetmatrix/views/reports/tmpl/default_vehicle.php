@@ -14,7 +14,7 @@ JHtml::_('behavior.tooltip');
 
 <h2>Reports - Vehicle Report</h2>
 <br />
-
+<div class="tempbg">
 <form action="<?php echo JRoute::_($this->getRoute()); ?>" method="post" name="adminForm">
 
 	<table class="adminlist sortable">
@@ -23,4 +23,5 @@ JHtml::_('behavior.tooltip');
 		<tbody><?php echo $this->loadTemplate('vehicle_body');?></tbody>
 	</table>
 </form>
+</div>
 
