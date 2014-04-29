@@ -61,7 +61,7 @@ $doc->addScriptDeclaration('
 ?>
 <div id="xmap-nav_tree" style="height:250px;overflow:auto;border:1px solid #CCC;"></div>
       <div id="xmap-nav_linkinfo" style="margin-top:3px;border:1px solid #CCC;height:120px;">
-	    <form name="adminForm" action="#" onSubmit="return false;">
+	    <form name="adminForm"  action="#" onSubmit="return false;">
 	    <table width="100%">
 		   <tr>
 		       <td><?php echo JText::_('Xmap_Link_Text'); ?></td>
