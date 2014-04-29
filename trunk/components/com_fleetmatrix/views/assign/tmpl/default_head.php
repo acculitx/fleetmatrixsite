@@ -3,15 +3,10 @@
 defined('_JEXEC') or die('Restricted Access');
 ?>
 <div id="assignment_controls">
-<div id="group_controls">
+<div id="group_controls" class="fieldsbg">
 <?php
 include(JPATH_COMPONENT . DS . 'models' . DS . 'vehicle_group_controls.php');
 ?>
-</div>
-</div>
-<br />
-<br />
-
 <select name="driver" id="driver">
 <?php
     require_once(JPATH_COMPONENT . DS . 'models' . DS . 'fields' . DS . 'selectgroup.php');
@@ -30,9 +25,14 @@ include(JPATH_COMPONENT . DS . 'models' . DS . 'vehicle_group_controls.php');
     }
 ?>
 </select>
+
     <input type="hidden" name="option" value="com_fleetmatrix" />
     <input type="hidden" id="task" name="task" value="assign.submit" />
     <button type="submit" id="submit" class="button"><?php echo JText::_('Submit'); ?></button>
+</div>
+</div>
+
+
     <?php echo JHtml::_('form.token'); ?>
 
 <tr>
