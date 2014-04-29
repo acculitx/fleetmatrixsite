@@ -1,3 +1,4 @@
+<div class="fieldsbg">
 <form action="<?php echo JRequest::getVar('REQUEST_URL', '', 'server'); ?>" >
 <select name="window" id="window_select">
     <option value="7" <?php if($this->window==7) {echo "selected";}?> >Last 7 days</option>
@@ -151,4 +152,5 @@ jQuery(document).ready(function(){
 });
 </script>
 </form>
+</div>
 <!-- REPLACE_END -->
