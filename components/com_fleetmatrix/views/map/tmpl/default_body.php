@@ -1,6 +1,360 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
+$db = JFactory::getDBO();
+$end_date = JRequest::getVar('date', '');
+$trip_id = JRequest::getInt('trip', 0);
+
+
+/*$queryreprot = mysql_query("Select * from fleet_redflag_report where tripid=".$_REQUEST['trip']);
+$resultreport = mysql_fetch_assoc($queryreprot);
+*/
+//print_r($resultreport);
+/*$query2 = $db->getQuery(true)
+    ->select('*')
+        ->from('fleet_redflag_report as a')
+        ->where('a.tripid='.$_REQUEST['trip']) ;
+$db->setQuery($query2);
+$driverdetail = $db->loadObjectList();
+foreach($driverdetail as $item){
+print_r($item);
+}*/
+//print_r($driverdetail);
+
+ $query2 = "Select * from fleet_redflag where trip_id=".$_REQUEST['trip'];
+$db->setQuery($query2);
+
+$driverdetail = $db->loadObjectList();
+/*foreach($driverdetail as $item){
+echo $item->id;
+echo "<br/>";
+echo $item->type;
+echo "<br/>"; 
+}*/
+// $driverdetail->hard_turns_hard_count;
+//hard_turns
+//decel
+//accel;
+
+$lataccel  = array();
+$longaccel =   array();
+ $lat = array();
+ $long  =  array();
+$latbrake =   array();
+$longbrake  =  array();
+$accel_middle = '';
+$brake_middle = '';
+$turn_middle = '';
+
+
+foreach($driverdetail as $i => $item){
+
+
+if($item->type == 'decel'){
+$first_date =  substr($item->starttime,0,-2)."00";
+
+ $scond_date =  substr($item->endtime,0,-2)."00";
+$date_array = explode(':',$scond_date);
+$next_date = $date_array[1]+1;
+$scond_date =  $date_array[0].':'.$next_date.":".$date_array[2];
+
+
+
+$query3 = "Select * from fleet_gps where trip_id=".$_REQUEST['trip'] ." and date between '$first_date' and '$scond_date'";
+$db->setQuery($query3);
+
+$querygps = $db->loadObjectList();
+
+
+
+
+
+foreach($querygps as $k => $itemss){
+
+
+ //$resultgps['latitude'];
+ $itemss->latitude;
+ 
+ 
+  $result = substr($itemss->latitude, 0, 2);
+ 
+ $result1 = substr($itemss->latitude, 2);
+ $result1 = $result1/60;
+  $latbrake[$i] = $result+$result1;
+  
+  
+ 
+ //$resultgps['longitude'];
+ $itemss->longitude;
+ 
+ $pos = strpos( $itemss->longitude, '.');
+ if($pos == 4){
+  $result2 = substr( $itemss->longitude, 0, 2);
+ $result3 = substr( $itemss->longitude, 2);
+ } 
+ 
+  if($pos == 5){
+  $result2 = substr( $itemss->longitude, 0, 3);
+ $result3 = substr( $itemss->longitude, 3);
+ } 
+ 
+ 
+ $result3 = $result3/60;
+  $longbrake[$i] = $result2+$result3;
+  
+  if($itemss->lat_dir!= 'N'){
+  $latbrake[$i] = '-'.$latbrake[$i];
+  }
+  
+  
+  if($itemss->lon_dir!= 'E'){
+    $longbrake[$i] = '-'.$longbrake[$i];
+  }
+  
+//echo  $latbrake." , ". $longbrake."<br/>";
+
+if($latbrake[$i] != 0){
+ $brake_middle .= '<Placemark>
+    <styleUrl>#startStyle</styleUrl>
+    <name>Brake Hard / Brake Severe #__TRIPID__</name>
+    <description>'. $itemss->date.'</description>
+    <Point>
+        <coordinates>
+'. $longbrake[$i].','.$latbrake[$i].'
+        </coordinates>
+    </Point>
+	<StyleMap>
+<Pair>
+<Style>
+<IconStyle>
+<Icon>
+<href>'.JURI::root().'images/pause.png</href>
+</Icon>
+
+</IconStyle>
+</Style>
+</Pair>
+</StyleMap>
+</Placemark>';
+}
+
+}
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+if($item->type == 'hard_turns'){
+$first_date =  substr($item->starttime,0,-2)."00";
+
+ $scond_date =  substr($item->endtime,0,-2)."00";
+$date_array = explode(':',$scond_date);
+$next_date = $date_array[1]+1;
+$scond_date =  $date_array[0].':'.$next_date.":".$date_array[2];
+
+
+
+$query3 = "Select * from fleet_gps where trip_id=".$_REQUEST['trip'] ." and date between '$first_date' and '$scond_date'";
+$db->setQuery($query3);
+
+$querygps = $db->loadObjectList();
+
+foreach($querygps as $k => $itemss){
+
+
+ //$resultgps['latitude'];
+ $itemss->latitude;
+ 
+ 
+  $result = substr($itemss->latitude, 0, 2);
+ 
+ $result1 = substr($itemss->latitude, 2);
+ $result1 = $result1/60;
+   $lat[$i] = $result+$result1;
+
+  
+ 
+ //$resultgps['longitude'];
+ $itemss->longitude;
+ 
+ $pos = strpos( $itemss->longitude, '.');
+ if($pos == 4){
+  $result2 = substr( $itemss->longitude, 0, 2);
+ $result3 = substr( $itemss->longitude, 2);
+ } 
+ 
+  if($pos == 5){
+  $result2 = substr( $itemss->longitude, 0, 3);
+ $result3 = substr( $itemss->longitude, 3);
+ } 
+ 
+ 
+ $result3 = $result3/60;
+  $long[$i] = $result2+$result3;
+  
+  if($itemss->lat_dir!= 'N'){
+  $lat[$i] = '-'.$lat[$i];
+  }
+  
+  
+  if($itemss->lon_dir!= 'E'){
+  $long[$i] = '-'.$long[$i];
+  }
+  
+
+if($lat[$i] != 0){
+  $turn_middle .= '<Placemark>
+    <styleUrl>#startStyle</styleUrl>
+    <name>Turn Hard / Turn Severe #__TRIPID__</name>
+    <description>'. $itemss->date.'</description>
+    <Point>
+        <coordinates>
+'. $long[$i].','.$lat[$i].'
+        </coordinates>
+    </Point>
+<StyleMap>
+<Pair>
+<Style>
+<IconStyle>
+<Icon>
+<href>'.JURI::root().'images/descent.png</href>
+</Icon>
+
+</IconStyle>
+</Style>
+</Pair>
+</StyleMap>
+</Placemark>';
+}
+
+}
+
+
+
+
+
+
+}
+
+
+
+
+if($item->type == 'accel'){
+$first_date =  substr($item->starttime,0,-2)."00";
+
+ $scond_date =  substr($item->endtime,0,-2)."00";
+$date_array = explode(':',$scond_date);
+$next_date = $date_array[1]+1;
+$scond_date =  $date_array[0].':'.$next_date.":".$date_array[2];
+
+$query3 = "Select * from fleet_gps where trip_id=".$_REQUEST['trip'] ." and date between '$first_date' and '$scond_date'";
+$db->setQuery($query3);
+
+$querygps = $db->loadObjectList();
+
+
+
+//$querygps = mysql_query("Select * from fleet_gps where trip_id=".$_REQUEST['trip'] ." and date between '$first_date' and '$scond_date'");
+
+
+
+foreach($querygps as $itemss){
+
+
+ //$resultgps['latitude'];
+ $itemss->latitude;
+ 
+ 
+  $result = substr($itemss->latitude, 0, 2);
+ 
+ $result1 = substr($itemss->latitude, 2);
+ $result1 = $result1/60;
+  $lataccel[$i] = $result+$result1;
+  
+  
+ 
+ //$resultgps['longitude'];
+ $itemss->longitude;
+ 
+ $pos = strpos( $itemss->longitude, '.');
+ if($pos == 4){
+  $result2 = substr( $itemss->longitude, 0, 2);
+ $result3 = substr( $itemss->longitude, 2);
+ } 
+ 
+  if($pos == 5){
+  $result2 = substr( $itemss->longitude, 0, 3);
+ $result3 = substr( $itemss->longitude, 3);
+ } 
+ 
+ 
+ $result3 = $result3/60;
+  $longaccel[$i] = $result2+$result3;
+  
+  if($itemss->lat_dir!= 'N'){
+  $lataccel[$i] = '-'.$lataccel[$i];
+  }
+  
+  
+  if($itemss->lon_dir!= 'E'){
+    $longaccel[$i] = '-'.$longaccel[$i];
+  }
+  
+
+  
+
+
+if($lataccel[$i] != 0){
+ $accel_middle = '<Placemark>
+    <styleUrl>#startStyle</styleUrl>
+    <name>Accel Hard  / Accel Hard  #__TRIPID__</name>
+    <description>'. $itemss->date.'</description>
+    <Point>
+        <coordinates>
+'. $longaccel[$i].','.$lataccel[$i].'
+        </coordinates>
+    </Point>
+	<StyleMap>
+<Pair>
+<Style>
+<IconStyle>
+<Icon>
+<href>'.JURI::root().'images/pickup.png</href>
+</Icon>
+
+</IconStyle>
+</Style>
+</Pair>
+</StyleMap>
+</Placemark>';
+}
+
+}
+
+
+
+
+}
+
+
+
+
+
+}
+
+
+
+
 
 
 $kml_head = <<<KML_HEAD
@@ -111,6 +465,14 @@ __START__
         </coordinates>
     </Point>
 </Placemark>
+
+$brake_middle
+
+$turn_middle
+
+
+$accel_middle
+
 <Placemark>
     <styleUrl>#endStyle</styleUrl>
     <name>End of Trip #__TRIPID__</name>
@@ -130,9 +492,8 @@ KML_FOOT;
 $kml = $kml_head;
 
 $c = 0;
-$db = JFactory::getDBO();
-$end_date = JRequest::getVar('date', '');
-$trip_id = JRequest::getInt('trip', 0);
+
+
 
 $trip = $trip_id;
 foreach ($this->items as $trip => $item) {
@@ -156,6 +517,51 @@ foreach ($this->items as $trip => $item) {
         implode('', array_slice($item, 0, 1)),
         $kml_endpoints
     );
+	
+	
+/*	foreach($driverdetail as $j => $itemyy){
+	
+	if(count($lat) > 0){
+	
+for($p=0 ; $p < count($lat) ; $p++){
+
+  $endpoints = str_replace(
+        '__MIDDLE'.$p.'__',
+       $long[$p].','.$lat[$p],
+        $endpoints
+    );
+	}
+	
+
+	
+	}
+	
+	
+	if(count($latbrake) > 0){
+	for($p=0; $p < count($latbrake); $p++){
+	   $endpoints = str_replace(
+        '__BRAKEMIDDLE'.$j.'__',
+       $longbrake[$p].','.$latbrake[$p],
+        $endpoints
+    );
+	}
+	}
+	
+	 
+if(count($lataccel)  > 0){
+for($p=0; $p < count($lataccel); $p++){
+	   $endpoints = str_replace(
+        '__ACCELMIDDLE'.$j.'__',
+       $longaccel.','.$lataccel,
+        $endpoints
+    );
+	}
+	
+}
+
+}*/
+
+
     $endpoints = str_replace(
         '__END__',
         implode('', array_slice($item, -1, 1)),
@@ -172,6 +578,9 @@ foreach ($this->items as $trip => $item) {
     $row = $db->loadObject();
 
     $kml = str_replace('__TRIPID__', $row->id, $kml);
+	 //$kml = str_replace('__TRIPTurn__', $resultreport['hard_turns_starttime'], $kml);
+	// $kml = str_replace('__TRIPBRAKE__', $resultreport['decel_starttime'], $kml);
+	 // $kml = str_replace('__TRIPACCEL__', $resultreport['accel_starttime'], $kml);
     $kml = str_replace('__TRIPSTART__', $row->start_date, $kml);
     $kml = str_replace('__TRIPEND__', $row->end_date, $kml);
     if ($row->end_date) {
@@ -183,7 +592,7 @@ foreach ($this->items as $trip => $item) {
 $kml .= $kml_foot;
 
 $id = JRequest::getInt('trip');
-file_put_contents('cache/map'.$id.'.kml', $kml);
+@file_put_contents('cache/map'.$id.'.kml', $kml);
 
 function dayString($date) {
     $d = new DateTime($date);
@@ -204,6 +613,19 @@ $query = $db->getQuery(true)
         ;
 $db->setQuery($query);
 $driver_name = $db->loadResult();
+
+
+/*$querygps = $db->getQuery(true)
+    ->select('id')
+        ->from('fleet_gps')
+        ->where('trip_id='.$trip)
+        ;
+$db->setQuery($querygps);
+$gps = $db->loadResult();
+
+print_r($gps);*/
+
+
 ?>
 <table id="current_date" width="100%"><tr><td><?php echo dayString($end_date); ?></td>
 <td><?php echo $driver_name; ?></td></tr></table>
