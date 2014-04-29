@@ -20,11 +20,11 @@ $id = JRequest::getInt('trip');
             singleInfoWindow: true,
             afterParse: useTheData
         });
-        geoXml.parse('/cache/map<?php echo $id; ?>.kml');
+        geoXml.parse('<?php echo JURI::base(); ?>cache/map<?php echo $id; ?>.kml');
     });
 
     function useTheData(doc){
-        /*for (var i = 0; i < doc[0].markers.length; i++) {
+   /*     for (var i = 0; i < doc[0].markers.length; i++) {
             jQuery('#map_text').append(doc[0].markers[i].title + ', ');
         }*/
     };
