@@ -9,7 +9,7 @@ JHtml::_('behavior.tooltip');
 
 <h2>Reports - Driver Trip Assignment</h2>
 <br />
-
+<div class="tempbg">
 <form action="<?php echo JRoute::_($this->getRoute()); ?>" method="post" name="adminForm">
 
 	<table class="adminlist">
@@ -18,3 +18,4 @@ JHtml::_('behavior.tooltip');
 		<tbody><?php echo $this->loadTemplate('body');?></tbody>
 	</table>
 </form>
+</div>
