@@ -16,11 +16,10 @@ $speed_severe = '';
 
 
 foreach($this->items as $i => $item) {
-//echo "<pre >";
-//print_r($item);
 
 
-$trip_id .= "'".$item->id."', ";
+
+$trip_id .= "'".$item->id."-window-".$item->window."', ";
 
 if($item->accel_hard == '') {
 $accel_hard .= "0, ";
