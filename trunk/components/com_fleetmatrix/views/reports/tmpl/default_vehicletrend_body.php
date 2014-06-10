@@ -32,7 +32,7 @@ if (!sizeof($values)) {
 
 if(count($values) > 0  && count($xlabels) > 0){
 
-echo $chart123 = renderLineChart($values, $names, "Trends over time", $xlabels);
+ $chart123 = renderLineChart($values, $names, "Trends over time", $xlabels);
 
 
 ?>
