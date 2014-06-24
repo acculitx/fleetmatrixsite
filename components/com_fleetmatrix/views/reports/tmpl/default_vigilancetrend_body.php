@@ -27,10 +27,28 @@ function dateDiff ($d1, $d2) {
  $total = count($this->items);
 
 foreach($this->items as $i => $item) {
+ $time =  strtotime($item->date);
+  //echo $item->date;
+ 
+  $days = dateDiff(date('Y-m-d'), date("Y-m-d",$time));
 
 
 
-$trip_id .= "'".$item->id."-window-".$item->window."', ";
+
+ $ltday = (int)$_SESSION['lastdays']-(int)$days ;
+ 
+$forlop = $_SESSION['lastdays'];
+if($ltday <= 1){
+
+
+$_SESSION['lastdays'] = $days;
+//$trip_id = $item->id."-window-".$item->windowtwo;
+
+//$timestamp = strtotime($item->date);
+// $trip_id = date("M-d", $timestamp);
+
+ $trip_id = $days;
+ // echo "<pre>";print_r($trip_id);
 
 if($item->accel_hard == '') {
 $accel_hard = 0;
