@@ -14,9 +14,20 @@ class FleetMatrixModelBaseList extends JModelList
 	{
 		$app = JFactory::getApplication();
         $cmd = JRequest::getCmd('cmd', '');
+		if(isset($_REQUEST['cmd']) && $_REQUEST['cmd'] != 'vigilancetrend'){ 
         $window = JRequest::getCmd('window', '7');
+		}
+		if(isset($_REQUEST['cmd']) && $_REQUEST['cmd'] == 'vigilancetrend'){ 
+		$windowtwo = JRequest::getCmd('windowtwo', '7');
+		}
         $this->setState(strtolower($this->model_key).'.cmd', $cmd);
+		if(isset($_REQUEST['cmd']) && $_REQUEST['cmd'] != 'vigilancetrend'){ 
         $this->setState(strtolower($this->model_key).'.window', $window);
+		}
+		
+		if(isset($_REQUEST['cmd']) && $_REQUEST['cmd'] == 'vigilancetrend'){ 
+		 $this->setState(strtolower($this->model_key).'.windowtwo', $windowtwo);
+		 }
 
 		// Load the parameters.
 		$params = $app->getParams();

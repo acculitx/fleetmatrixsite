@@ -15,7 +15,8 @@ defined('_JEXEC') or die('Restricted Access');
 					echo 0;
 				  }
 				  else {
-					echo is_numeric($item->gallon_consumed) ? round($item->miles/$item->gallon_consumed, 2) : $item->gallon_consumed; }?>
+					echo is_numeric($item->gallon_consumed) ? 
+						round($item->miles/$item->gallon_consumed, 2) : $item->gallon_consumed; }?>
 		</td>
         <td>
             <?php echo number_format($item->miles); ?>
