@@ -308,6 +308,8 @@ class ScoreCalculator
         }
         $db->setQuery($query);
 
+//         echo $query;
+        
         $scores = array();
 
         $now = new DateTime();

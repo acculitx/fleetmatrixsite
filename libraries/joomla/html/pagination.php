@@ -419,6 +419,7 @@ class JPagination extends JObject
 	 *
 	 * @since   11.1
 	 */
+	
 	public function getLimitBox()
 	{
 		$app = JFactory::getApplication();
@@ -433,6 +434,86 @@ class JPagination extends JObject
 		}
 		$limits[] = JHtml::_('select.option', '50', JText::_('J50'));
 		$limits[] = JHtml::_('select.option', '100', JText::_('J100'));
+		$limits[] = JHtml::_('select.option', '0', JText::_('JALL'));
+
+		$selected = $this->_viewall ? 0 : $this->limit;
+
+		// Build the select list.
+		if ($app->isAdmin())
+		{
+			$html = JHtml::_(
+				'select.genericlist',
+				$limits,
+				$this->prefix . 'limit',
+				'class="inputbox" size="1" onchange="Joomla.submitform();"',
+				'value',
+				'text',
+				$selected
+			);
+		}
+		else
+		{
+			$html = JHtml::_(
+				'select.genericlist',
+				$limits,
+				$this->prefix . 'limit',
+				'class="inputbox" size="1" onchange="this.form.submit()"',
+				'value',
+				'text',
+				$selected
+			);
+		}
+		return $html;
+	}
+	
+	
+	public function getListFooter1()
+	{
+		$app = JFactory::getApplication();
+
+		$list = array();
+		$list['prefix'] = $this->prefix;
+		$list['limit'] = $this->limit;
+		$list['limitstart'] = $this->limitstart;
+		$list['total'] = $this->total;
+		$list['limitfield'] = $this->getLimitBox1();
+		$list['pagescounter'] = $this->getPagesCounter();
+		$list['pageslinks'] = $this->getPagesLinks();
+
+		$chromePath = JPATH_THEMES . '/' . $app->getTemplate() . '/html/pagination.php';
+		if (file_exists($chromePath))
+		{
+			include_once $chromePath;
+			if (function_exists('pagination_list_footer'))
+			{
+				return pagination_list_footer($list);
+			}
+		}
+		return $this->_list_footer($list);
+	}
+
+	/**
+	 * Creates a dropdown box for selecting how many records to show per page.
+	 *
+	 * @return  string  The HTML for the limit # input box.
+	 *
+	 * @since   11.1
+	 */
+	
+	public function getLimitBox1()
+	{
+		$app = JFactory::getApplication();
+
+		// Initialise variables.
+		$limits = array();
+
+		// Make the option list.
+		for ($i = 5; $i <= 30; $i += 5)
+		{
+			//$limits[] = JHtml::_('select.option', "$i");
+		}
+		//$limits[] = JHtml::_('select.option', '50', JText::_('J50'));
+		//$limits[] = JHtml::_('select.option', '100', JText::_('J100'));
 		$limits[] = JHtml::_('select.option', '0', JText::_('JALL'));
 
 		$selected = $this->_viewall ? 0 : $this->limit;

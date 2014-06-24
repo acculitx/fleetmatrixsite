@@ -128,7 +128,7 @@ if($latbrake[$i] != 0){
 <Style>
 <IconStyle>
 <Icon>
-<href>'.JURI::root().'images/pause.png</href>
+<href>'.JURI::root().'images/brake_icon.jpg</href>
 </Icon>
 
 </IconStyle>
@@ -227,7 +227,7 @@ if($lat[$i] != 0){
 <Style>
 <IconStyle>
 <Icon>
-<href>'.JURI::root().'images/descent.png</href>
+<href>'.JURI::root().'images/turn_icon1.png</href>
 </Icon>
 
 </IconStyle>
@@ -329,7 +329,7 @@ if($lataccel[$i] != 0){
 <Style>
 <IconStyle>
 <Icon>
-<href>'.JURI::root().'images/pickup.png</href>
+<href>'.JURI::root().'images/accel_icon.jpg</href>
 </Icon>
 
 </IconStyle>

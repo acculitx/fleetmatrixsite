@@ -24,7 +24,7 @@ include(JPATH_COMPONENT . DS . 'models' . DS . 'search_controls.php');
     }
 ?>
 </select>
-
+<?php //echo $_POST['vehicle'] ?>
 <script>
     function vehicleChange() {
         var val = jQuery('#vehicle').val();
@@ -38,9 +38,26 @@ include(JPATH_COMPONENT . DS . 'models' . DS . 'search_controls.php');
     jQuery.noConflict();
     jQuery(document).ready(function($) {
         $('#vehicle').change(vehicleChange);
-        $('#vehicle').hide();
+		<?php if(!empty($_POST['vehicle'])){ ?>
+		$('#vehicle').show();
+		<?php }else{?>
+		$('#vehicle').hide();
+		<?php } ?>
         //vehicleChange($);
-    });
+   
+	
+	
+        /*$('#vehicle').change(driverChange);
+        driverChange($);
+        var vehicle = $('#vehicle')
+        if (vehicle && $('#group')==0) {
+            $('#vehicle').hide();
+        } else if (vehicle) {
+            $('#vehicle').show();
+        }
+        groupChange(); */
+    
+	});
 </script>
 
 <!-- REPLACE_HERE -->
