@@ -429,7 +429,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                     #$item->mpg = $this->calcMPG($item);
                     if ($trend == "accel" || $trend == "overall" || $trend=="all") {
                         $item->accel_score = $this->calculator->getDriverAccelArray($item, $window, 'accel');
-						//echo "<pre>"; print_r($item->accel_score);
+// 						echo "<pre>"; print_r($item->accel_score);
                     }
                     if ($trend == 'decel' || $trend == 'overall' || $trend=="all") {
                         $item->decel_score = $this->calculator->getDriverAccelArray($item, $window, 'decel');
@@ -439,23 +439,26 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                         $item->hard_turns = $this->calculator->getDriverAccelArray($item, $window, 'hard_turns');
 						//echo "<pre>"; print_r($item->hard_turns);
                     }
-                    if ($trend == 'speed' || $trend == 'overall' || $trend=="all") {
+//                     if ($trend == 'speed' || $trend == 'overall' || $trend=="all") {
 					
-                        $item->speed_score = $this->calculator->getDriverSpeedArray($item, $window);
-						//echo "<pre>"; print_r($item->speed_score);
-                    }
+//                         $item->speed_score = $this->calculator->getDriverSpeedArray($item, $window);
+// 						//echo "<pre>"; print_r($item->speed_score);
+//                     }
                 }
                 if ($trend == 'overall' || $trend == 'all') {
-                    foreach (array('accel', 'decel', 'hard_turns', 'speed') as $context) {
-                        $this->reduce_to_scope($items, $context);
+                    foreach (array('accel', 'decel', 'hard_turns') as $context) {
+//                         $this->reduce_to_scope($items, $context);
                         $this->cap_to_zero($items, $context);
                     }
                     $this->calculator->getOverallArray($items);
                 } else {
-                    $this->reduce_to_scope($items);
+//                 	echo "in else"; echo "<pre>"; print_r($items);
+//                     $this->reduce_to_scope($items);
                 }
+//                 echo "after else"; echo "<pre>"; print_r($items);
                 $items = $this->reduce_to_average($items, $company, $group, $driver, 0);
-				//echo "<pre>"; print_r($items);
+// 				echo "<pre>"; print_r($items);
+				
                 break;
         }
 
@@ -644,42 +647,55 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             $v[] = $item->$context;
         }
         #var_dump($v);
+//         echo "v is: "; echo "<pre>"; print_r($v);
         $firsts = array();
         $lasts = array();
         foreach($v as &$values) {
             $first = NULL;
             $last = sizeof($v[0])-1;
-            for ($x=0; $x<$last; $x++) {
-                if ($values[$x]->value != -1) {
-                    $first = $x;
-                    break;
-                }
-            }
-            for ($x=$last; $x>$first; $x--) {
-                if ($values[$x]->value != -1) {
-                    $last = $x;
-                    break;
-                }
-            }
-            $prev = 0;
-            foreach ($values as &$vv) {
-                if ($vv->value == -1) {
-                    $vv->value = $prev;
-                }
-                $prev = $vv->value;
-            }
-            if (!is_null($first)) {
-                $firsts[] = $first;
-                $lasts[] = $last;
-            }
+            // find the first date with non-zero score
+//             for ($x=0; $x<$last; $x++) {
+//                 if ($values[$x]->value != -1) {
+//                     $first = $x;
+//                     break;
+//                 }
+//             }
+
+//             echo "first is: "; echo "<pre>"; print_r($first);
+            // find the last date with non-zero score
+//             for ($x=$last; $x>$first; $x--) {
+//                 if ($values[$x]->value != -1) {
+//                     $last = $x;
+//                     break;
+//                 }
+//             }
+//             echo "last is: "; echo "<pre>"; print_r($last);
+			// loops thru the values array
+//             $prev = 0;
+//             foreach ($values as &$vv) {
+//                 if ($vv->value == -1) {
+//                     $vv->value = $prev;
+//                 }
+//                 $prev = $vv->value;
+//             }
+//             if (!is_null($first)) {
+//                 $firsts[] = $first;
+//                 $lasts[] = $last;
+//             }
+//             echo "values is: "; echo "<pre>"; print_r($values);
+//             echo "first array is: "; echo "<pre>"; print_r($firsts);
+//             echo "last array is: "; echo "<pre>"; print_r($lasts);
         }
         #var_dump($firsts);
         if (sizeof($firsts)) {
             $first = min($firsts);
             $last = max($lasts);
-
+			
             for ($x=0; $x<sizeof($v); $x++) {
+//             	echo "x is: "; echo "<pre>"; print_r($x);
+//             	echo "items is: "; echo "<pre>"; print_r($items);
                 $items[$x]->$context = array_slice($v[$x], $first, $last-$first);
+//                 echo "items is: "; echo "<pre>"; print_r($items);
             }
         }
     }
