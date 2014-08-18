@@ -190,12 +190,12 @@ class ScoreCalculator
                 $date = $item->accel_score[$x]->date;
                 $decel = $item->decel_score[$x]->value * .3;
                 $turns = $item->hard_turns[$x]->value * .2;
-                if (sizeof($item->speed_score)>$x) {
-                    $speed = $item->speed_score[$x]->value * .3;
-                } else {
-                    $speed = 0;
-                }
-                $value = $accel + $decel + $turns + $speed;
+//                 if (sizeof($item->speed_score)>$x) {
+//                     $speed = $item->speed_score[$x]->value * .3;
+//                 } else {
+//                     $speed = 0;
+//                 }
+                $value = $accel + $decel + $turns;
                 $item->overall_score[] = new Score($date, $value);
             }
         }
@@ -266,6 +266,51 @@ class ScoreCalculator
         return $result;
     }
 
+    public function getLastValidScore($item, $window, $avtype) {
+    	$dbb = JFactory::getDBO();
+//     	$averages = $this->getAverages($avtype);
+    	
+    	$clause = 'distinct '.$avtype;
+    	$table = 'fleet_moving_daily_score as b';
+    	
+    	$query = $dbb->getQuery(true)
+	    	->select($clause)
+	    	->from($table)
+	    	;
+    	if (property_exists($item, 'driver_id')) {
+    		$query = $query->where('b.driver_id='.$item->driver_id);
+    	} else {
+    		$query = $query->leftJoin('#__fleet_trip_subscription as e on e.subscription_id = b.subscription_id')
+    		->leftJoin('#__fleet_subscription as a on e.subscription_id = a.id')
+    		->where('a.id="'.$item->vehicle_id.'"')
+    		;
+    	}
+    	
+    	if ($window) {
+    		$query = $query->where('b.date < DATE_SUB(NOW(), INTERVAL '.$window.' DAY)');
+    		$query = $query->where('window = '.$window);
+    	}
+    	
+    	$query = $query->order($avtype.' DESC');
+    	$query = ((string)$query) . ' LIMIT 1';
+    	
+    	$dbb->setQuery($query);
+
+        $lastScore = $dbb->loadResult();
+		
+        // if the driver doesn't have any score prior to specified date
+//         if (mysql_num_rows($lastScore) == 0) {
+        if (is_null($lastScore)) {
+        	$lastScore = 5;
+        }
+       	
+//         echo $query;
+//         echo $lastScore;
+        
+        return $lastScore;
+    }
+    
+    
     public function getDriverAccelArray($item, $window, $avtype='accel') {
 		$db = JFactory::getDBO();
         $averages = $this->getAverages($avtype);
@@ -308,8 +353,6 @@ class ScoreCalculator
         }
         $db->setQuery($query);
 
-//         echo $query;
-        
         $scores = array();
 
         $now = new DateTime();
@@ -324,19 +367,40 @@ class ScoreCalculator
             $format = 'Y-m-d';
         }
         $now = $now->format($format);
+        
+//         echo $query;
+        
         foreach ($db->loadObjectList() as $row) {
             $scores[$row->date] = new Score($row->date, doAverage($averages, $row->$avtype, $avtype));
         }
+        
         $ret = array();
+        $lastValidScore = -1;
+        
         foreach ($range as $d) {
             $d = $d->format($format);
+            
             if (array_key_exists($d, $scores)) {
-                $ret[] = new Score($d, $scores[$d]->value);
+            	// cap value at 10
+            	if ($scores[$d]->value > 10)
+            		$value = 10;
+            	else
+            		$value = $scores[$d]->value;
+            	
+                $ret[] = new Score($d, $value);
+                $lastValidScore = $scores[$d]->value;
             } else {
-                $ret[] = new Score($d, -1);
+            	// check if this is day 1
+            	if ($lastValidScore == -1) 
+            		$lastValidScore = $this->getLastValidScore($item, $window, $avtype);
+            	// cap value at 10
+            	if ($lastValidScore > 10)
+            		$lastValidScore = 10;
+                $ret[] = new Score($d, $lastValidScore);
             }
         }
-
+		
+// 		echo "score array is: "; echo "<pre>"; print_r($ret);
         return $ret;
     }
 
