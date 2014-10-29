@@ -55,77 +55,30 @@ class FleetMatrixModelMapList extends FleetMatrixModelBaseList
         //var_dump((string)$query);
 		return $query;
 	}
-
-    protected function decimal2DMS($value) {
-        $value = $value / 100;
-        $deg = (int)($value);
-        $minpart = (60 * ($value - $deg));
-        $min = (int)($minpart);
-        $sec = round((60 * ($minpart - $min)), 4);
-        if ($sec == 60) {
-            $min += 1;
-            $sec = 0;
-        }
-        if ($min == 60) {
-            $deg += 1;
-            $min = 0;
-        }
-        return sprintf('%02d,%02d,%06.4f', $deg, $min, $sec);
-    }
-
-    protected function degrees2decimal($value) {
-        //var_dump($value);
-        $deg = (int)($value);
-        //var_dump($deg);
-        $min = (($value - $deg) * 100) / 60;
-        //var_dump($min);
-
-        $ret = sprintf('%6.9f', $deg + $min);
-        //var_dump($ret);
-        //echo "<hr>";
-
-        return $ret;
-    }
-
-    protected function convertGPS($lat, $lat_dir, $lon, $lon_dir)
-    {
-        $lat /= 100;
-        $lon /= 100;
-
-        $latc = $lat_dir == "S" ? '-' : '';
-        $lonc = $lon_dir == "W" ? '-' : '';
-
-        return sprintf('%s%s,%s%s', $lonc, $this->degrees2decimal($lon), $latc, $this->degrees2decimal($lat));
-    }
-
+	
     public function getItems() {
-        //$items = parent::getItems();
         $result = array();
 
 		$db = JFactory::getDBO();
         $db->setQuery($this->getListQuery());
         $items = &$db->loadObjectList();
 
-        foreach ($items as &$item) {
-            //$item->clatitude = $this->decimal2DMS($item->latitude);
-            //$item->clongitude = $this->decimal2DMS($item->longitude);
-            //var_dump($item);
-            $item->coordinates = $this->convertGPS(
-                $item->latitude,
-                $item->lat_dir,
-                $item->longitude,
-                $item->lon_dir
-            );
-            if ($item->coordinates == "0.000000000,0.000000000") {
+        foreach ($items as &$item) {        	
+        	$lat_dd = $item->lat_dd;
+        	$lon_dd = $item->lon_dd;
+        	
+        	$item->coordinates = sprintf('%s,%s', $lon_dd, $lat_dd);
+        	
+            if ($item->coordinates == "0.00000,0.00000") {
                 continue;
             }
+            
             if (array_key_exists($item->trip_id, $result)) {
                 $result[$item->trip_id][] = $item->coordinates;
             } else {
                 $result[$item->trip_id] = array($item->coordinates);
             }
         }
-
         return $result;
     }
 
