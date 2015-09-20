@@ -1,24 +1,32 @@
 <?php
 ob_start ();
 function renderLineChart($value_arrays, $labels = NULL, $title, $xlabels = NULL) {
-// 	echo "value array is: "; echo "<pre>"; print_r($value_arrays);
-// 	echo "labels is: "; echo "<pre>"; print_r($labels);
-// 	echo "title is: "; echo "<pre>"; print_r($title);
-// 	echo "xlabels is: "; echo "<pre>"; print_r($xlabels);
+// 	echo "value array is: ";
+// 	echo "<pre>";
+// 	print_r ( $value_arrays );
+// 	echo "labels is: ";
+// 	echo "<pre>";
+// 	print_r ( $labels );
+// 	echo "title is: ";
+// 	echo "<pre>";
+// 	print_r ( $title );
+// 	echo "xlabels is: ";
+// 	echo "<pre>";
+// 	print_r ( $xlabels );
 	// exit;
 	global $chartmapvlaue;
 	
-	$average_value_array = array();
-	$driverSize = sizeof($labels);
+	$average_value_array = array ();
+	$driverSize = sizeof ( $labels );
 	
 	// in case 'all drivers' is selected, we compute the average first
 	if ($title != 'all') {
-		for ($i=0; $i < sizeof($value_arrays[0]); $i++) { // for each date
+		for($i = 0; $i < sizeof ( $value_arrays [0] ); $i ++) { // for each date
 			$sum = 0;
-			for ($j=0; $j < $driverSize ; $j++) { // for each driver
-				$sum = $sum + $value_arrays[$j][$i];
+			for($j = 0; $j < $driverSize; $j ++) { // for each driver
+				$sum = $sum + $value_arrays [$j] [$i];
 			}
-			$average_value_array[0][] = $sum/$driverSize;
+			$average_value_array [0] [] = $sum / $driverSize;
 		}
 	} else {
 		$average_value_array = $value_arrays;
@@ -69,6 +77,58 @@ function renderLineChart($value_arrays, $labels = NULL, $title, $xlabels = NULL)
 		return $chartmapvlaue;
 	}
 }
-
+function renderLineChartForMpg($value_arrays, $labels = NULL, $title, $xlabels = NULL) {
+// 	echo "<pre>";
+// 	echo "value array is: ";
+// 	print_r ( $value_arrays );
+// 	echo "<pre>";
+// 	echo "labels is: ";
+// 	print_r ( $labels );
+// 	echo "<pre>";
+// 	echo "title is: ";
+// 	print_r ( $title );
+// 	echo "<pre>";
+// 	echo "xlabels is: ";
+// 	print_r ( $xlabels );
+	// exit;
+	global $chartmapvlaue;
+	
+	$average_value_array = array ();
+	$driverSize = sizeof ( $labels );
+	
+	// commpute the average
+	for($i = 0; $i < sizeof ( $value_arrays [0] ); $i ++) { // for each date
+		$sum = 0;
+		for($j = 0; $j < $driverSize; $j ++) { // for each driver
+			$sum = $sum + $value_arrays [$j] [$i];
+		}
+		$average_value_array [0] [] = $sum / $driverSize;
+	}
+	
+	if (count ( $average_value_array ) > 0) {
+		for($va = 0; $va < sizeof ( $average_value_array [0] ); $va ++) {
+			
+			$value = $average_value_array [0] [$va];
+			
+			$labels = $xlabels [$va];
+			$datess = $labels;
+			// $datess = explode("-",$labels);
+			if (count ( $datess ) != 3) {
+				$datess [0];
+				$dates = strtotime ( $datess [0] );
+				$labels = date ( 'Y-m-d', $dates );
+			}
+			$cur_date = $datess;
+			$_SESSION ['title'] = $title;
+			$datess1 = explode ( "-", $datess );
+			$datess2 = $datess1 [1] . "-" . $datess1 [2];
+			$reqDate = 1;
+			
+			$chartmapvlaue .= '{"date":"' . $datess2 . '" , "duration":' . round ( $value, 2 ) . '},';
+		}
+		$chartmapvlaue = substr ( $chartmapvlaue, 0, - 1 );
+		return $chartmapvlaue;
+	}
+}
 ?>
 		

@@ -89,7 +89,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
 
             	break;
             case 'vehicletrend':
-                $clause = "distinct s.id as vehicle_id, s.subscription_id, a.name as group_name, ".
+                $clause = "distinct s.id as vehicle_id, s.subscription_id, s.driver_id, a.name as group_name, ".
                         "a.id as group_id, a.parent_entity_id as company_id, ".
                         "'N/A' as mpg, ".
                         "s.name as vehicle_name, ".
@@ -99,12 +99,14 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                         "'N/A' as not_connected, ".
                         "'N/A' as disconnects ";
                 $query = $query->select($clause)
-                    ->from('#__fleet_subscription as s')
-                    ->leftJoin('#__fleet_entity as a on a.id = s.entity_id')
-                    ->leftJoin('#__fleet_trip_subscription as e on e.subscription_id = s.id')
-                    ->leftJoin('fleet_trip as h on h.id = e.trip_id')
-                    ->group('s.id')
-                    ->where('s.visible')
+                    ->from('fleet_trip as h')
+                    ->leftJoin('#__fleet_trip_subscription as e on e.trip_id = h.id')
+                    ->join('left outer', '#__fleet_subscription as s on e.subscription_id = s.id')
+                    ->leftJoin('#__fleet_trip_driver as d on h.id = d.trip_id')
+                    ->leftJoin('#__fleet_driver as b on d.driver_id = b.id')
+                    ->leftJoin('#__fleet_entity as a on b.entity_id = a.id')
+                    ->group('b.id')
+                    ->where('b.visible')
                     ->where('UNIX_TIMESTAMP(h.end_date)-UNIX_TIMESTAMP(h.start_date)>60')
                     ;
                 break;
@@ -417,13 +419,17 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                 break;
             case 'vehicletrend':
                 foreach ($items as &$item) {
-                    $item->mpg = $this->getMpgArray($item, $window);
+                    $item->mpg = $this->calculator->getMpgArray($item, $window);
                 }
-                $this->reduce_to_scope($items, 'mpg');
+//                 echo "<pre>"; print_r($items);
+//                 $this->reduce_to_scope($items, 'mpg');
                 $items = $this->reduce_to_average($items, $company, $group, 0, $vehicle, 'vehicle_name');
+//                 $items = $this->reduce_to_average($items, $company, $group, $driver, 0);
+//                 echo "<pre>"; print_r($items);
                 break;
             case 'drivertrend':
                 #TODO: remove when drop downs are complete
+//             	echo "<pre>"; print_r($items);
                 foreach ($items as &$item) {
                     #$item->gallons = $this->getVehicleFuelUsage($item, $window);
                     #$item->mpg = $this->calcMPG($item);
@@ -445,6 +451,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
 // 						//echo "<pre>"; print_r($item->speed_score);
 //                     }
                 }
+                
                 if ($trend == 'overall' || $trend == 'all') {
                     foreach (array('accel', 'decel', 'hard_turns') as $context) {
 //                         $this->reduce_to_scope($items, $context);
@@ -457,7 +464,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                 }
 //                 echo "after else"; echo "<pre>"; print_r($items);
                 $items = $this->reduce_to_average($items, $company, $group, $driver, 0);
-// 				echo "<pre>"; print_r($items);
+// 				echo "after reduce to average"; echo "<pre>"; print_r($items);
 				
                 break;
         }
@@ -751,8 +758,8 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
         if ($group) {
             $nn = $n;
             $g = str_replace('_name', '_id', $n);
-        } else
         if ($company) {
+        } else
             $nn = 'group_name';
             $g = 'group_id';
         } else {
