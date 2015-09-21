@@ -92,12 +92,53 @@ class FleetMatrixModelManageDevicesEdit extends FleetMatrixModelBaseEdit
         return true;
 
     }
+    
+    protected function exchangeExist($data) {
+        $db = & $this->getDbo();
+        $query = $db->getQuery(true);
+        $query->clear();
+        $serials = explode(',', $data['serialnumbers']);
+        if (sizeof($serials) < 1) {
+            JError::raiseWarning(1, 'Please enter the serial number. Use brower back button and modify input.');
+            return false;
+        }
+        $exchangeSerial = trim($serials[0]);
+        $originaSub = $data['selectsubscription'];
+        $query = $query->update('#__fleet_subscription')
+                    ->set('serial = NULL')
+                    ->where('serial = "' . $exchangeSerial . '"');
+        $db->setQuery((string) $query);
+        if (!$db->query()) {
+                JError::raiseError(500, $db->getErrorMsg());
+                return false;
+            }
+        $query->clear();
+      
+        $query = $query->update('#__fleet_subscription')
+                ->set('serial = "' . $exchangeSerial . '"')
+                ->where('subscription_id = "' . $originaSub . '"');
+        $db->setQuery((string) $query);
+
+        if (!$db->query()) {
+            JError::raiseError(500, $db->getErrorMsg());
+            return false;
+        }
+        if (!$db->getAffectedRows()) {
+            JError::raiseWarning(1, 'No device found. Use browser back button and modify input.');
+            return false;
+        }
+        return true;
+    }
 
 	public function updItem($data, $cmd=NULL)
 	{
         $cmd = JRequest::getCmd('submit', 'AddtoGroup');
         if ($cmd == 'RemovefromGroup' || $cmd == 'RetireDevice' ) {
             return $this->removeDevice($data);
+        }
+        
+        if($cmd == 'Exchange'){
+            return $this->exchangeExist($data);
         }
 
         $serials = explode(',', $data['serialnumbers']);
@@ -124,8 +165,16 @@ class FleetMatrixModelManageDevicesEdit extends FleetMatrixModelBaseEdit
             if (in_array($serial, $blacklist)) {
                 continue;
             }
+            
+            $query = $query->update('#__fleet_subscription')
+                    ->set('serial = NULL')
+                    ->where('serial = "' . $serial . '"');
 
-            $query	= $db->getQuery(true);
+            $db->setQuery((string) $query);
+            if (!$db->query()) {
+                JError::raiseError(500, $db->getErrorMsg());
+                return false;
+            }
             $query->clear();
 
             $subid = $this->calcSubId($company, $counter);

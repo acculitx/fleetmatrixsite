@@ -6,6 +6,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ERROR);
 
 require(JPATH_COMPONENT . DS . 'models' . DS . 'fields' . DS . 'selectgroup.php');
+require(JPATH_COMPONENT . DS . 'models' . DS . 'fields' . DS . 'selectsubscription.php');
 
 class FleetMatrixViewManageDevices extends JView
 {
@@ -15,6 +16,14 @@ class FleetMatrixViewManageDevices extends JView
         $cmd = JRequest::getCmd('cmd', NULL);
 
         switch ($task) {
+            case 'subscription':
+                $subscriptions = JFormFieldSelectSubscription::getSubscriptionByGroup($cmd);
+                $output = '';
+                foreach ($subscriptions as $subscriptions) {
+                    $output .= '<option value="'.$subscriptions->value.'">'.$subscriptions->text.'</option>';
+                }
+                $data = $output;
+                break;
             case 'group':
                 $groups = JFormFieldSelectGroup::getGroups($cmd);
                 $output = '';

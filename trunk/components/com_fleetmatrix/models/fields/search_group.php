@@ -15,4 +15,5 @@ class JFormFieldSearchGroup extends JFormFieldSelectGroup {
         $options[0] = JHtml::_('select.option', 0, 'All Groups');
 
         return $options;
+    }
 }

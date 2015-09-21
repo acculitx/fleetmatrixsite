@@ -12,13 +12,13 @@ class JFormFieldSelectGroup extends JFormFieldList {
 	protected $type = 'selectgroup';
 
 	public function getLabel() {
-		// code that returns HTML that will be shown as the label
-        return parent::getLabel();
+            // code that returns HTML that will be shown as the label
+            return parent::getLabel();
 	}
 
 	public function getInput() {
-		// code that returns HTML that will be shown as the form field
-        return parent::getInput();
+            // code that returns HTML that will be shown as the form field
+            return parent::getInput();
 	}
 
     static function getCompany($group, $remove_first=true) {
@@ -32,11 +32,17 @@ class JFormFieldSelectGroup extends JFormFieldList {
             ->from('#__fleet_entity as h')
             ->leftJoin('#__fleet_entity as a on a.id = h.parent_entity_id')
             ->where('h.entity_type=3');
-        /*if ($group) {
-            $query = $query->where('h.id='.$group);
-        }*/
+        if ($group) {
+            $query = $query->where('h.id='.$group[0]);
+        }
         $db->setQuery((string)$query);
+        
+//        echo "kelvin_com_2: ".(string)$query;
+                
         $rows = $db->loadObjectList();
+        
+//        echo "kelvin_com_2: ".print_r($rows);
+        
         if ($rows)
         {
             if (sizeof($rows) == 1 && $remove_first) {
@@ -64,12 +70,15 @@ class JFormFieldSelectGroup extends JFormFieldList {
             $query = $query->where('h.parent_entity_id="'.$parent.'"');
         } else {
             if ($GLOBALS['user_groups']) {
-            $query = $query->where(
-                "id in (".implode(',', $GLOBALS['user_groups']).")"
-            );
-        }
+                $query = $query->where(
+                        "id in (".implode(',', $GLOBALS['user_groups']).")"
+                );
+            }
         }
         $db->setQuery((string)$query);
+//        echo "kelvin_group";
+//        echo (string)$query;
+        
         $groups = $db->loadObjectList();
         if ($groups)
         {
@@ -83,8 +92,7 @@ class JFormFieldSelectGroup extends JFormFieldList {
         }
         return $options;
     }
-
-
+    
     static function getVehicleGroup($vehicle, $remove_first=true) {
         $options = array();
 

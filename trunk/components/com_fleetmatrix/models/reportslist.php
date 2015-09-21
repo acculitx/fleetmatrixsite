@@ -66,10 +66,11 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
         $group = JRequest::getInt('group', 0);
         $vehicle = JRequest::getInt('vehicle', 0);
         $driver = JRequest::getInt('driver', 0);
+        $diffDays = JRequest::getInt('diffDays', 0);
 
-		// Create a new query object.
-		$db = JFactory::getDBO();
-		$query = $db->getQuery(true);
+        // Create a new query object.
+        $db = JFactory::getDBO();
+        $query = $db->getQuery(true);
 
         switch ($cmd) {
             case 'vehicle':
@@ -226,77 +227,74 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             		;
             	break;
 				
-				
-				            case 'driverfuelreport':
-            	$clause = "distinct b.name as driver_name, ".
-              			"a.name as group_name, ".
-              			"aa.name as company_name, ".
-            			"SUM(redflag.hard_turns_hard_count) as turns_hard,".
-            			"SUM(redflag.accel_hard_count) as accel_hard,".
-            			"SUM(redflag.decel_hard_count) as decel_hard,".
-            			"SUM(speed.hard_count) as speed_hard,".
-            			"COUNT(h.subscriber_id) as trip_count, ".
-						"SUM(h.gallon_consumed) as gallon_consumed, ".
-						"idle.idle_time, ".
-            			"SUM(h.odo_end - h.odo_start) as miles "
-            			;
-          	$query = $query->select($clause)
-            			->from('fleet_trip as h')
-            			->leftJoin('#__fleet_trip_subscription as e on e.trip_id = h.id')
-            			->join('left outer', '#__fleet_subscription as s on e.subscription_id = s.id')
-            			->leftJoin('#__fleet_trip_driver as d on h.id = d.trip_id')
-						 ->leftJoin('fleet_idletime as idle ON h.id = idle.trip_id')
-            			->leftJoin('#__fleet_driver as b on d.driver_id = b.id')
-            			->leftJoin('#__fleet_entity as a on a.id = b.entity_id')
-            			->leftJoin('#__fleet_entity as aa on a.parent_entity_id = aa.id')
-            			->leftJoin('fleet_redflag_report as redflag ON h.id = redflag.tripid')
-            			->leftJoin('fleet_redflag_speed_report as speed ON h.id = speed.tripid ')
-            			->group('b.id')
-            			->where('b.visible')
-            			->where('UNIX_TIMESTAMP(h.end_date)-UNIX_TIMESTAMP(h.start_date)>60')
+            	case 'totalscore':
+            		$clause = "distinct b.name as driver_name, ".
+              				"b.id as driver_id, ".
+            				"a.name as group_name, ".
+            				"aa.name as company_name"
+            		;
+            		$query = $query->select($clause)
+            		->from('fleet_trip as h')
+            		->leftJoin('#__fleet_trip_subscription as e on e.trip_id = h.id')
+            		->join('left outer', '#__fleet_subscription as s on e.subscription_id = s.id')
+            		->leftJoin('#__fleet_trip_driver as d on h.id = d.trip_id')
+            		->leftJoin('#__fleet_driver as b on d.driver_id = b.id')
+            		->leftJoin('#__fleet_entity as a on a.id = b.entity_id')
+            		->leftJoin('#__fleet_entity as aa on a.parent_entity_id = aa.id')
+            		->group('d.driver_id')
+            		->where('b.visible')
             		;
             	break;
-				
-				
-				   case 'vigilancetrend':
-			
-
-					
-				/*	$clause = "redflag.hard_turns_hard_count as turns_hard, ".
-              			"redflag.hard_turns_severe_count as turns_severe, ".
-              			"redflag.accel_hard_count as accel_hard, ".
-            			"redflag.accel_severe_count as accel_severe,".
-            			"redflag.decel_hard_count as decel_hard,".
-            			"redflag.decel_severe_count as decel_severe,".
-						"redflag.hard_turns_starttime as hard_turns_starttime,".
-						"redflag.hard_turns_endtime as hard_turns_endtime,".
-						"redflag.accel_starttime as accel_starttime,".
-						"redflag.accel_endtime as accel_endtime,".
-						"redflag.decel_starttime as decel_starttime,".
-						"redflag.decel_endtime as decel_endtime,".
-						"redflag.tripid as tripid,".
-            			"speed.hard_count as speed_hard,".
-            			"speed.severe_count as speed_severe,".
-						"b.name as driver_name, ".
-						"a.name as group_name, ".
-              			"aa.name as company_name, ".
-            			"h.id, ".
-            			"h.odo_end - h.odo_start as miles "
-            			;
-						
-						 	$query = $query->select($clause)
-            			->from('fleet_trip as h')
-            			->leftJoin('fleet_redflag_report as redflag ON h.id = redflag.tripid')
-            			->leftJoin('fleet_redflag_speed_report as speed ON h.id = speed.tripid ')
-						->leftJoin('#__fleet_trip_driver as d on h.id = d.trip_id')
-            			->leftJoin('#__fleet_driver as b on d.driver_id = b.id')
-						->leftJoin('#__fleet_entity as a on a.id = b.entity_id')
-            			->leftJoin('#__fleet_entity as aa on a.parent_entity_id = aa.id')
-						->group('h.id')
-            			->where('UNIX_TIMESTAMP(h.end_date)-UNIX_TIMESTAMP(h.start_date)>60')*/
-						
-						
-						$clause = "AVG(redflag.hard_turns_hard) as turns_hard, ".
+            	
+            	case 'severelist':
+            		$clause = "distinct b.name as driver_name, ".
+            				"b.id as driver_id, ".
+            				"a.name as group_name, ".
+            				"aa.name as company_name"
+            		;
+            		$query = $query->select($clause)
+            		->from('fleet_trip as h')
+            		->leftJoin('#__fleet_trip_subscription as e on e.trip_id = h.id')
+            		->join('left outer', '#__fleet_subscription as s on e.subscription_id = s.id')
+            		->leftJoin('#__fleet_trip_driver as d on h.id = d.trip_id')
+            		->leftJoin('#__fleet_driver as b on d.driver_id = b.id')
+            		->leftJoin('#__fleet_entity as a on a.id = b.entity_id')
+            		->leftJoin('#__fleet_entity as aa on a.parent_entity_id = aa.id')
+            		->group('d.driver_id')
+            		->where('b.visible')
+            		;
+            	break;
+            	 
+		case 'driverfuelreport':
+                    $clause = "distinct b.name as driver_name, ".
+                                    "a.name as group_name, ".
+                                    "aa.name as company_name, ".
+                                    "SUM(redflag.hard_turns_hard_count) as turns_hard,".
+                                    "SUM(redflag.accel_hard_count) as accel_hard,".
+                                    "SUM(redflag.decel_hard_count) as decel_hard,".
+                                    "SUM(speed.hard_count) as speed_hard,".
+                                    "COUNT(h.subscriber_id) as trip_count, ".
+                                                    "SUM(h.gallon_consumed) as gallon_consumed, ".
+                                                    "idle.idle_time, ".
+                                    "SUM(h.odo_end - h.odo_start) as miles "
+                                    ;
+                    $query = $query->select($clause)
+                                    ->from('fleet_trip as h')
+                                    ->leftJoin('#__fleet_trip_subscription as e on e.trip_id = h.id')
+                                    ->join('left outer', '#__fleet_subscription as s on e.subscription_id = s.id')
+                                    ->leftJoin('#__fleet_trip_driver as d on h.id = d.trip_id')
+                                                     ->leftJoin('fleet_idletime as idle ON h.id = idle.trip_id')
+                                    ->leftJoin('#__fleet_driver as b on d.driver_id = b.id')
+                                    ->leftJoin('#__fleet_entity as a on a.id = b.entity_id')
+                                    ->leftJoin('#__fleet_entity as aa on a.parent_entity_id = aa.id')
+                                    ->leftJoin('fleet_redflag_report as redflag ON h.id = redflag.tripid')
+                                    ->leftJoin('fleet_redflag_speed_report as speed ON h.id = speed.tripid ')
+                                    ->group('b.id')
+                                    ->where('b.visible')
+                                    ->where('UNIX_TIMESTAMP(h.end_date)-UNIX_TIMESTAMP(h.start_date)>60');
+            	break;
+                case 'vigilancetrend':
+                    $clause = "AVG(redflag.hard_turns_hard) as turns_hard, ".
               			"AVG(redflag.hard_turns_severe) as turns_severe, ".
               			"AVG(redflag.accel_hard) as accel_hard, ".
             			"AVG(redflag.accel_severe) as accel_severe,".
@@ -311,7 +309,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             			"h.id "
             			;
 						
-							$query = $query->select($clause)
+                    $query = $query->select($clause)
             			->from('fleet_trip as h')
             			->join('','fleet_vigilance_windowScore as redflag ON h.id =  redflag.trip_id')
 						->leftJoin('#__fleet_trip_driver as d on h.id = d.trip_id')
@@ -319,13 +317,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
 						->leftJoin('#__fleet_entity as a on a.id = b.entity_id')
 						->leftJoin('#__fleet_entity as aa on a.parent_entity_id = aa.id')
 						->group('DATE(redflag.date)')
-						->order('redflag.date ASC')
-						
-            			//->where('UNIX_TIMESTAMP(redflag.`date`)-UNIX_TIMESTAMP(redflag.`date`)>60')
-            		;
-						
-		
-		
+						->order('redflag.date ASC');
             	break;
 				
             default:
@@ -336,34 +328,39 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
         }
 
         # Apply time window if specified
-        if ($window) {
-            $query = $query->where('h.end_date > DATE_SUB(NOW(), INTERVAL '.$window.' DAY)');
+        if ($cmd == 'totalscore') { # only totalscore has implemented diffDays
+            $totalDiffDays = (int) $diffDays + 7;
+            $query = $query->where('h.end_date > DATE_SUB(NOW(), INTERVAL ' . $totalDiffDays . ' DAY)');
+        } else {
+            if ($window) {
+                $query = $query->where('h.end_date > DATE_SUB(NOW(), INTERVAL '.$window.' DAY)');
+            } else {
+                $query = $query->where('h.end_date > DATE_SUB(NOW(), INTERVAL 1 DAY)');
+            }
+            if ($windowtwo) {
+                $query = $query->where('redflag.`date` > DATE_SUB(NOW(), INTERVAL '.$windowtwo.' DAY)');
+            }
         }
-		
-		
-		   if ($windowtwo) {
-            $query = $query->where('redflag.`date` > DATE_SUB(NOW(), INTERVAL '.$windowtwo.' DAY)');
-        }
-		
 		
         if ($company) {
             $query = $query->where('a.parent_entity_id = "'.$company.'"');
         } else {
             if (array_key_exists('user_companies', $GLOBALS) && $GLOBALS['user_companies']) {
-            $query = $query->where(
-                "a.parent_entity_id in (".implode(',', $GLOBALS['user_companies']).")"
-            );
+                $query = $query->where(
+                    "a.parent_entity_id in (".implode(',', $GLOBALS['user_companies']).")"
+                );
             }
         }
         if ($group) {
             $query = $query->where('a.id = "'.$group.'"');
         } else {
             if (array_key_exists('user_groups', $GLOBALS) && $GLOBALS['user_groups']) {
-            $query = $query->where(
-                "a.id in (".implode(',', $GLOBALS['user_groups']).")"
-            );
+                $query = $query->where(
+                    "a.id in (".implode(',', $GLOBALS['user_groups']).")"
+                );
             }
         }
+        
         if ($vehicle) {
             $query = $query->where('s.id = "'.$vehicle.'"');
         }
@@ -371,7 +368,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             $query = $query->where('b.id = "'.$driver.'"');
         }
 
-        #var_dump((string)$query);
+//        var_dump((string)$query);
 //         echo $query;
 		return $query;
 	}
@@ -381,7 +378,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
 
         $cmd = $this->getState(strtolower($this->model_key).'.cmd');
         $window = $this->getState(strtolower($this->model_key).'.window');
-		 $windowtwo = $this->getState(strtolower($this->model_key).'.windowtwo');
+        $windowtwo = $this->getState(strtolower($this->model_key).'.windowtwo');
         $trend = $this->getState(strtolower($this->model_key).'.trend');
         $company = JRequest::getInt('company', 0);
         if (!$company && sizeof($GLOBALS['user_companies'])==1) {
@@ -394,6 +391,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
         $vehicle = JRequest::getInt('vehicle', 0);
         $driver = JRequest::getInt('driver', 0);
         $idletime = JRequest::getInt('idletime', 0);
+        $diffDays = JRequest::getInt('diffDays', 0);
 
         switch ($cmd) {
             case 'vehicle':
@@ -416,17 +414,34 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
 //                     $item->speed_score = $this->calculator->getDriverSpeedScore($item, $window);
 //                     $item->overall_score = $this->calculator->getOverall($item);
                 }
+//                echo "<pre>"; print_r($items);
+                break;
+            case 'totalscore':
+                foreach ($items as &$item) {
+                    $item->total_score = $this->calculator->getDriverTotalScore($item, 'totalScore', $diffDays);
+                    $item->aggressive_score = $this->calculator->getDriverTotalScore($item, 'aggressiveScore', $diffDays);
+                    $item->distraction_score = $this->calculator->getDriverTotalScore($item, 'distractionScore', $diffDays);
+                    
+                    $item->company_group_name = $this->calculator->getCompanyGroupName($company, $group);
+                    $company_group_score = $this->calculator->getCompanyGroupTotalScore($item, $diffDays, $company, $group, '7');
+                    $item->company_group_total_score = count($company_group_score) > 0 ? $company_group_score[0]->total_score : 0;
+                    $item->company_group_aggressive_score = count($company_group_score) > 0 ? $company_group_score[0]->aggressive_score : 0;
+                    $item->company_group_distraction_score = count($company_group_score) > 0 ? $company_group_score[0]->distraction_score : 0;
+                }
                 break;
             case 'vehicletrend':
                 foreach ($items as &$item) {
                     $item->mpg = $this->calculator->getMpgArray($item, $window);
                 }
-//                 echo "<pre>"; print_r($items);
+//                 echo "<pre>"; echo "before reduce to average"; print_r($items);
 //                 $this->reduce_to_scope($items, 'mpg');
-                $items = $this->reduce_to_average($items, $company, $group, 0, $vehicle, 'vehicle_name');
+//                 $items = $this->reduce_to_average($items, $company, $group, 0, $vehicle, 'vehicle_name');
+//                 $items = $this->reduce_to_average($items, $company, $group, $driver, 0);
+//                 echo "<pre>"; echo "after reduce to average"; print_r($items);
 //                 $items = $this->reduce_to_average($items, $company, $group, $driver, 0);
 //                 echo "<pre>"; print_r($items);
                 break;
+               
             case 'drivertrend':
                 #TODO: remove when drop downs are complete
 //             	echo "<pre>"; print_r($items);
@@ -463,7 +478,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
 //                     $this->reduce_to_scope($items);
                 }
 //                 echo "after else"; echo "<pre>"; print_r($items);
-                $items = $this->reduce_to_average($items, $company, $group, $driver, 0);
+//                 $items = $this->reduce_to_average($items, $company, $group, $driver, 0);
 // 				echo "after reduce to average"; echo "<pre>"; print_r($items);
 				
                 break;

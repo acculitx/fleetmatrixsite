@@ -1,4 +1,6 @@
 <form action="<?php echo JRequest::getVar('REQUEST_URL', '', 'server'); ?>" >
+
+    
 <select name="company" id="company">
 <?php
     require_once(JPATH_COMPONENT . DS . 'models' . DS . 'fields' . DS . 'searchcompany.php');
@@ -34,12 +36,12 @@
     var processCompany = true;
     function groupChange() {
         var val = jQuery('#group').val();
-        if (val != "0" && val != undefined && processCompany) {
-            url = "<?php echo JRoute::_($this->getRoute().'&layout=json&format=raw&task=company&val='); ?>"+val;
-            jQuery.getJSON(url, function(data) {
-                jQuery('#company').html(data);
-            });
-        }
+//        if (val != "0" && val != undefined && processCompany) {
+//            url = "<?php echo JRoute::_($this->getRoute().'&layout=json&format=raw&task=group&val='); ?>"+val;
+//            jQuery.getJSON(url, function(data) {
+//                jQuery('#group').html(data);
+//            });
+//        }
         if (jQuery('#vehicle').length) {
             url = "<?php echo JRoute::_($this->getRoute().'&layout=json&format=raw&task=vehicle&val='); ?>"+val;
             jQuery.getJSON(url, function(data) {
@@ -93,7 +95,7 @@
 <script>
     function handlePagination($) {
         var value = this.href;
-        this.href = this.href + '&window=' + jQuery('#window_select').val();
+        this.href = this.href + '&window=' + "7";
         this.href = this.href + '&company=' + jQuery('#company').val();
         this.href = this.href + '&group=' + jQuery('#group').val();
         this.href = this.href + '&vehicle=' + jQuery('#vehicle').val();
@@ -107,6 +109,7 @@
         jQuery('#update').click();
         return false;
     }
+    
 
     jQuery(document).ready(function() {
         jQuery('.pagination a').click(handlePagination);

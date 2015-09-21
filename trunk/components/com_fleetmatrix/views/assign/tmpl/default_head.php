@@ -7,6 +7,7 @@ defined('_JEXEC') or die('Restricted Access');
 <?php
 include(JPATH_COMPONENT . DS . 'models' . DS . 'vehicle_group_controls.php');
 ?>
+    
 <select name="driver" id="driver">
 <?php
     require_once(JPATH_COMPONENT . DS . 'models' . DS . 'fields' . DS . 'selectgroup.php');

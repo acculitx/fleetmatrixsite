@@ -12,7 +12,7 @@ $names = array ();
 $xlabels = array ();
 $count = 1; // indicates first iteration
 
-// echo "<pre>"; echo "in body, items: ";
+// echo "<pre>"; echo "items: ";
 // print_r ( $this->items );
 
 foreach ( $this->items as $i => $item ) {
@@ -112,7 +112,7 @@ if (count ( $values ) > 0) {
                 graph.title = "mpg";
                 graph.valueField = "duration";
                // graph.hidden = true; // this line makes the graph initially hidden           
-                graph.balloonText = "duration [[category]]: [[value]]";
+                graph.balloonText = "mpg [[category]]: [[value]]";
                // graph.lineAlpha = 1;
              //   graph.bullet = "round";
                 chart.addGraph(graph);

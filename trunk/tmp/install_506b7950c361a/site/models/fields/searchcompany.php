@@ -12,7 +12,9 @@ class JFormFieldSearchCompany extends JFormFieldSelectCompany {
 
     static function getCompanies() {
         $options = parent::getCompanies();
-        $options[0] = JHtml::_('select.option', 0, 'All Companies');
+        if (sizeof($options) > 1) {
+            $options[0] = JHtml::_('select.option', 0, 'All Companies');
+        }
 
         return $options;
     }
