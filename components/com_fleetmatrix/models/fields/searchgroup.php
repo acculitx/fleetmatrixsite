@@ -39,7 +39,14 @@ class JFormFieldSearchGroup extends JFormFieldSelectGroup {
 
     static function getCompany($group) {
         $options = parent::getCompany($group, false);
-        if (sizeof($options) > 1) {
+        // the first one is always "select a company"
+        // if == 2, than it really means there is only one eligbile company, then go ahead and remove the first generated one
+        // so the first one doesn't count, and if there is more than 2, means there's more than one eligible company
+        if (sizeof($options) == 2) { 
+            unset($options[0]); // remove element
+            $options = array_values($options); // re-index the array
+        }
+        elseif (sizeof($options) > 2) { 
             $options[0] = JHtml::_('select.option', 0, 'All Companies');
         }
 

@@ -221,6 +221,164 @@ if (! class_exists ( 'ScoreCalculator' )) {
 			}
 			return $this->averages [$avtype];
 		}
+		
+		public function getDriverTotalScore($item, $avtype, $diffDays, $window = '7') {
+                    $db = JFactory::getDBO ();
+
+                    $clause = 'avg(distinct ' . $avtype .')';
+
+                    $table = 'fleet_daily_total_score as b';
+
+                    $totalDiffDays = (int) $diffDays + (int) $window;
+
+                    $query = $db->getQuery ( true )->select ( $clause )->from ( $table );
+                    if (property_exists ( $item, 'driver_id' )) {
+                            $query->where ( 'b.driver_id=' . $item->driver_id );
+                            $query->where('b.date > DATE_SUB(NOW(), INTERVAL '. $totalDiffDays .' DAY)');
+                    } else { // should never be reached
+                            $query = $query->leftJoin ( '#__fleet_trip_subscription as e on e.subscription_id = b.subscription_id' )
+                            ->leftJoin ( '#__fleet_subscription as a on e.subscription_id = a.id' )
+                            ->where ( 'a.id="' . $item->vehicle_id . '"' );
+                    }
+
+                    $query = (( string ) $query) . ' group by b.driver_id';
+
+                    $db->setQuery ( $query );
+
+                    $result = $db->loadResult ();
+
+                    // if the driver doesn't have any score prior to specified date
+                    // here we return -1 to indicate it's n/a
+                    // back to dangerous_drivers, we will set it back to 0 and render n/a
+                    if (is_null ( $result )) {
+                            $result = -1;
+                    }
+
+//                    echo $query;
+                    // echo $lastScore;
+
+                    return $result;
+		}
+		
+                public function getCompanyGroupTotalScore($item, $diffDays, $company, $group, $window = '7') {
+                    $db = JFactory::getDBO ();
+
+                    $clause = 'avg(b.totalScore) as total_score, avg(b.aggressiveScore) as aggressive_score, avg(b.distractionScore) as distraction_score';
+
+                    $table = 'fleet_entity_daily_total_score as b';
+
+                    $totalDiffDays = (int) $diffDays + (int) $window;
+
+                    $query = $db->getQuery ( true )->select ( $clause )->from ( $table );
+                    $query->where('b.date > DATE_SUB(NOW(), INTERVAL '. $totalDiffDays .' DAY)');
+                    
+                    if ($group) {
+                        $query->where ( 'b.entity_id=' . $group);
+                        $query = (( string ) $query) . ' group by b.entity_id';
+                    }
+                    elseif ($company) {
+                        $query->where ( 'b.entity_id=' . $company);
+                        $query = (( string ) $query) . ' group by b.entity_id';
+                    }
+                    
+                    $db->setQuery ( $query );
+
+                    $result = $db->loadObjectList();
+
+                    // if the driver doesn't have any score prior to specified date
+                    // here we return -1 to indicate it's n/a
+                    // back to dangerous_drivers, we will set it back to 0 and render n/a
+                    if (is_null ( $result )) {
+                        $result = -1;
+                    }
+
+//                    echo $query;
+                    // echo $lastScore;
+
+                    return $result;
+		}
+                
+                public function getCompanyGroupName($company, $group) {
+                    if (!$company && !$group) {
+                        return 'All Companies';
+                    }
+                    
+                    $db = JFactory::getDBO ();
+
+                    $query = 'select distinct e.name 
+                                from fleet_entity_daily_total_score as b, giqwm_fleet_entity as e
+                                where b.entity_id = e.id';
+                    if ($group) {
+                        $query = (( string ) $query) . ' and e.id=' . $group;
+                    }
+                    elseif ($company) {
+                        $query = (( string ) $query) . ' and e.id=' . $company;
+                    }
+                    
+                    $db->setQuery ( $query );
+
+                    $result = $db->loadResult ();
+
+                    // if the driver doesn't have any score prior to specified date
+                    // here we return -1 to indicate it's n/a
+                    // back to dangerous_drivers, we will set it back to 0 and render n/a
+                    if (is_null ( $result )) {
+                        $result = -1;
+                        return $result;
+                    }
+                    
+                    if (!$group) {
+                        $result = $result . ' (All Groups)';
+                    }
+//                    echo $query;
+                    // echo $lastScore;
+
+                    return $result;
+		}
+                
+		public function getDriverADTScore($driver_id) {
+			$db = JFactory::getDBO ();
+			$select = 'DATE_ADD(redflag.starttime, INTERVAL fleet_trip.time_zone HOUR) as starttime, redflag.type as eventtype, redflag.trip_id as trip_id';
+			$from = '#__fleet_trip_driver as trip_driver, fleet_redflag as redflag, fleet_trip';
+				
+			$query = $db->getQuery ( true ) -> select ( $select ) -> from ( $from );
+			$query = $query->where ( 'trip_driver.driver_id=' . $driver_id );
+			$query = $query->where ( 'trip_driver.trip_id = redflag.trip_id');
+			$query = $query->where ( 'trip_driver.trip_id = fleet_trip.id');
+			$query = $query->where ( 'redflag.scoretype=1');
+			$query = $query->order ( 'redflag.starttime' . ' DESC' );
+			
+			$db->setQuery ( $query );
+			
+			$result = $db->loadObjectList ();
+			
+// 			echo $query;
+			
+			return $result;
+		}
+		
+		public function getDriverAllSpeedScore($driver_id) {
+			$db = JFactory::getDBO ();
+			$select = 'DATE_ADD(speed.date, INTERVAL fleet_trip.time_zone HOUR) as starttime, speed.tripid as trip_id, "speed" as eventtype';
+			$from = '#__fleet_trip_driver as trip_driver, fleet_redflag_speed as speed, fleet_trip';
+		
+			$query = $db->getQuery ( true ) -> select ( $select ) -> from ( $from );
+			$query = $query->where ( 'trip_driver.driver_id=' . $driver_id );
+			$query = $query->where ( 'trip_driver.trip_id = speed.tripid');
+			$query = $query->where ( 'trip_driver.trip_id = fleet_trip.id');
+			$query = $query->where ( 'speed.scoretype=2');
+			$query = $query->order ( 'speed.date' . ' DESC' );
+				
+			$db->setQuery ( $query );
+				
+			$result = $db->loadObjectList ();
+				
+// 			echo $query;
+			// echo $lastScore;
+				
+			return $result;
+		}
+		
 		public function getDriverAccelScore($item, $window, $avtype = 'accel') {
 			$db = JFactory::getDBO ();
 			$averages = $this->getAverages ( $avtype );
@@ -229,6 +387,7 @@ if (! class_exists ( 'ScoreCalculator' )) {
 			} else {
 				$table = 'fleet_daily_score as b';
 			}
+                        
 			
 			$query = $db->getQuery ( true )->select ( sprintf ( "sum(IF(%s > 10, 10, %s))/count(%s)", $avtype, $avtype, $avtype ) )->from ( $table );
 			if (property_exists ( $item, 'driver_id' )) {
@@ -241,7 +400,8 @@ if (! class_exists ( 'ScoreCalculator' )) {
 			}
 			if ($window) {
 				$query = $query->where ( 'b.date > DATE_SUB(NOW(), INTERVAL ' . $window . ' DAY)' );
-				$query = $query->where ( 'window = ' . $window );
+                                $adjustedWindow = $this->adjustWindow($window);
+				$query = $query->where ( 'window = ' . $adjustedWindow );
 			}
 			
 			$debug = JRequest::getCmd ( 'debug', '0' );
@@ -250,12 +410,30 @@ if (! class_exists ( 'ScoreCalculator' )) {
 			}
 			$db->setQuery ( $query );
 			
+//                        echo $query;
+                        
 			$result = $db->loadResult ();
 			
 			$result = doAverage ( $averages, $result, $avtype );
 			
 			return $result;
 		}
+                
+                /**
+                 * if window is not specified through drop down list (not 7,30,90,180)
+                 * then we set window = 7. As fleet_moving_daily_score only has pre-computed score for
+                 * window 7,30,90,180
+                 * 
+                 * @param type $window
+                 */
+                public function adjustWindow($window) {
+                    $windowMap = array("7", "30", "90", "180", "365" );
+                    if (!in_array($window, $windowMap)) {
+                        $window = "7";
+                    }
+                    return $window;
+                }
+                
 		public function getLastValidScore($item, $window, $avtype) {
 			$dbb = JFactory::getDBO ();
 			// $averages = $this->getAverages($avtype);
@@ -560,6 +738,7 @@ if (! class_exists ( 'ScoreCalculator' )) {
 				
 			return $lastScore;
 		}
-	}
+
+    }
 }
 ?>

@@ -97,6 +97,8 @@ class FleetMatrixModelAssignList extends FleetMatrixModelBaseList
 	protected function getListQuery()
 	{
         $cmd = $this->getState(strtolower($this->model_key).'.cmd');
+//        $window = $this->getState(strtolower($this->model_key).'.window');
+        
         $company = JRequest::getInt('company', 0);
         $group = JRequest::getInt('group', 0);
         $vehicle = JRequest::getInt('vehicle', 0);
@@ -146,8 +148,10 @@ class FleetMatrixModelAssignList extends FleetMatrixModelBaseList
         if (!$company && !$group) {
             $query = $query->where('1=0');
         }
+        
+        $query = $query->where('h.end_date > DATE_SUB(NOW(), INTERVAL '.'7'.' DAY)');
 
-        //var_dump((string)$query);
+//        echo $query;
 		return $query;
 	}
 

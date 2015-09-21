@@ -20,6 +20,11 @@
                label="Assign Group"
                required="true"
                ></field>
+        <field name="selectsubscription"
+               type="selectsubscription"
+               label="Exist Subscriptions"
+               required="true"
+               ></field>
 
 	</fieldset>
 </form>

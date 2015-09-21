@@ -8,7 +8,9 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
-include(JPATH_COMPONENT . DS . 'models' . DS . 'search_controls.php');
+include(JPATH_COMPONENT . DS . 'models' . DS . 'search_controls_7day.php');
+include(JPATH_COMPONENT . DS . 'models' . DS . 'calendarCreator.php');
+
 //$trend = "accel";
 ?>
 

@@ -1,0 +1,69 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jun 22, 2015, 11:20:06 PM
+    Author     : Kelvin
+*/
+
+table.batchFileLoad-table {
+    background-color: #FFFFEB;
+    border: 2px solid;
+}
+
+tr.batchFileLoad-tr > td
+{
+    padding-bottom: 1em;
+    padding-left: 1em;
+    font-family:Arial, Helvetica, sans-serif; 
+    font-size : 13px;
+}
+
+tr.batchFileLoad-tr-error > td
+{
+    color: red;
+    background-color: #FEEFB3;
+    font-family:Arial, Helvetica, sans-serif; 
+    font-size : 15px;
+    border: 1px solid;
+    margin: 10px 0px;
+    padding:15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+div#fixErrorMessage
+{
+    color: red;
+    background-color: #FEEFB3;
+    font-family:Arial, Helvetica, sans-serif; 
+    font-size : 15px;
+    border: 1px solid;
+    margin: 10px 0px;
+    padding:15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+div.warning-message
+{
+    color: #9F6000;
+    background-color: #FEEFB3;
+    font-family:Arial, Helvetica, sans-serif; 
+    font-size : 15px;
+    border: 1px solid;
+    margin: 10px 0px;
+    padding:15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+img.warning-icon
+{
+    cursor: pointer;
+    width: 25px;
+    margin: -3px;
+    padding-right: 10px;
+}

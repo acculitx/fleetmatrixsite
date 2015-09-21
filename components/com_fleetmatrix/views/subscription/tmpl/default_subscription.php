@@ -10,8 +10,8 @@ JHtml::_('behavior.tooltip');
 <form action="<?php echo JRoute::_($this->getRoute()); ?>" method="post" name="adminForm">
 
 	<table class="adminlist">
-		<thead><?php echo $this->loadTemplate('head');?></thead>
-		<tfoot><?php echo $this->loadTemplate('foot');?></tfoot>
-		<tbody><?php echo $this->loadTemplate('body');?></tbody>
+		<thead><?php echo $this->loadTemplate('subscription_head');?></thead>
+		<tfoot><?php echo $this->loadTemplate('subscription_foot');?></tfoot>
+		<tbody><?php echo $this->loadTemplate('subscription_body');?></tbody>
 	</table>
 </form>

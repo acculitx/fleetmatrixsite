@@ -36,17 +36,12 @@
         	    required="true"
                 size="50" ></field>
 
-        <!-- TODO: this needs to be a custom list -->
         <field name="driver_id"
-               type="sql"
+               type="selectdriver"
                label="Driver"
                required="true"
                description="The default driver of the vehicle"
-               query="select id, name from #__fleet_driver"
-               key_field="id"
-               value_field="name" >
-            <option value="0">Select a Driver</option>
-        </field>
+               ></field>
 
         <field name="vin"
                 type="text"

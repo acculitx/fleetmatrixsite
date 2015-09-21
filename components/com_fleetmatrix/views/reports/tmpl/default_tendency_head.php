@@ -4,7 +4,7 @@ defined('_JEXEC') or die('Restricted Access');
 
 
 include(JPATH_COMPONENT . DS . 'models' . DS . 'search_controls.php');
-
+include(JPATH_COMPONENT . DS . 'models' . DS . 'calendarCreator.php');
 ?>
 
 <tr class = "sortable">

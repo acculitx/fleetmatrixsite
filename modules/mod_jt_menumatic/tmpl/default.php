@@ -15,6 +15,9 @@ defined('_JEXEC') or die;
 // Note. It is important to remove spaces between elements.
 $document 		=& JFactory::getDocument();
 
+$document->addStyleSheet(JURI::base() . 'modules/mod_jt_menumatic/css/calendar.css');
+$document->addStyleSheet(JURI::base() . 'modules/mod_jt_menumatic/css/batchfileload.css');
+
 if ($jt_style_menu == 0) { $document->addStyleSheet(JURI::base() . 'modules/mod_jt_menumatic/css/horizontal-menumatic.css'); $jt_style = 'horizontal'; }
 	else 				 { $document->addStyleSheet(JURI::base() . 'modules/mod_jt_menumatic/css/vertical-menumatic.css'); 	 $jt_style = 'vertical'; }
 

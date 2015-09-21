@@ -5,112 +5,135 @@ $db = JFactory::getDBO();
 $end_date = JRequest::getVar ('date', '');
 $trip_id = JRequest::getInt ('trip', 0);
 
+// get driver id
+$dqry = "select td.driver_id as driver_id from giqwm_fleet_trip_driver as td where td.trip_id = " . $_REQUEST ['trip'];
+$db->setQuery ($dqry);
+$driver_id = $db->loadObject();
+
+// get previous trip
+$ptqry = "select td.trip_id as trip_id from giqwm_fleet_trip_driver as td"
+        . " where td.driver_id =" .$driver_id->driver_id. " and td.trip_id < " . $_REQUEST ['trip'] 
+        . " order by td.trip_id desc limit 1";
+$db->setQuery ($ptqry);
+$prev_trip = $db->loadObject();
+$prev_trip_id = $prev_trip ? $prev_trip->trip_id : NULL;
+//echo var_dump($prev_trip_id);
+
+// get next trip
+$ntqry = "select td.trip_id as trip_id from giqwm_fleet_trip_driver as td"
+        . " where td.driver_id =" .$driver_id->driver_id. " and td.trip_id > " . $_REQUEST ['trip'] 
+        . " order by td.trip_id asc limit 1";
+$db->setQuery ($ntqry);
+$next_trip = $db->loadObject();
+$next_trip_id = $next_trip ? $next_trip->trip_id : NULL;
+//echo var_dump($next_trip_id);
+
+// get all redflag events
 $qry = "Select * from fleet_redflag where trip_id=" . $_REQUEST ['trip'];
 $db->setQuery ($qry);
-$driver = $db->loadObjectList();
+$redflag_events = $db->loadObjectList();
 
-$accel_markers = '';
-$brake_markers = '';
-$turn_markers = '';
+$accel_decel_turns_markers = '';
 $speed_markers = '';
 
-foreach($driver as $i => $item) {
-	$brake_markers .= get_marker($item, $i);
-	$turn_markers .= get_marker($item, $i);
-	$accel_markers .= get_marker($item, $i);
+foreach($redflag_events as $i => $item) {
+    switch ($item->type) {
+        case 'hard_turns': $type = 'Turn'; break;
+        case 'accel': $type = 'Accel'; break;
+        case 'decel': $type = 'Brake'; break;
+    }
+    $accel_decel_turns_markers .= get_marker($item, $type);
 }
 
-$qry = "select * from fleet_redflag_speed a join fleet_gps b on a.tripid = b.trip_id where tripid = ".$_REQUEST ['trip']." and a.speedscore = round(b.score, 4)";
+// get all the speed redflag events
+$qry = "select * from fleet_redflag_speed a where tripid = ".$_REQUEST ['trip'];
 $db->setQuery ($qry);
-$driver = $db->loadObjectList();
-
-foreach($driver as $i => $e) {
-	$speed_markers .= get_gps_marker($driver, $i, 'Speed');
+$speed_redflag_events = $db->loadObjectList();
+//echo var_dump($speed_redflag_events);
+foreach($speed_redflag_events as $i => $e) {
+    $speed_markers .= get_marker($e, 'Speed');
 }
 
-function get_gps_marker($gps, $i, $type=''){
+function get_gps_marker($gps, $type = ''){
 	$marker = '';
 	
-	foreach ($gps as $k => $e) {
-		$lat_degrees = substr($e->latitude, 0, 2);
-		$lat_minutes = substr($e->latitude, 2);
-		$lat_minutes /=  60;
-		$lat[$i] = $lat_degrees + $lat_minutes;
-			
-		$pos = strpos ($e->longitude, '.');
-		if ($pos == 4) {
-			$lon_degrees = substr($e->longitude, 0, 2);
-			$lon_minutes = substr($e->longitude, 2);
-		}
-			
-		if ($pos == 5) {
-			$lon_degrees = substr($e->longitude, 0, 3);
-			$lon_minutes = substr($e->longitude, 3);
-		}
-			
-		$lon_minutes /= 60;
-		$lon[$i] = $lon_degrees + $lon_minutes;
-			
-		if ($e->lat_dir == 'S') {
-			$lat[$i] = '-' . $lat[$i];
-		}
-			
-		if ($e->lon_dir == 'W') {
-			$lon[$i] = '-' . $lon[$i];
-		}
-			
-		if ($lat[$i] != 0) {
-			$marker .= '
-			<Placemark>
-				<styleUrl>#startStyle</styleUrl>
-			    <name>'.$type.' Hard / '.$type.' Severe #__TRIPID__</name>
-			    <description>' . $e->date . '</description>
-			    <Point>
-			        <coordinates>'.$lon[$i].','.$lat[$i].'</coordinates>
-			    </Point>
-				<StyleMap>
-					<Pair>
-						<Style>
-							<IconStyle>
-								<Icon>
-									<href>'.JURI::root().'images/'.strtolower($type).'.png</href>
-								</Icon>
-							</IconStyle>
-						</Style>
-					</Pair>
-				</StyleMap>
-			</Placemark>';
-		}
-	}
+        $lat_degrees = substr($gps->latitude, 0, 2);
+        $lat_minutes = substr($gps->latitude, 2);
+        $lat_minutes /=  60;
+        $lat = $lat_degrees + $lat_minutes;
+
+        $pos = strpos ($gps->longitude, '.');
+        if ($pos == 4) {
+                $lon_degrees = substr($gps->longitude, 0, 2);
+                $lon_minutes = substr($gps->longitude, 2);
+        }
+        elseif ($pos == 5) {
+                $lon_degrees = substr($gps->longitude, 0, 3);
+                $lon_minutes = substr($gps->longitude, 3);
+        }
+        else {
+            return;
+        }
+        $lon_minutes /= 60;
+        $lon = $lon_degrees + $lon_minutes;
+
+        if ($gps->lat_dir == 'S') {
+                $lat = '-' . $lat;
+        }
+
+        if ($gps->lon_dir == 'W') {
+                $lon = '-' . $lon;
+        }
+
+        if ($lat != 0) {
+                $marker .= '
+                <Placemark>
+                        <styleUrl>#startStyle</styleUrl>
+                    <name>'.$type.' Hard / '.$type.' Severe #__TRIPID__</name>
+                    <description>' . $gps->date . '</description>
+                    <Point>
+                        <coordinates>'.$lon.','.$lat.'</coordinates>
+                    </Point>
+                        <StyleMap>
+                                <Pair>
+                                        <Style>
+                                                <IconStyle>
+                                                        <Icon>
+                                                                <href>'.JURI::root().'images/'.strtolower($type).'.png</href>
+                                                        </Icon>
+                                                </IconStyle>
+                                        </Style>
+                                </Pair>
+                        </StyleMap>
+                </Placemark>';
+        }
 	return $marker;
 }
 
-function get_marker($item, $i){
-	$db = JFactory::getDBO();
-	$marker = '';
-	$type = $item->type;
-	
-	switch ($type){
-		case $type == 'hard_turns' :
-			$type = 'Turn'; break;
-		case $type == 'decel':
-			$type = 'Brake'; break;
-		case $type == 'accel':
-			$type = 'Accel'; break;
-	}	
-	
-	$start = substr($item->starttime, 0, - 2) . "00";
-	$end = substr($item->endtime, 0, - 2) . "00";
-	
-	$date_array = explode (':', $end);
-	$next = $date_array[1] + 1;
-	$end = $date_array[0] . ':' . $next . ":" . $date_array[2];
+function get_marker($item, $type){
+    $db = JFactory::getDBO();
+    if ($type != 'Speed') {
+        // get the previous minute with second set to 00
+        $start = substr($item->starttime, 0, - 2) . "00";
+        $end = substr($item->endtime, 0, - 2) . "00";
 
-	$qry = "Select * from fleet_gps where trip_id=" . $_REQUEST['trip'] . " and date between '$start' and '$end'";
-	$db->setQuery($qry);
-	$gps = $db->loadObjectList();
-	
-	return get_gps_marker($gps, $i, $type);
+        // get the next minute with second set to 00
+        $date_array = explode (':', $end);
+        $next = $date_array[1] + 1;
+        $end = $date_array[0] . ':' . $next . ":" . $date_array[2];          
+    }
+
+    $qry = $type == 'Speed' ?
+            "Select * from fleet_gps where trip_id=" . $_REQUEST['trip'] . " and date = '$item->date'" :
+            "Select * from fleet_gps where trip_id=" . $_REQUEST['trip'] . " and date between '$start' and '$end'";
+    $db->setQuery($qry);
+    $gps_result = $db->loadObjectList();
+
+    if ($gps_result != NULL && count($gps_result) > 0) {
+        $gps = $gps_result[0];
+//            echo var_dump($gps);
+        return get_gps_marker($gps, $type);
+    }
 }
 
 $kml_head = <<<KML_HEAD
@@ -222,9 +245,7 @@ __START__
     </Point>
 </Placemark>
 
-$brake_markers
-$turn_markers
-$accel_markers
+$accel_decel_turns_markers
 $speed_markers
 
 <Placemark>
@@ -246,6 +267,7 @@ KML_FOOT;
 $kml = $kml_head;
 $c = 0;
 $trip = $trip_id;
+
 foreach ( $this->items as $trip => $item ) {
 	$placemark = str_replace ( '__COORDINATES__', implode ( "\n", $item ), $kml_placemark );
 	$placemark = str_replace ( '__STYLE__', $c, $placemark );
@@ -262,7 +284,7 @@ foreach ( $this->items as $trip => $item ) {
 	
 	$query = $db->getQuery ( true )->select ( 'id, DATE_ADD(start_date, INTERVAL a.time_zone HOUR) as start_date, DATE_ADD(end_date, INTERVAL a.time_zone HOUR) as end_date' )->from ( 'fleet_trip as a' )->where ( 'a.id=' . $trip );
 	$db->setQuery ( $query );
-	$row = $db->loadObject ();
+	$row = $db->loadObject();
 	
 	$kml = str_replace ( '__TRIPID__', $row->id, $kml );
 	// $kml = str_replace('__TRIPTurn__', $resultreport['hard_turns_starttime'], $kml);
@@ -313,10 +335,14 @@ function dayStringMinus($date) {
 	return $d->format ( 'Y-m-d' );
 }
 
-if ($end_date) { ?>
-<a class="prev_date" href="/component/fleetmatrix?view=map&trip=<?php echo $trip_id; ?>&date=<?php echo dayStringMinus($end_date); ?>&tmpl=component"><< PREVIOUS</a>
-<?php if (todayString () != dayString ( $end_date )) { ?>
-<a class="next_date" href="/component/fleetmatrix?view=map&trip=<?php echo $trip_id; ?>&date=<?php echo dayStringPlus($end_date); ?>&tmpl=component">NEXT >></a>
+if ($prev_trip_id) { ?>
+    <a class="prev_date" href="/component/fleetmatrix?view=map&trip=<?php echo $prev_trip_id; ?>&tmpl=component"><< PREVIOUS</a>
 <?php } else { ?>
-<span class="next_date">NEXT >>></a>
-<?php } } ?>
+        <span class="next_date"><< PREVIOUS</a>
+<?php } ?>
+
+<?php if ($next_trip_id) { ?>
+        <a class="next_date" href="/component/fleetmatrix?view=map&trip=<?php echo $next_trip_id; ?>&tmpl=component">NEXT >></a>
+<?php } else { ?>
+        <span class="next_date">NEXT >></a>
+<?php } ?>

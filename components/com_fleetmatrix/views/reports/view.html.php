@@ -11,10 +11,9 @@ class FleetMatrixViewReports extends FleetMatrixBaseView
 {
     var $model_key = 'reports';
 
-	// Overwriting JView display method
-	function display($tpl = null)
-	{
-		$this->item = $this->get('Item');
+    // Overwriting JView display method
+    function display($tpl = null) {
+        $this->item = $this->get('Item');
         $tpl = $this->item->getTemplate($tpl);
 
         $this->window = JRequest::getInt('window', 7);
@@ -23,7 +22,7 @@ class FleetMatrixViewReports extends FleetMatrixBaseView
         $this->vehicle = JRequest::getInt('vehicle', 0);
         $this->driver = JRequest::getInt('driver', 0);
         return parent::display($tpl);
-	}
+    }
 
     function getRoute() {
         if ($this->item) {

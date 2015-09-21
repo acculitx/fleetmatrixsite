@@ -1,18 +1,18 @@
 <?php
 ob_start ();
 function renderLineChart($value_arrays, $labels = NULL, $title, $xlabels = NULL) {
-// 	echo "value array is: ";
-// 	echo "<pre>";
-// 	print_r ( $value_arrays );
-// 	echo "labels is: ";
-// 	echo "<pre>";
-// 	print_r ( $labels );
-// 	echo "title is: ";
-// 	echo "<pre>";
-// 	print_r ( $title );
-// 	echo "xlabels is: ";
-// 	echo "<pre>";
-// 	print_r ( $xlabels );
+	// echo "value array is: ";
+	// echo "<pre>";
+	// print_r ( $value_arrays );
+	// echo "labels is: ";
+	// echo "<pre>";
+	// print_r ( $labels );
+	// echo "title is: ";
+	// echo "<pre>";
+	// print_r ( $title );
+	// echo "xlabels is: ";
+	// echo "<pre>";
+	// print_r ( $xlabels );
 	// exit;
 	global $chartmapvlaue;
 	
@@ -78,18 +78,18 @@ function renderLineChart($value_arrays, $labels = NULL, $title, $xlabels = NULL)
 	}
 }
 function renderLineChartForMpg($value_arrays, $labels = NULL, $title, $xlabels = NULL) {
-// 	echo "<pre>";
-// 	echo "value array is: ";
-// 	print_r ( $value_arrays );
-// 	echo "<pre>";
-// 	echo "labels is: ";
-// 	print_r ( $labels );
-// 	echo "<pre>";
-// 	echo "title is: ";
-// 	print_r ( $title );
-// 	echo "<pre>";
-// 	echo "xlabels is: ";
-// 	print_r ( $xlabels );
+	// echo "<pre>";
+	// echo "value array is: ";
+	// print_r ( $value_arrays );
+	// echo "<pre>";
+	// echo "labels is: ";
+	// print_r ( $labels );
+	// echo "<pre>";
+	// echo "title is: ";
+	// print_r ( $title );
+	// echo "<pre>";
+	// echo "xlabels is: ";
+	// print_r ( $xlabels );
 	// exit;
 	global $chartmapvlaue;
 	
@@ -97,12 +97,14 @@ function renderLineChartForMpg($value_arrays, $labels = NULL, $title, $xlabels =
 	$driverSize = sizeof ( $labels );
 	
 	// commpute the average
-	for($i = 0; $i < sizeof ( $value_arrays [0] ); $i ++) { // for each date
-		$sum = 0;
-		for($j = 0; $j < $driverSize; $j ++) { // for each driver
-			$sum = $sum + $value_arrays [$j] [$i];
+	if ($driverSize > 0) {
+		for($i = 0; $i < sizeof ( $value_arrays [0] ); $i ++) { // for each date
+			$sum = 0;
+			for($j = 0; $j < $driverSize; $j ++) { // for each driver
+				$sum = $sum + $value_arrays [$j] [$i];
+			}
+			$average_value_array [0] [] = $sum / $driverSize;
 		}
-		$average_value_array [0] [] = $sum / $driverSize;
 	}
 	
 	if (count ( $average_value_array ) > 0) {
