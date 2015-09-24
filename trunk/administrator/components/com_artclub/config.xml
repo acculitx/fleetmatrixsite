@@ -1,0 +1,12 @@
+<root>
+  <params>
+    <param type="spacer" />
+    <param type="spacer" default="Notification Configuration" />
+    <param type="spacer" />
+    <param type="text" name="director_email" size="3" default="info@finarta.net" label="Director E-mail:" description="Specify the Email address for the FINARTA director." />
+    <param name="attach_html" type="list" default="0" label="Attach HTML" description="Attach the HTML used to make the PDF for debugging purposes">
+        <option value="0">No</option>
+        <option value="1">Yes</option>
+    </param>
+  </params>
+</root>

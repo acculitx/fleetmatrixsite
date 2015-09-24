@@ -1,0 +1,100 @@
+<?php
+// No direct access to this file
+defined('_JEXEC') or die('Restricted access');
+
+require(JPATH_COMPONENT . DS . 'models' . DS . 'baseedit.php');
+
+class FleetMatrixModelAssignEdit extends FleetMatrixModelBaseEdit
+{
+	protected function populateState()
+	{
+        $cmd = JRequest::getCmd('cmd', '');
+        $this->setState(strtolower($this->model_key).'.cmd', $cmd);
+
+		// Load the parameters.
+		$params = $app->getParams();
+		$this->setState('params', $params);
+		parent::populateState();
+	}
+
+	/**
+	 * Get the data for a new qualification
+	 */
+	public function getForm($data = array(), $loadData = true)
+	{
+        return NULL;
+        /*
+        // Get the form.
+		$form = $this->loadForm('com_fleetmatrix.'.strtolower($this->model_key),
+                                strtolower($this->model_key),
+                                array('control' => 'jform', 'load_data' => true)
+        );
+		if (empty($form)) {
+			return false;
+		}
+		return $form;
+        */
+	}
+
+	function &getItem()
+	{
+		return $this->_item;
+	}
+
+    public function setItem(&$item) {
+        $this->_item = $item;
+    }
+
+    public function loadFormData() {
+        return NULL;
+        /*
+        if (!is_string($this->_item)) {
+            $ret = get_object_vars($this->_item);
+        } else {
+            $ret = $this->_item;
+        }
+        return $ret;
+        */
+    }
+
+	public function updItem($data)
+	{
+        JRequest::checkToken() or die( 'Invalid Token' );
+        $cid = JRequest::getVar('cid', array(), 'post');
+        $driver = JRequest::getInt('driver', 0);
+
+        $db =& JFactory::getDbo();
+
+        foreach($cid as $id) {
+            $id = (int)$id;
+            if (!$id) { continue; }
+
+            if ($driver) {
+                $query = 'select `trip_id` from #__fleet_trip_driver where `trip_id`='.$id;
+                #var_dump($query);
+                $db->setQuery($query);
+                $update = $db->loadResult();
+                #var_dump($update);
+                if (!$update) {
+                    // insert row
+                    $query = 'insert into #__fleet_trip_driver (`trip_id`, `driver_id`) values ('.$id.', '.$driver.')';
+                } else {
+                    // update row
+                    $query = 'update #__fleet_trip_driver set `driver_id` = '.$driver.' where `trip_id` = '.$id;
+                }
+            } else {
+                // remove row
+                $query = 'delete from #__fleet_trip_driver where `trip_id` = '.$id;
+            }
+
+            #var_dump($query);
+            #die;
+            $db->setQuery($query);
+            if (!$db->query()) {
+                JError::raiseError(500, $db->getErrorMsg());
+            	return false;
+            }
+        }
+       	return true;
+	}
+}

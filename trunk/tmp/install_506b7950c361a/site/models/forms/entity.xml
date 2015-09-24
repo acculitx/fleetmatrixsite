@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form name="entity">
+	<fieldset name="entity">
+
+
+        <field name="name"
+                type="text"
+                label="Name"
+                description="The name of the entity"
+                maxlength="255"
+        	    required="true"
+                size="50" ></field>
+
+        <field name="entity_type"
+               label="Entity Type"
+               type="entitytype"
+               ></field>
+
+        <field name="parent_entity_id"
+               type="parententity"
+               label="Parent Entity"
+               required="true"
+               description="The entity this will be assigned to" >
+            <option value="0">Select Parent Entity</option>
+        </field>
+
+        <field name="contact_name"
+                type="text"
+                label="Contact Name"
+                description="The contact name for the entity"
+                maxlength="255"
+        	    required="true"
+                size="50" ></field>
+
+        <field name="street_address"
+                type="text"
+                label="Street Address"
+                description="The street address for the entity"
+                maxlength="255"
+        	    required="true"
+                size="50" ></field>
+
+        <field name="city"
+                type="text"
+                label="City"
+                description="The city for the entity"
+                maxlength="255"
+        	    required="true"
+                size="50" ></field>
+
+        <field name="state"
+                type="text"
+                label="State"
+                description="The city for the entity"
+                maxlength="255"
+        	    required="true"
+                size="50" ></field>
+
+        <field name="zip"
+                type="text"
+                label="Zipcode"
+                description="The postal zipcode for the entity"
+                maxlength="255"
+        	    required="true"
+                size="50" ></field>
+
+        <field name="phone"
+                type="Tel"
+                label="Phone"
+                description="The contact phone number for the entity"
+                maxlength="255"
+        	    required="true"
+                size="50" ></field>
+
+        <field name="email"
+                type="Email"
+                label="Email"
+                description="The email address for the entity"
+                maxlength="255"
+        	    required="true"
+                size="50" ></field>
+
+	</fieldset>
+</form>

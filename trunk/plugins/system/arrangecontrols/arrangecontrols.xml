@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="system">
+	<name>Arrange Controls</name>
+	<author>CTS</author>
+	<creationDate>Dec 2012</creationDate>
+	<version>2.5.0</version>
+	<description>Arrange Controls</description>
+	<files>
+		<filename plugin="arrangecontrols">arrangecontrols.php</filename>
+	</files>
+	<config />
+</extension>

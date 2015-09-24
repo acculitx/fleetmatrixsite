@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="/templates/tfjyataliteversion/css/template_css.css"?>
+<form name="driver">
+	<fieldset name="driver">
+
+        <field name="name"
+                type="text"
+                label="Name"
+                description="The name of the driver"
+                maxlength="255"
+        	    required="true"
+                size="50"   ></field>
+
+        <field name="visible"
+               type="checkbox"
+               label="Visible"
+               description="If the driver will be visible or disabled"
+               value="checked" ></field>
+
+        <field name="company_nosave"
+               type="selectcompany"
+               label="Company"
+               required="true"
+               description="The company to assign the driver to"
+                >
+        </field>
+
+        <field name="entity_id"
+               type="selectgroup"
+               label="Group"
+               required="true"
+               description="The group to assign the driver to"
+                >
+        </field>
+
+	</fieldset>
+</form>
