@@ -113,7 +113,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
                 break;
             case 'driver':
                 $clause = "distinct s.name as vehicle_name, ".
-                        "DATE_ADD(h.start_date, INTERVAL h.time_zone HOUR) as trip_start, ".
+                        "DATE_ADD(h.start_date, INTERVAl h.time_zone HOUR) as trip_start, ".
 //                         "DATE_ADD(h.end_date, INTERVAL h.time_zone HOUR) as trip_end, ".
                         "h.odo_end - h.odo_start as miles, ".
                         "b.name as assigned_driver,".
@@ -330,15 +330,16 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
         # Apply time window if specified
         if ($cmd == 'totalscore') { # only totalscore has implemented diffDays
             $totalDiffDays = (int) $diffDays + 7;
-            $query = $query->where('h.end_date > DATE_SUB(NOW(), INTERVAL ' . $totalDiffDays . ' DAY)');
+            $query = $query->where('h.end_date between DATE_SUB(NOW(), INTERVAL ' . $totalDiffDays . ' DAY) and DATE_SUB(now(), INTERVAL ' . $diffDays . ' DAY)') ;
         } else {
+            $startWindow = (int) $window + 7;
             if ($window) {
-                $query = $query->where('h.end_date > DATE_SUB(NOW(), INTERVAL '.$window.' DAY)');
+                $query = $query->where('h.end_date between DATE_SUB(NOW(), iNTERVAL ' . $startWindow . ' DAY) and date_sub(now(), INTERVAL ' . $window . ' DAY)');
             } else {
-                $query = $query->where('h.end_date > DATE_SUB(NOW(), INTERVAL 1 DAY)');
+                $query = $query->where('h.end_date > DATE_SUB(NOW(), InTERVAL 1 DAY)');
             }
             if ($windowtwo) {
-                $query = $query->where('redflag.`date` > DATE_SUB(NOW(), INTERVAL '.$windowtwo.' DAY)');
+                $query = $query->where('redflag.`date` > DATE_SUB(NOW(), INtERVAL '.$windowtwo.' DAY)');
             }
         }
 		
@@ -509,7 +510,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             ;
 
         if ($window) {
-            $query = $query->where('h.end_date > DATE_SUB(NOW(), INTERVAL '.$window.' DAY)');
+            $query = $query->where('h.end_date > DATE_SUB(NOW(), INTeRVAL '.$window.' DAY)');
         }
 
         #var_dump((string)$query);
@@ -859,7 +860,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             ;
 
         if ($window) {
-            $query = $query->where('b.date > DATE_SUB(NOW(), INTERVAL '.$window.' DAY)');
+            $query = $query->where('b.date > DATE_SUB(NOW(), INTErVAL '.$window.' DAY)');
         }
 
         #var_dump((string)$query);
@@ -879,7 +880,7 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
             ;
 
         if ($window) {
-            $query = $query->where('b.date > DATE_SUB(NOW(), INTERVAL '.$window.' DAY)');
+            $query = $query->where('b.date > DATE_SUB(NOW(), INTERvAL '.$window.' DAY)');
         }
 
         #var_dump((string)$query);

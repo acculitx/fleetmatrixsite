@@ -1,0 +1,57 @@
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Accuscore: Total Scores</title>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="http://code.highcharts.com/highcharts.js"></script>
+  <script src="TotalScores.js" language="javascript"></script>
+
+<style>
+body {
+  font-family: sans-serif;
+}
+
+.score_chart td {
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+  border-collapse: collapse;
+  empty-cells: hide;
+  padding-left: 7px;
+  height: 25px;
+  width: 30px;
+  font-size: small;
+}
+
+.dateline td {
+  font-size:8pt;
+}
+
+</style>
+  
+</head>
+
+<body>
+
+<h1>
+Accuscore:  Total Scores
+</h1>
+
+start: <input id="start_date" type="text" value="2014-08-01"></input>
+end: <input id="end_date" type="text" value="2015-10-01"></input>
+<button onclick="refreshPage();">refresh</button>
+<p>
+<div id="linkback"></div>
+
+<center>
+  <div id="top_content"></div>
+  <div id="graph_container" style="height:200px;margin-bottom:20px;width:80%;background-color:lightgray;padding:0px"></div>
+</center>
+<div id="content"></div>
+
+</body>
+
+</html>
+
+
