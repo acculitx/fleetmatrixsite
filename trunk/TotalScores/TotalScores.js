@@ -72,161 +72,26 @@ var TotalScores = function() {
 
   this.displayData = function(data, divName) {
     var report = this.parseData(data);
-    var dateRange = this.findDateRange(report);
-    var s = this.formatData(report, dateRange, divName);
-    var s = "<table>" + s + "</table>";
+
+    var s = "<table>" + report + "</table>";
     $("#" + divName).html(s + "<p/>");
   }
 
-  this.findDateRange = function(report) {
-    var r = {};
-    for (var i = 0; i < report.items.length; i++) {
-      var stats = report.items[i].stats;
-      var yearmonths = stats[0];
-      for (var j = 0; j < yearmonths.length; j++) {
-        r[yearmonths[j]] = 1;
-      }
-    }
-    return r;
+  this.parseData = function (data) {
+     var s= "";
+     var lines = data.split("\n");
+     for (var i=0; i<lines.length; i++) {
+       var line = lines[i];
+       s += "<tr>";
+       var cols = line.split("\t");
+       for (var j=0; j<cols.length; j++) {
+          s += "<td>" + $cols[j] + "</td>";
+       }
+       s += "</tr>";
+     }
+     return s;
   }
-
-  this.parseData = function(data) {
-    var report = {};
-    var lines = data.split('\n');
-    var stats = [];
-    report.header = [];
-    report.items = [];
-    var id = -1;
-    var name = '';
-    for (var i = 0; i < lines.length; i++) {
-      if (lines[i] == "") {
-        continue;
-      }
-      var cols = lines[i].split('\t');
-
-      // The first line has the column headers.
-      if (i == 0) {
-        for (j = cols.length - 4; j < cols.length; j++) {
-          report.header.push(cols[j]);
-          stats = [];
-        }
-        continue;
-      }
-
-      // The global query has no id or name.
-      var newId = -1;
-      var newName = "";
-      if (cols.length > 4) {
-        newId = cols[0];
-        newName = cols[1];
-      }
-
-      if (newId != id && name != "") {
-        // New item -- store current accumulation buffer and start new one.
-        report.items.push(this.parseItem(id, name, stats, report.header));
-        stats = [];
-      }
-
-      id = newId;
-      name = newName;
-
-      // Get stats for this item.
-      var stat = [];
-      for (var j = cols.length - 4; j < cols.length; j++) {
-        stat.push(cols[j]);
-      }
-      stats.push(stat);
-    }
-
-    // Last item.
-    report.items.push(this.parseItem(id, name, stats, report.header));
-
-    return report;
-  };
-
-  this.parseItem = function(id, name, stats, header) {
-    if (name == "") name = "All Companies";
-    stats.push(header);
-    return {
-      "id": id,
-      "name": name,
-      "stats": transpose(stats)
-    };
-  }
-
-  this.formatData = function(rows, dateRange, divName) {
-    var s = "";
-    for (var i = 0; i < rows.items.length; i++) {
-      var item = rows.items[i];
-      s += this.formatItem(item.id, item.name, item.stats, dateRange, i == 0, divName);
-    }
-    return s;
-  }
-
-  this.formatItem = function(id, name, stats, dateRange, first, divName) {
-    var s = "";
-
-    var dataDates = [];
-    for (var i = 0; i < stats[0].length; i++) {
-      dataDates[stats[0][i]] = 1;
-    }
-    var total = [];
-    var aggressive = [];
-    var vigilance = []
-    var scoreChart = "<table class='score_chart'>";
-    var start = first ? 0 : 1;
-    //     start = 0;
-    for (var i = start; i < stats.length; i++) {
-      var line = stats[i];
-      var idx = 0;
-      var tr = (i == 0) ? "<tr class=\"dateline\">" : "<tr>";
-      scoreChart += tr;
-      var dates = Object.keys(dateRange);
-      //    for (var j=0; j<line.length; j++) {
-      for (var j = 0; j < dates.length; j++) {
-        if (idx >= line.length) break;
-        var key = dates[j];
-        if (dataDates[key] == 1) {
-          var score = line[idx++];
-          scoreChart += "<td>" + score + "</td>"
-          if (j < line.length - 1) {
-            score = parseFloat(score);
-            if (i == 1) total.push(score);
-            if (i == 2) aggressive.push(score);
-            if (i == 3) vigilance.push(score);
-          }
-        } else {
-          scoreChart += "<td></td>";
-        }
-      }
-      scoreChart += "</tr>";
-    }
-    scoreChart += "</table>";
-
-    if (divName == 'top_content')
-      displayChart(name, total, aggressive, vigilance);
-
-    var href = "index.html?" + this.fixedParams + "&" + this.level + "=" + id;
-    if (this.nextLevel != "") href += "&" + this.nextLevel + "=*";
-
-    var nameHref = "<a href='" + href + "'>" + name + "</a>";
-
-    var s = "<tr><td style='padding:20px;font-size:14pt'>" + nameHref + "</td><td>" + scoreChart + "</td></tr>";
-
-    return s;
-  }
-}
-
-function transpose(array) {
-  if (array.length <= 0) return array;
-
-  var newArray = array[0].map(function(col, i) {
-    return array.map(function(row) {
-      return row[i]
-    })
-  });
-  return newArray;
-}
+ }
 
 $.urlParam = function(name) {
   var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
