@@ -85,7 +85,7 @@ var TotalScores = function() {
        s += "<tr>";
        var cols = line.split("\t");
        for (var j=0; j<cols.length; j++) {
-          s += "<td>" + $cols[j] + "</td>";
+          s += "<td>" + cols[j] + "</td>";
        }
        s += "</tr>";
      }

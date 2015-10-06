@@ -1,9 +1,9 @@
 <?php
 $mysql_host     = "localhost";
-// $mysql_user = "webserver";
-// $mysql_password = "fleetmatrixdbpassword";
-$mysql_user     = "root";
-$mysql_password = "sectrends";
+$mysql_user = "webserver";
+$mysql_password = "fleetmatrixdbpassword";
+//$mysql_user     = "root";
+//$mysql_password = "sectrends";
 $mysql_database = "fleetmatrix_test";
 
 // Connecting, selecting database
@@ -24,15 +24,15 @@ $t1      = $_GET['t1'];
 //$group = "*";
 //$group = "49";
 //$driver = "*";
-//$company = "*";
+// $company = "*";
 //$t0 = "2015-04-01";
-//ß$t1 = "2015-09-01";
+//$t1 = "2015-09-01";
 
 // Define data source.
 $table             = "fleet_daily_total_score";
 $aggregate_columns = array(
-  //  "totalScore",
-  //  "aggressiveScore",
+    "totalScore",
+    "aggressiveScore",
   "distractionScore"
 );
 $date_column       = "date";
@@ -93,7 +93,7 @@ $groupby_columns = join($array_groupby, ",");
 $alias_columns   = join($array_alias, ",");
 
 
-function getDates($table, $date_column, $timeslice)
+function getDates($table, $date_column, $timeslice, $where)
 {
   $query = "
 select distinct DATE_FORMAT($date_column, \"$timeslice\") as date
@@ -118,7 +118,7 @@ order by DATE_FORMAT($date_column, \"$timeslice\")
   return $cols;
 }
 
-$dateColumns = getDates($table, $date_column, $timeslice);
+$dateColumns = getDates($table, $date_column, $timeslice, $where);
 
 /* ----
 echo "request_columns=[$request_columns], sizeof=" . sizeof($request_columns);
@@ -127,25 +127,26 @@ echo "alias_columns=[$alias_columns], sizeof=" . sizeof($alias_columns);
 ---  */
 
 $query    = "";
-$subquery = "";
-$columns  = "";
 
 # Each aggregate column needs its own transpose query.
 foreach ($aggregate_columns as $aggcol) {
   
+  $subquery = "";
+  $columns  = "";
   $subquery = "select ";
   if ($alias_columns != "")
     $subquery .= " $alias_columns,";
-  $subquery .= " \"$aggcol\"";
   
+#  $subquery .= " \"$aggcol\" ";
   foreach ($dateColumns as $column) {
-    if (sizeof($columns) > 0) {
+    if ($columns != "") {
       $columns .= ",\n";
     }
     $columns .= "MAX(CASE WHEN time_period = \"$column\" THEN $aggcol END) as \"$column\"";
   }
   $subquery .= $columns;
-  
+  $subquery .= ", \"$aggcol\" ";
+
   $subquery .= " from
     (select $request_columns
       DATE_FORMAT($date_column, \"$timeslice\") as time_period,
@@ -175,14 +176,14 @@ foreach ($aggregate_columns as $aggcol) {
 
 
 $finalquery = "select ";
-if ($alias_columns != "")
-  $finalquery .= " $alias_columns, ";
+//if ($alias_columns != "")
+//  $finalquery .= " $alias_columns, ";
 $finalquery .= " union_query.* from ($query) as union_query ";
 if ($alias_columns != "")
   $finalquery .= " order by $alias_columns ";
 
-echo $finalquery;
-// return;
+#echo $query;
+##return;
 
 
 // Perform SQL query
