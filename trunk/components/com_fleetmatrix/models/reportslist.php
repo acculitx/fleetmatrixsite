@@ -330,11 +330,13 @@ class FleetMatrixModelReportsList extends FleetMatrixModelBaseList
         # Apply time window if specified
         if ($cmd == 'totalscore') { # only totalscore has implemented diffDays
             $totalDiffDays = (int) $diffDays + 7;
-            $query = $query->where('h.end_date between DATE_SUB(NOW(), INTERVAL ' . $totalDiffDays . ' DAY) and DATE_SUB(now(), INTERVAL ' . $diffDays . ' DAY)') ;
+            #$query = $query->where('h.end_date between DATE_SUB(NOW(), INTERVAL ' . $totalDiffDays . ' DAY) and DATE_SUB(now(), INTERVAL ' . $diffDays . ' DAY)') ;
+            $query = $query->where('h.end_date > DATE_SUB(NOW(), INTERVAL ' . $totalDiffDays . ' DAY)');
         } else {
             $startWindow = (int) $window + 7;
             if ($window) {
-                $query = $query->where('h.end_date between DATE_SUB(NOW(), iNTERVAL ' . $startWindow . ' DAY) and date_sub(now(), INTERVAL ' . $window . ' DAY)');
+                #$query = $query->where('h.end_date between DATE_SUB(NOW(), iNTERVAL ' . $startWindow . ' DAY) and date_sub(now(), INTERVAL ' . $window . ' DAY)');
+                $query = $query->where('h.end_date > DATE_SUB(NOW(), iNTERVAL ' . $startWindow . ' DAY)');
             } else {
                 $query = $query->where('h.end_date > DATE_SUB(NOW(), InTERVAL 1 DAY)');
             }
