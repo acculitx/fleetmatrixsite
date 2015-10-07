@@ -1,5 +1,32 @@
 $(document).ready(function() {
+  var ds = $.urlParam('ds');
+  $("input[name=ds][value=" + ds + "]").attr('checked', 'checked');
+  var dr = $.urlParam('dr');
+  $("input[name=dr][value=" + dr + "]").attr('checked', 'checked');
+  var ts = $.urlParam('ts');
+  $("input[name=ts][value=" + ts + "]").attr('checked', 'checked');
+
+  radioSubmitsForm("ds");
+  radioSubmitsForm("dr");
+  radioSubmitsForm("ts");
+
   refreshPage();
+
+  onresize();
+});
+
+function radioSubmitsForm(rbName) {
+   $('input[name=' + rbName + ']').change(function(){
+        $('form').submit();
+   });
+}
+
+function onresize() {
+  $("#graph_container").css("width", $(".time_table").css("width"));
+}
+
+$( window ).resize(function() {
+  onresize();
 });
 
 function refreshPage() {
@@ -17,9 +44,43 @@ var TotalScores = function() {
     var c = $.urlParam('c');
     var g = $.urlParam('g');
     var d = $.urlParam('d');
+    var ds = $.urlParam('ds') || "fleet_daily_total_score";
+    var dr = $.urlParam('dr') || "month";
+    var ts = $.urlParam('ts') || "day";;
+
+
+    // Set hidden fields in set parameters form.
+    if (c)
+    $("#c").val(c);
+    if (g)
+    $("#g").val(g);
+    if (d)
+    $("#d").val(d);
+
+    this.fixedParams = "ds=" + ds + "&dr=" + dr + "&ts=" + ts;
+
+    this.ds = ds;
+    p.ds = ds;
+
+      if (ts == "month") {
+        this.dateFormat = "%Y-%b"; 
+      } else if (ts == "week") {
+        this.dateFormat = "%Y-%u";
+      }
+
+       if (dr == "month") {
+          this.start_date = " DATE_SUB(NOW(), INTERVAL 1 MONTH) ";
+       } else if (dr == "sixmonths") {
+          this.start_date = " DATE_SUB(NOW(), INTERVAL 6 MONTH) ";
+       } else {
+          this.start_date = " 2000-01-01 ";
+       }
+       this.end_date = " NOW() ";
+
+    if (!c && !g && !d) c = "*";
     var linkBack = "";
     if (c) {
-      if (!g) totalScores.getData(p, "top_content");
+      if (!g) this.getData(p, "top_content");
       p.c = c;
       if (c != "*") this.fixedParams += "&c=" + c;
     }
@@ -55,10 +116,10 @@ var TotalScores = function() {
 
   this.getData = function(p, divName) {
     var me = this;
-    var start_date = $("#start_date").val();
-    var end_date = $("#end_date").val();
-    if (start_date) p.t0 = start_date;
-    if (end_date) p.t1 = end_date;
+    p.df = this.dateFormat;
+
+    p.t0 = this.start_date;
+    p.t1 = this.end_date;
     $.ajax({
       url: 'TotalScores.php',
       // url: 'DailyMoving.php',
@@ -71,24 +132,63 @@ var TotalScores = function() {
   };
 
   this.displayData = function(data, divName) {
-    var report = this.parseData(data);
+    var report = this.parseData(data, divName);
 
-    var s = "<table>" + report + "</table>";
+    var s = "<table class='time_table'>" + report + "</table>";
     $("#" + divName).html(s + "<p/>");
   }
 
-  this.parseData = function (data) {
+  this.parseData = function (data, divName) {
      var s= "";
      var lines = data.split("\n");
+     var lastName = "";
+     var series = [];
+     var total = [];
+     var numAggCols = this.ds == "vigilance" ? 6 : 3;
      for (var i=0; i<lines.length; i++) {
        var line = lines[i];
-       s += "<tr>";
-       var cols = line.split("\t");
-       for (var j=0; j<cols.length; j++) {
+       var tr = (i == 0) ? "<tr class='dateline'>" : "<tr>";
+       s += tr;
+       var cols = line.split("\t")
+
+       // Use the left column expanded to 3 rows for names, rather than repeating them.
+       var name = cols[1];
+       if (this.level == 'c' && divName == "top_content")
+           name = "All Companies";
+       if (name && name != lastName) {
+          var rowspan = (i == 0) ? 1 : numAggCols;
+
+          var skipIt = this.level == "c" && divName == "top_content";
+          if (!skipIt) {
+            var link = "<a href='index.html?" + this.fixedParams + "&" + this.level + "=" + cols[0] + "&" + this.nextLevel + "=*'>" + name + "</a>";
+            s += "<td rowspan='" + rowspan + "'>" + link + "</td>";
+          }
+          
+          lastName = name;
+       }
+    ;;
+
+       // Print the data grid.
+       var end = (i == 0) ? cols.length - 1 : cols.length;
+       var start = (divName == "top_content" && this.level == "c") ? 0 : 2;
+       for (var j=start; j<end; j++) {
           s += "<td>" + cols[j] + "</td>";
+          if (i>=1 && i <= numAggCols) {
+            var aggcol = cols[end-1];
+            if (j < end-1) {
+            if (! series[aggcol]) 
+              series[aggcol] = [];
+            if (cols[j])
+              series[aggcol].push(parseFloat(cols[j]));
+            }
+          }
        }
        s += "</tr>";
      }
+
+     if (divName == "top_content")
+       displayChart(lastName, series);
+
      return s;
   }
  }
@@ -102,8 +202,22 @@ $.urlParam = function(name) {
   }
 }
 
-function displayChart(name, total, aggressive, vigilance) {
-var chart = new Highcharts.Chart({
+function displayChart(name, input_series) {
+
+  var colors = ["red", "yellow", "green", "blue", "orange", "purple"];
+  var colorIdx = 0;
+  var output_series = [];
+  for (var aggcol in input_series) {
+     var info = { 
+       data: input_series[aggcol], 
+       name:aggcol,
+       color: colors[colorIdx++], 
+       shadow: {  width: 5 } 
+    };
+     output_series.push(info);
+  }
+
+  var chart = new Highcharts.Chart({
 
     chart: {
         renderTo: 'graph_container',
@@ -113,7 +227,7 @@ var chart = new Highcharts.Chart({
     title: {
         text: name == "" ? "All Subscribers" : name,
         style: {
-            color: '#CCC'
+            color: '#333'
         }
     },
     xAxis: {
@@ -128,46 +242,12 @@ var chart = new Highcharts.Chart({
             }
         },
         gridLineColor: '#333',
-        max: 10,
-        min: 0,
-        tickInterval: 1
+//        max: 10,
+//        min: 0,
+//        tickInterval: 1
         
     },
 
-    series: [{
-        data: total, // [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
-        color: 'cyan',
-        name: "total",
-        shadow: {
-            color: 'cyan',
-            width: 10,
-            offsetX: 0,
-            offsetY: 0
-        }
-        
-    }, {
-        data: aggressive, // [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4].reverse(),
-        color: 'red',
-        name: 'aggressivity',
-        shadow: {
-            color: 'red',
-            width: 10,
-            offsetX: 0,
-            offsetY: 0
-        }
-        
-    }, {
-        data: vigilance, // [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4].reverse(),
-        color: 'green',
-        name: "vigilance",
-        shadow: {
-            color: 'green',
-            width: 10,
-            offsetX: 0,
-            offsetY: 0
-        }
-  }
-]
-
-});
+    series: output_series
+  });
 }
