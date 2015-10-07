@@ -2,7 +2,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Accuscore: Total Scores</title>
+  <title>Accuscore: Trends</title>
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="http://code.highcharts.com/highcharts.js"></script>
@@ -13,7 +13,7 @@ body {
   font-family: sans-serif;
 }
 
-.score_chart td {
+.time_table td {
   border-left: 1px solid black;
   border-bottom: 1px solid black;
   border-collapse: collapse;
@@ -28,26 +28,78 @@ body {
   font-size:8pt;
 }
 
-</style>
+.menu {
+  font-size:10pt;
   
-</head>
+}
 
+.menu_options {
+  padding-left: 30px;
+  padding-right: 50px;
+  margin-right: 50px;
+  border: 1px solid black;
+}
+.menu_label {
+  font-size:14pt;
+  padding: 20px;
+  background-color: lightgray;
+  border: 1px solid black;
+}
+.linkback_class {
+  
+}
+</style>
+</head>
 <body>
 
 <h1>
-Accuscore:  Total Scores
+Accuscore Trends
 </h1>
-
-start: <input id="start_date" type="text" value="2014-08-01"></input>
-end: <input id="end_date" type="text" value="2015-10-01"></input>
-<button onclick="refreshPage();">refresh</button>
 <p>
-<div id="linkback"></div>
+<div class="linkback_class" id="linkback"></div>
 
-<center>
+<form id="set_parameters_form" action="index.html">
+<table class="menu"><tr>
+<td class="menu_label">
+source: 
+</td>
+<td class="menu_options">
+<input type="radio" name="ds" value="fleet_daily_total_score">total score</input>
+<br>
+<input type="radio" name ="ds" value="vigilance">vigilance</input>
+<br>
+<input type="radio" name ="ds" value="fleet_moving_daily_score">moving average</input>
+</td>
+<td class="menu_label">
+date range:
+</td>
+<td class="menu_options">
+<input type="radio" name="dr" value="month">month</input>
+<br>
+<input type="radio" name="dr" value="sixmonths">6 months</input>
+<br>
+<input type="radio" name="dr" value="all">all</input>
+</td>
+<td class="menu_label">
+time slice:
+</td>
+<td class="menu_options">
+<input type="radio" name="ts" value="day">day</input>
+<br>
+<input type="radio" name="ts" value="week">week</input>
+<br>
+<input type="radio" name="ts" value="month">month</input>
+</td>
+</tr></table>
+<input type="hidden" id="c" name="c" />
+<input type="hidden" id="g" name="g" />
+<input type="hidden" id="d" name="d" />
+</form>
+
+<p>
+
   <div id="top_content"></div>
   <div id="graph_container" style="height:200px;margin-bottom:20px;width:80%;background-color:lightgray;padding:0px"></div>
-</center>
 <div id="content"></div>
 
 </body>

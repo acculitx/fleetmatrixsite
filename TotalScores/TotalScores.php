@@ -18,6 +18,11 @@ $driver  = $_GET['d'];
 $slice   = $_GET['s'];
 $t0      = $_GET['t0'];
 $t1      = $_GET['t1'];
+$df      = $_GET['df'];
+$ds      = $_GET['ds'];
+
+if (!$ds) 
+  $ds = "fleet_moving_daily_score";
 
 // Test values.
 //$company = "29";
@@ -28,15 +33,45 @@ $t1      = $_GET['t1'];
 //$t0 = "2015-04-01";
 //$t1 = "2015-09-01";
 
+#$t0 = " DATE_SUB(NOW(), INTERVAL 6 DAY) ";
+#$t1 = " NOW() ";
+$c = "*";
+
 // Define data source.
-$table             = "fleet_daily_total_score";
-$aggregate_columns = array(
+#$table             = "fleet_daily_total_score";
+
+$table = $ds;
+if ($ds == "fleet_daily_total_score") {
+  $aggregate_columns = array(
     "totalScore",
     "aggressiveScore",
-  "distractionScore"
-);
+    "distractionScore"
+  );
+} else if ($ds == "vigilance") {
+  $table             = "vigilance";
+  $aggregate_columns = array(
+    "turns_hard",
+    "turns_severe",
+    "accel_hard",
+    "accel_severe",
+    "decel_hard",
+    "decel_severe"
+  );
+} else {
+  $table = "fleet_moving_daily_score"; 
+  $aggregate_columns = array (
+    "accel",
+    "decel",
+    "hard_turns"
+  );
+}
+
 $date_column       = "date";
-$timeslice         = "%Y-%m";
+
+$timeslice         = $df;
+if (!$timeslice) {
+  $timeslice = "%Y-%b-%d";
+}
 
 $request_columns = "";
 $where           = "";
@@ -45,11 +80,11 @@ $array_alias     = array();
 $alias_columns   = "";
 
 if (isset($t0)) {
-  $where .= " AND `date` >= \"$t0\" ";
+  $where .= " AND $date_column >= $t0 ";
 }
 
 if (isset($t1)) {
-  $where .= " AND `date` <= \"$t1\" ";
+  $where .= " AND $date_column <= $t1 ";
 }
 
 if (isset($driver)) {
@@ -96,14 +131,19 @@ $alias_columns   = join($array_alias, ",");
 function getDates($table, $date_column, $timeslice, $where)
 {
   $query = "
-select distinct DATE_FORMAT($date_column, \"$timeslice\") as date
+select distinct DATE_FORMAT($date_column, \"$timeslice\") as date_column
 from $table
      LEFT JOIN giqwm_fleet_driver as driver on $table.driver_id = driver.id
      LEFT JOIN giqwm_fleet_entity as dgroup on dgroup.id = driver.entity_id
      LEFT JOIN giqwm_fleet_entity as company on dgroup.parent_entity_id = company.id
      where driver.visible $where
-order by DATE_FORMAT($date_column, \"$timeslice\")
+order by $date_column
 ";
+
+//  echo $query;
+//  return;
+
+// DATE_FORMAT($date_column, \"$timeslice\")
   
   // Performing SQL query
   file_put_contents("/tmp/mysqllog.txt", $query . "\n", FILE_APPEND);
@@ -142,7 +182,7 @@ foreach ($aggregate_columns as $aggcol) {
     if ($columns != "") {
       $columns .= ",\n";
     }
-    $columns .= "MAX(CASE WHEN time_period = \"$column\" THEN $aggcol END) as \"$column\"";
+    $columns .= "MAX(CASE WHEN time_period = \"$column\" THEN round($aggcol,2) END) as \"$column\"";
   }
   $subquery .= $columns;
   $subquery .= ", \"$aggcol\" ";
