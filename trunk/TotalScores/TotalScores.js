@@ -1,11 +1,4 @@
 $(document).ready(function() {
-  var ds = $.urlParam('ds');
-  $("input[name=ds][value=" + ds + "]").attr('checked', 'checked');
-  var dr = $.urlParam('dr');
-  $("input[name=dr][value=" + dr + "]").attr('checked', 'checked');
-  var ts = $.urlParam('ts');
-  $("input[name=ts][value=" + ts + "]").attr('checked', 'checked');
-
   radioSubmitsForm("ds");
   radioSubmitsForm("dr");
   radioSubmitsForm("ts");
@@ -44,9 +37,18 @@ var TotalScores = function() {
     var c = $.urlParam('c');
     var g = $.urlParam('g');
     var d = $.urlParam('d');
-    var ds = $.urlParam('ds') || "fleet_daily_total_score";
-    var dr = $.urlParam('dr') || "month";
-    var ts = $.urlParam('ts') || "day";;
+
+  var ds = $.urlParam('ds');
+  if (!ds) ds = "fleet_daily_total_score";
+  $("input[name=ds][value=" + ds + "]").attr('checked', 'checked');
+
+  var dr = $.urlParam('dr');
+  if (!dr) dr = "month";
+  $("input[name=dr][value=" + dr + "]").attr('checked', 'checked');
+
+  var ts = $.urlParam('ts');
+  if (!ts) ts = "day";
+  $("input[name=ts][value=" + ts + "]").attr('checked', 'checked');
 
 
     // Set hidden fields in set parameters form.
