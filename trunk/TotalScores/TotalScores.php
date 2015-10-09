@@ -1,9 +1,9 @@
 <?php
 $mysql_host     = "localhost";
-$mysql_user = "webserver";
-$mysql_password = "fleetmatrixdbpassword";
-//$mysql_user     = "root";
-//$mysql_password = "sectrends";
+//$mysql_user = "webserver";
+//$mysql_password = "fleetmatrixdbpassword";
+$mysql_user     = "root";
+$mysql_password = "sectrends";
 $mysql_database = "fleetmatrix_test";
 
 // Connecting, selecting database
