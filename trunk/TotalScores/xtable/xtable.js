@@ -63,6 +63,16 @@ var Xtable = function() {
         me.urlParams.put("t0", me.t0.yyyymmdd());
         me.urlParams.put("t1", me.t1.yyyymmdd());
 
+        // Remove any previous date selection in the where clause.
+        var wheres = me.urlParams.get("where[]", []);
+        for (var i=0; i<wheres.length; i++) {
+           var where = wheres[i];
+           // Should check for "Date=" not just date.
+           if (where.indexOf("Date") != -1) {
+             me.urlParams.removeElement("where[]", where);
+           }
+        }
+
         var href = "index.html?" + me.urlParams.generateString();
         navigateTo(href);
       });
