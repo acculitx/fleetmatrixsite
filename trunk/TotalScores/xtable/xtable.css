@@ -1,0 +1,89 @@
+    body {
+      font-family: sans-serif;
+    }
+
+    #content {
+      margin-top: 20px;
+    }
+    
+    .paging_controls {
+      float:right;
+      margin-bottom: 20px;
+    }
+    
+    .normal_cell {
+      background-color: white;
+    }
+
+    .selected_cell {
+      background-color: lightgray;
+    }
+
+    .row_count {
+       font-size: 8pt;
+    }
+    .time_table {
+      width: 100%;
+      border-collapse: collapse;
+      empty-cells: hide;
+    }
+
+    .time_table td {
+//      border-left: 1px solid black;
+//      border-bottom: 1px solid black;
+      padding-left: 7px;
+      padding-right: 7px;
+      border: 1px solid black;
+      font-size: small;
+    }
+    
+
+    .normal_header {
+      background-color: yellow;
+      padding-top:10px;
+      padding-bottom:10px;
+      text-align: center;
+    }
+
+    .selected_header {
+      background-color: lightgray;
+      padding-top:10px;
+      padding-bottom:10px;
+      text-align: center;
+    }
+    
+    .menu {
+      font-size: 10pt;
+    }
+    
+    .menu_options {
+      padding-left: 30px;
+      padding-right: 50px;
+      margin-right: 50px;
+      border: 1px solid black;
+    }
+    
+    .menu_label {
+      font-size: 14pt;
+      padding: 20px;
+      background-color: lightgray;
+      border: 1px solid black;
+    }
+    
+    .linkback_class {
+      margin-bottom: 20px
+    }
+
+    #source_selector {
+      float: right;
+      font-size:18pt;
+      margin-right: 100px;
+    }
+
+    .selected_source_menu {
+      font-size: 24pt;
+    }
+
+    .source_menu {
+      font-size: 12pt;
+    }

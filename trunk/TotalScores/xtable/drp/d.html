@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="daterangepicker.css" />
+  <script src="jquery-1.11.2.min.js"></script>
+  <script src="moment.min.js"></script>
+  <script src="jquery.daterangepicker.js"></script>
+</head>
+<script>
+  function onLoad() {
+    $("#date-range0").dateRangePicker({}).bind('datepicker-closed',function(event,obj) {
+      /* This event will be triggered when user clicks on the apply button */
+      console.log(obj);
+    });
+//    console.log ("rangeInput=" + rangeInput);
+  }
+</script>
+<body onload="onLoad();">
+
+
+<div class="demo">
+	Default settings: <input id="date-range0" size="40" value=""> 
+</div>
+</body>
+</html>

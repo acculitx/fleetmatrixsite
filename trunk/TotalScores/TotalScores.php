@@ -1,9 +1,9 @@
 <?php
 $mysql_host     = "localhost";
-//$mysql_user = "webserver";
-//$mysql_password = "fleetmatrixdbpassword";
-$mysql_user     = "root";
-$mysql_password = "sectrends";
+$mysql_user = "webserver";
+$mysql_password = "fleetmatrixdbpassword";
+//$mysql_user     = "root";
+//$mysql_password = "sectrends";
 $mysql_database = "fleetmatrix_test";
 
 // Connecting, selecting database
@@ -50,12 +50,12 @@ if ($ds == "fleet_daily_total_score") {
 } else if ($ds == "vigilance") {
   $table             = "vigilance";
   $aggregate_columns = array(
-    "turns_hard",
-    "turns_severe",
-    "accel_hard",
-    "accel_severe",
-    "decel_hard",
-    "decel_severe"
+    "Turn Hard",
+    "Turn Severe",
+    "Accel Hard",
+    "Accel Severe",
+    "Brake Hard",
+    "Brake Severe"
   );
 } else {
   $table = "fleet_moving_daily_score"; 
@@ -140,8 +140,8 @@ from $table
 order by $date_column
 ";
 
-//  echo $query;
-//  return;
+#  echo "<pre>" . $query;
+#  return;
 
 // DATE_FORMAT($date_column, \"$timeslice\")
   
@@ -182,7 +182,7 @@ foreach ($aggregate_columns as $aggcol) {
     if ($columns != "") {
       $columns .= ",\n";
     }
-    $columns .= "MAX(CASE WHEN time_period = \"$column\" THEN round($aggcol,2) END) as \"$column\"";
+    $columns .= "MAX(CASE WHEN time_period = \"$column\" THEN round(`$aggcol`,2) END) as \"$column\"";
   }
   $subquery .= $columns;
   $subquery .= ", \"$aggcol\" ";
@@ -190,7 +190,7 @@ foreach ($aggregate_columns as $aggcol) {
   $subquery .= " from
     (select $request_columns
       DATE_FORMAT($date_column, \"$timeslice\") as time_period,
-      avg($aggcol) as $aggcol
+      avg(`$aggcol`) as `$aggcol`
      from $table
      LEFT JOIN giqwm_fleet_driver as driver on $table.driver_id = driver.id
      LEFT JOIN giqwm_fleet_entity as dgroup on dgroup.id = driver.entity_id
@@ -201,7 +201,7 @@ foreach ($aggregate_columns as $aggcol) {
   if ($groupby_columns != "")
     $subquery .= " , $groupby_columns ";
   $subquery .= "
-    ) as table_$aggcol ";
+    ) as `table_$aggcol` ";
   if ($alias_columns != "")
     $subquery .= " group by $alias_columns ";
   
@@ -223,7 +223,7 @@ if ($alias_columns != "")
   $finalquery .= " order by $alias_columns ";
 
 #echo $query;
-##return;
+#return;
 
 
 // Perform SQL query
