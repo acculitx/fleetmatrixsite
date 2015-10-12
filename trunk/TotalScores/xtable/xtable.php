@@ -23,7 +23,7 @@ function composeQuery() {
   $row_count = param('row_count', 10);
 
   $sort = "";
-  $sortParams = $_GET["sort"];
+  $sortParams = param("sort", Array());
   foreach ($sortParams as $sortSpec) {
     if ($sort == "")
        $sort = " ORDER BY ";
@@ -44,7 +44,7 @@ function composeQuery() {
       $t1 = "'" . $t1 . "'";
   $where = " WHERE Date between $t0 AND $t1 ";
     
-  $whereParams = $_GET["where"];
+  $whereParams = param("where", Array());
   foreach ($whereParams as $whereSpec) {
     if ($where == "") 
        $where = " WHERE ";
