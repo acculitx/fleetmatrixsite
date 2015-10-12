@@ -32,7 +32,9 @@ var Xtable  = function() {
           s += "<span class='selected_source_menu'>" + thisSource + "</span>";
         } else {
           // Need to remove the sorts and selects that are not applicable to the new source.
-          var href = "index.html?table=" + thisSource;
+          var href = "index.html?table=" + thisSource
+             + "&t0=" + this.urlParams.get("t0","")
+             + "&t1=" + this.urlParams.get("t1","");
           var wheres = this.urlParams.get("where[]", []);
           for (var j=0; j<wheres.length; j++) {
              var where = wheres[j];
