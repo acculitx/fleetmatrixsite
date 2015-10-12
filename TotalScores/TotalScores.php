@@ -2,8 +2,8 @@
 $mysql_host     = "localhost";
 $mysql_user = "webserver";
 $mysql_password = "fleetmatrixdbpassword";
-//$mysql_user     = "root";
-//$mysql_password = "sectrends";
+$mysql_user     = "root";
+$mysql_password = "sectrends";
 $mysql_database = "fleetmatrix_test";
 
 // Connecting, selecting database
@@ -11,20 +11,31 @@ $link = mysql_connect($mysql_host, $mysql_user, $mysql_password) or die('Could n
 mysql_select_db($mysql_database) or die('Could not select database');
 mysql_set_charset('utf8', $link);
 
-// Read query params.
-$company = $_GET['c'];
-$group   = $_GET['g'];
-$driver  = $_GET['d'];
-$slice   = $_GET['s'];
-$t0      = $_GET['t0'];
-$t1      = $_GET['t1'];
-$df      = $_GET['df'];
-$ds      = $_GET['ds'];
+function param($name, $defaultValue)
+{
+  $p = isset($_GET[$name]) ? $_GET[$name] : null;
+  if (!$p || empty($p))
+    $p = $defaultValue;
+  return $p;
+}
 
+// Read query params.
+$company = param('c', "");
+$group   = param('g',"");
+$driver  = param('d',"");
+$slice   = param('s',"");
+$t0      = param('t0',"");
+$t1      = param('t1',"");
+$df      = param('df',"");
+$ds      = param('ds',"");
+
+
+// Set default source.
 if (!$ds) 
   $ds = "fleet_moving_daily_score";
 
 // Test values.
+//$t0 = " DATE_SUB(NOW(), INTERVAL 1 MONTH) ";
 //$company = "29";
 //$group = "*";
 //$group = "49";
@@ -79,15 +90,15 @@ $array_groupby   = array();
 $array_alias     = array();
 $alias_columns   = "";
 
-if (isset($t0)) {
+if ($t0 != "") {
   $where .= " AND $date_column >= $t0 ";
 }
 
-if (isset($t1)) {
+if ($t1 != "") {
   $where .= " AND $date_column <= $t1 ";
 }
 
-if (isset($driver)) {
+if ($driver != "") {
   $request_columns .= " driver.id as driver_id, driver.name as driver_name, ";
   
   array_push($array_alias, "driver_id", "driver_name");
@@ -98,7 +109,7 @@ if (isset($driver)) {
   }
 }
 
-if (isset($group)) {
+if ($group != "") {
   $request_columns .= " dgroup.id as group_id, dgroup.name as group_name, ";
   
   if (count($array_alias) == 0)
@@ -111,7 +122,7 @@ if (isset($group)) {
   }
 }
 
-if (isset($company)) {
+if ($company != "") {
   $request_columns .= " company.id as company_id, company.name as company_name, ";
   
   if (count($array_alias) == 0)
@@ -140,13 +151,13 @@ from $table
 order by $date_column
 ";
 
-#  echo "<pre>" . $query;
-#  return;
+//  echo "<pre>" . $query;
+//  return;
 
 // DATE_FORMAT($date_column, \"$timeslice\")
   
   // Performing SQL query
-  file_put_contents("/tmp/mysqllog.txt", $query . "\n", FILE_APPEND);
+  // file_put_contents("/tmp/mysqllog.txt", $query . "\n", FILE_APPEND);
   $result = mysql_query($query) or die('Query failed: ' . mysql_error());
   
   $cols = array();
@@ -222,12 +233,12 @@ $finalquery .= " union_query.* from ($query) as union_query ";
 if ($alias_columns != "")
   $finalquery .= " order by $alias_columns ";
 
-#echo $query;
-#return;
+//echo $query;
+//return;
 
 
 // Perform SQL query
-file_put_contents("/tmp/mysqllog.txt", $finalquery . "\n", FILE_APPEND);
+//file_put_contents("/tmp/mysqllog.txt", $finalquery . "\n", FILE_APPEND);
 $result = mysql_query($finalquery) or die('Query failed: ' . mysql_error());
 
 #echo "<pre>";
