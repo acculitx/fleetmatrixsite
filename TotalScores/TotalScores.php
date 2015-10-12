@@ -1,9 +1,9 @@
 <?php
 $mysql_host     = "localhost";
-$mysql_user = "webserver";
+$mysql_user     = "webserver";
 $mysql_password = "fleetmatrixdbpassword";
-$mysql_user     = "root";
-$mysql_password = "sectrends";
+//$mysql_user     = "root";
+//$mysql_password = "sectrends";
 $mysql_database = "fleetmatrix_test";
 
 // Connecting, selecting database
@@ -21,17 +21,17 @@ function param($name, $defaultValue)
 
 // Read query params.
 $company = param('c', "");
-$group   = param('g',"");
-$driver  = param('d',"");
-$slice   = param('s',"");
-$t0      = param('t0',"");
-$t1      = param('t1',"");
-$df      = param('df',"");
-$ds      = param('ds',"");
+$group   = param('g', "");
+$driver  = param('d', "");
+$slice   = param('s', "");
+$t0      = param('t0', "");
+$t1      = param('t1', "");
+$df      = param('df', "");
+$ds      = param('ds', "");
 
 
 // Set default source.
-if (!$ds) 
+if (!$ds)
   $ds = "fleet_moving_daily_score";
 
 // Test values.
@@ -69,17 +69,17 @@ if ($ds == "fleet_daily_total_score") {
     "Brake Severe"
   );
 } else {
-  $table = "fleet_moving_daily_score"; 
-  $aggregate_columns = array (
+  $table             = "fleet_moving_daily_score";
+  $aggregate_columns = array(
     "accel",
     "decel",
     "hard_turns"
   );
 }
 
-$date_column       = "date";
+$date_column = "date";
 
-$timeslice         = $df;
+$timeslice = $df;
 if (!$timeslice) {
   $timeslice = "%Y-%b-%d";
 }
@@ -150,11 +150,11 @@ from $table
      where driver.visible $where
 order by $date_column
 ";
-
-//  echo "<pre>" . $query;
-//  return;
-
-// DATE_FORMAT($date_column, \"$timeslice\")
+  
+  //  echo "<pre>" . $query;
+  //  return;
+  
+  // DATE_FORMAT($date_column, \"$timeslice\")
   
   // Performing SQL query
   // file_put_contents("/tmp/mysqllog.txt", $query . "\n", FILE_APPEND);
@@ -177,7 +177,7 @@ echo "groupby_columns=[$groupby_columns], sizeof=" . sizeof($groupby_columns);
 echo "alias_columns=[$alias_columns], sizeof=" . sizeof($alias_columns);
 ---  */
 
-$query    = "";
+$query = "";
 
 # Each aggregate column needs its own transpose query.
 foreach ($aggregate_columns as $aggcol) {
@@ -188,7 +188,7 @@ foreach ($aggregate_columns as $aggcol) {
   if ($alias_columns != "")
     $subquery .= " $alias_columns,";
   
-#  $subquery .= " \"$aggcol\" ";
+  #  $subquery .= " \"$aggcol\" ";
   foreach ($dateColumns as $column) {
     if ($columns != "") {
       $columns .= ",\n";
@@ -197,7 +197,7 @@ foreach ($aggregate_columns as $aggcol) {
   }
   $subquery .= $columns;
   $subquery .= ", \"$aggcol\" ";
-
+  
   $subquery .= " from
     (select $request_columns
       DATE_FORMAT($date_column, \"$timeslice\") as time_period,
