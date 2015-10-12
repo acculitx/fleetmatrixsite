@@ -1,3 +1,6 @@
+var sources = ["trips", "vigilance", "total","severe"];
+var commonFields = ["Date", "Driver", "Group", "Company"];
+
 $(document).ready(function() {
   refreshPage();
 });
@@ -22,15 +25,23 @@ var Xtable  = function() {
   this.setupSource = function() {
      this.source = this.urlParams.get("table", "trips");
      var s = "";
-     var sources = ["trips", "vigilance"];
      for (var i=0; i<sources.length; i++) {
         var thisSource = sources[i];
         if (i>0)  s += " | ";
         if (this.source == thisSource) { 
           s += "<span class='selected_source_menu'>" + thisSource + "</span>";
         } else {
-          this.urlParams.put("table", thisSource);
-          var href = "index.html?" + this.urlParams.generateString();
+          // Need to remove the sorts and selects that are not applicable to the new source.
+          var href = "index.html?table=" + thisSource;
+          var wheres = this.urlParams.get("where[]", []);
+          for (var j=0; j<wheres.length; j++) {
+             var where = wheres[j];
+             for (k=0; k<commonFields.length; k++) {
+                 var field = commonFields[k];
+                 if (where.indexOf(field) != -1)
+                    href += "&where[]=" + encodeURIComponent(where);
+             }
+          }
           s += "<span class='source_menu'><a href='" + href + "'>" + thisSource + "</a></span>";
         }
      }
@@ -176,8 +187,8 @@ var Xtable  = function() {
        }
        urlParams.put("start_row", 0);
        var href = "index.html?" + urlParams.generateString();
-       return "<td class='" + cellStyle + "' onclick='navigateTo(\"" + href + "\");'>"
-           + cellval + "</td>";
+       return "<td class='" + cellStyle + "'><a class='cell_link' href='" + href + "'>" 
+           + cellval + "</a></td>";
   }
 
   this.pagingControls = function(p) {
