@@ -5,12 +5,12 @@
     #content {
       margin-top: 20px;
     }
-    
+
     .paging_controls {
       float:right;
       margin-bottom: 20px;
     }
-    
+
     .cell_link {
       text-decoration: none;
       color: #000000;
@@ -43,7 +43,7 @@
       border: 1px solid black;
       font-size: small;
     }
-    
+
 
     .normal_header {
       background-color: yellow;
@@ -60,25 +60,25 @@
       text-align: center;
       cursor: pointer;
     }
-    
+
     .menu {
       font-size: 10pt;
     }
-    
+
     .menu_options {
       padding-left: 30px;
       padding-right: 50px;
       margin-right: 50px;
       border: 1px solid black;
     }
-    
+
     .menu_label {
       font-size: 14pt;
       padding: 20px;
       background-color: lightgray;
       border: 1px solid black;
     }
-    
+
     .linkback_class {
       margin-bottom: 20px
     }
