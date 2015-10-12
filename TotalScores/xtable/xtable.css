@@ -11,6 +11,13 @@
       margin-bottom: 20px;
     }
     
+    .cell_link {
+      text-decoration: none;
+      color: #000000;
+    }
+    .cell_link a {
+    }
+
     .normal_cell {
       background-color: white;
     }
@@ -43,6 +50,7 @@
       padding-top:10px;
       padding-bottom:10px;
       text-align: center;
+      cursor: pointer;
     }
 
     .selected_header {
@@ -50,6 +58,7 @@
       padding-top:10px;
       padding-bottom:10px;
       text-align: center;
+      cursor: pointer;
     }
     
     .menu {
