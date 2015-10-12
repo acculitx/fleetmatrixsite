@@ -9,16 +9,16 @@ $(document).ready(function() {
 });
 
 function radioSubmitsForm(rbName) {
-   $('input[name=' + rbName + ']').change(function(){
-        $('form').submit();
-   });
+  $('input[name=' + rbName + ']').change(function() {
+    $('form').submit();
+  });
 }
 
 function onresize() {
   $("#graph_container").css("width", $(".time_table").css("width"));
 }
 
-$( window ).resize(function() {
+$(window).resize(function() {
   onresize();
 });
 
@@ -38,46 +38,46 @@ var TotalScores = function() {
     var g = $.urlParam('g');
     var d = $.urlParam('d');
 
-  var ds = $.urlParam('ds');
-  if (!ds) ds = "fleet_daily_total_score";
-  $("input[name=ds][value=" + ds + "]").attr('checked', 'checked');
+    var ds = $.urlParam('ds');
+    if (!ds) ds = "fleet_daily_total_score";
+    $("input[name=ds][value=" + ds + "]").attr('checked', 'checked');
 
-  var dr = $.urlParam('dr');
-  if (!dr) dr = "month";
-  $("input[name=dr][value=" + dr + "]").attr('checked', 'checked');
+    var dr = $.urlParam('dr');
+    if (!dr) dr = "month";
+    $("input[name=dr][value=" + dr + "]").attr('checked', 'checked');
 
-  var ts = $.urlParam('ts');
-  if (!ts) ts = "day";
-  $("input[name=ts][value=" + ts + "]").attr('checked', 'checked');
+    var ts = $.urlParam('ts');
+    if (!ts) ts = "day";
+    $("input[name=ts][value=" + ts + "]").attr('checked', 'checked');
 
 
     // Set hidden fields in set parameters form.
     if (c)
-    $("#c").val(c);
+      $("#c").val(c);
     if (g)
-    $("#g").val(g);
+      $("#g").val(g);
     if (d)
-    $("#d").val(d);
+      $("#d").val(d);
 
     this.fixedParams = "ds=" + ds + "&dr=" + dr + "&ts=" + ts;
 
     this.ds = ds;
     p.ds = ds;
 
-      if (ts == "month") {
-        this.dateFormat = "%Y-%b"; 
-      } else if (ts == "week") {
-        this.dateFormat = "%Y-%u";
-      }
+    if (ts == "month") {
+      this.dateFormat = "%Y-%b";
+    } else if (ts == "week") {
+      this.dateFormat = "%Y-%u";
+    }
 
-       if (dr == "month") {
-          this.start_date = " DATE_SUB(NOW(), INTERVAL 1 MONTH) ";
-       } else if (dr == "sixmonths") {
-          this.start_date = " DATE_SUB(NOW(), INTERVAL 6 MONTH) ";
-       } else {
-          this.start_date = " 2000-01-01 ";
-       }
-       this.end_date = " NOW() ";
+    if (dr == "month") {
+      this.start_date = " DATE_SUB(NOW(), INTERVAL 1 MONTH) ";
+    } else if (dr == "sixmonths") {
+      this.start_date = " DATE_SUB(NOW(), INTERVAL 6 MONTH) ";
+    } else {
+      this.start_date = " 2000-01-01 ";
+    }
+    this.end_date = " NOW() ";
 
     if (!c && !g && !d) c = "*";
     var linkBack = "";
@@ -140,60 +140,59 @@ var TotalScores = function() {
     $("#" + divName).html(s + "<p/>");
   }
 
-  this.parseData = function (data, divName) {
-     var s= "";
-     var lines = data.split("\n");
-     var lastName = "";
-     var series = [];
-     var total = [];
-     var numAggCols = this.ds == "vigilance" ? 6 : 3;
-     for (var i=0; i<lines.length; i++) {
-       var line = lines[i];
-       var tr = (i == 0) ? "<tr class='dateline'>" : "<tr>";
-       s += tr;
-       var cols = line.split("\t")
+  this.parseData = function(data, divName) {
+    var s = "";
+    var lines = data.split("\n");
+    var lastName = "";
+    var series = [];
+    var total = [];
+    var numAggCols = this.ds == "vigilance" ? 6 : 3;
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i];
+      var tr = (i == 0) ? "<tr class='dateline'>" : "<tr>";
+      s += tr;
+      var cols = line.split("\t")
 
-       // Use the left column expanded to 3 rows for names, rather than repeating them.
-       var name = cols[1];
-       if (this.level == 'c' && divName == "top_content")
-           name = "All Companies";
-       if (name && name != lastName) {
-          var rowspan = (i == 0) ? 1 : numAggCols;
+      // Use the left column expanded to 3 rows for names, rather than repeating them.
+      var name = cols[1];
+      if (this.level == 'c' && divName == "top_content")
+        name = "All Companies";
+      if (name && name != lastName) {
+        var rowspan = (i == 0) ? 1 : numAggCols;
 
-          var skipIt = this.level == "c" && divName == "top_content";
-          if (!skipIt) {
-            var link = "<a href='index.html?" + this.fixedParams + "&" + this.level + "=" + cols[0] + "&" + this.nextLevel + "=*'>" + name + "</a>";
-            s += "<td rowspan='" + rowspan + "'>" + link + "</td>";
-          }
-          
-          lastName = name;
-       }
-    ;;
+        var skipIt = this.level == "c" && divName == "top_content";
+        if (!skipIt) {
+          var link = "<a href='index.html?" + this.fixedParams + "&" + this.level + "=" + cols[0] + "&" + this.nextLevel + "=*'>" + name + "</a>";
+          s += "<td rowspan='" + rowspan + "'>" + link + "</td>";
+        }
 
-       // Print the data grid.
-       var end = (i == 0) ? cols.length - 1 : cols.length;
-       var start = (divName == "top_content" && this.level == "c") ? 0 : 2;
-       for (var j=start; j<end; j++) {
-          s += "<td>" + cols[j] + "</td>";
-          if (i>=1 && i <= numAggCols) {
-            var aggcol = cols[end-1];
-            if (j < end-1) {
-            if (! series[aggcol]) 
+        lastName = name;
+      };;
+
+      // Print the data grid.
+      var end = (i == 0) ? cols.length - 1 : cols.length;
+      var start = (divName == "top_content" && this.level == "c") ? 0 : 2;
+      for (var j = start; j < end; j++) {
+        s += "<td>" + cols[j] + "</td>";
+        if (i >= 1 && i <= numAggCols) {
+          var aggcol = cols[end - 1];
+          if (j < end - 1) {
+            if (!series[aggcol])
               series[aggcol] = [];
             if (cols[j])
               series[aggcol].push(parseFloat(cols[j]));
-            }
           }
-       }
-       s += "</tr>";
-     }
+        }
+      }
+      s += "</tr>";
+    }
 
-     if (divName == "top_content")
-       displayChart(lastName, series);
+    if (divName == "top_content")
+      displayChart(lastName, series);
 
-     return s;
+    return s;
   }
- }
+}
 
 $.urlParam = function(name) {
   var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
@@ -210,44 +209,46 @@ function displayChart(name, input_series) {
   var colorIdx = 0;
   var output_series = [];
   for (var aggcol in input_series) {
-     var info = { 
-       data: input_series[aggcol], 
-       name:aggcol,
-       color: colors[colorIdx++], 
-       shadow: {  width: 5 } 
+    var info = {
+      data: input_series[aggcol],
+      name: aggcol,
+      color: colors[colorIdx++],
+      shadow: {
+        width: 5
+      }
     };
-     output_series.push(info);
+    output_series.push(info);
   }
 
   var chart = new Highcharts.Chart({
 
     chart: {
-        renderTo: 'graph_container',
-        backgroundColor: null
+      renderTo: 'graph_container',
+      backgroundColor: null
     },
 
     title: {
-        text: name == "" ? "All Subscribers" : name,
-        style: {
-            color: '#333'
-        }
+      text: name == "" ? "All Subscribers" : name,
+      style: {
+        color: '#333'
+      }
     },
     xAxis: {
-//        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      //        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       tickInterval: 0
     },
-    
+
     yAxis: {
-        labels: {
-            style: {
-                color: '#CCC'
-            }
-        },
-        gridLineColor: '#333',
-//        max: 10,
-//        min: 0,
-//        tickInterval: 1
-        
+      labels: {
+        style: {
+          color: '#CCC'
+        }
+      },
+      gridLineColor: '#333',
+      //        max: 10,
+      //        min: 0,
+      //        tickInterval: 1
+
     },
 
     series: output_series
