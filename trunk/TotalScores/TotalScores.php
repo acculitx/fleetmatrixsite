@@ -1,9 +1,9 @@
 <?php
 $mysql_host     = "localhost";
 $mysql_user     = "webserver";
-$mysql_password = "fleetmatrixdbpassword";
+//$mysql_password = "fleetmatrixdbpassword";
 //$mysql_user     = "root";
-//$mysql_password = "sectrends";
+$mysql_password = "sectrends";
 $mysql_database = "fleetmatrix_test";
 
 // Connecting, selecting database
@@ -43,14 +43,12 @@ if (!$ds)
 // $company = "*";
 //$t0 = "2015-04-01";
 //$t1 = "2015-09-01";
+//$t0 = " DATE_SUB(NOW(), INTERVAL 6 DAY) ";
+//$t1 = " NOW() ";
 
-#$t0 = " DATE_SUB(NOW(), INTERVAL 6 DAY) ";
-#$t1 = " NOW() ";
 $c = "*";
 
-// Define data source.
-#$table             = "fleet_daily_total_score";
-
+// Schemas of SQL tables used in this report.
 $table = $ds;
 if ($ds == "fleet_daily_total_score") {
   $aggregate_columns = array(
@@ -77,8 +75,10 @@ if ($ds == "fleet_daily_total_score") {
   );
 }
 
+// Every table has a date column.
 $date_column = "date";
 
+// Default timeslice is daily.
 $timeslice = $df;
 if (!$timeslice) {
   $timeslice = "%Y-%b-%d";
@@ -98,6 +98,7 @@ if ($t1 != "") {
   $where .= " AND $date_column <= $t1 ";
 }
 
+// Set up columns for drill down interface (Company -> Group -> Driver)
 if ($driver != "") {
   $request_columns .= " driver.id as driver_id, driver.name as driver_name, ";
   
@@ -138,7 +139,8 @@ if ($company != "") {
 $groupby_columns = join($array_groupby, ",");
 $alias_columns   = join($array_alias, ",");
 
-
+// First query:  get the list of dates contained in the date column.
+// The query will transpose these dates, making a column for each time slice.
 function getDates($table, $date_column, $timeslice, $where)
 {
   $query = "
@@ -153,8 +155,6 @@ order by $date_column
   
   //  echo "<pre>" . $query;
   //  return;
-  
-  // DATE_FORMAT($date_column, \"$timeslice\")
   
   // Performing SQL query
   // file_put_contents("/tmp/mysqllog.txt", $query . "\n", FILE_APPEND);
@@ -171,12 +171,7 @@ order by $date_column
 
 $dateColumns = getDates($table, $date_column, $timeslice, $where);
 
-/* ----
-echo "request_columns=[$request_columns], sizeof=" . sizeof($request_columns);
-echo "groupby_columns=[$groupby_columns], sizeof=" . sizeof($groupby_columns);
-echo "alias_columns=[$alias_columns], sizeof=" . sizeof($alias_columns);
----  */
-
+// Second query:  do the transpose, average over values in each time slice.
 $query = "";
 
 # Each aggregate column needs its own transpose query.
@@ -225,10 +220,8 @@ foreach ($aggregate_columns as $aggcol) {
   $columns  = "";
 }
 
-
+// Construct final query from the series.
 $finalquery = "select ";
-//if ($alias_columns != "")
-//  $finalquery .= " $alias_columns, ";
 $finalquery .= " union_query.* from ($query) as union_query ";
 if ($alias_columns != "")
   $finalquery .= " order by $alias_columns ";
@@ -237,13 +230,10 @@ if ($alias_columns != "")
 //return;
 
 
+
 // Perform SQL query
 //file_put_contents("/tmp/mysqllog.txt", $finalquery . "\n", FILE_APPEND);
 $result = mysql_query($finalquery) or die('Query failed: ' . mysql_error());
-
-#echo "<pre>";
-
-#echo ($query);
 
 // First line has the headers.
 $num_fields = mysql_num_fields($result);
