@@ -38,8 +38,15 @@ var TotalScores = function() {
     var g = $.urlParam('g');
     var d = $.urlParam('d');
 
+    if (d) {
+      // Looks like we are double-escaping these params.  To fix! xxx
+      var param = encodeURIComponent("`id`=\"" + d + "\"");
+      param = escape(param);
+      $("#drivers_link").attr("href", "xtable/index.html?where[]=" + param);
+    }
+
     var ds = $.urlParam('ds');
-    if (!ds) ds = "fleet_daily_total_score";
+    if (!ds) ds = "total";
     $("input[name=ds][value=" + ds + "]").attr('checked', 'checked');
 
     var dr = $.urlParam('dr');
@@ -103,7 +110,10 @@ var TotalScores = function() {
       if (d == "*") linkBack = "c=" + c + "&g=*";
       if (d != "*") {
         this.fixedParams += "&d=" + d;
-        linkBack = "c=" + c + "&g=" + g + "&d=*";
+        if (c && g) 
+          linkBack = "c=" + c + "&g=" + g + "&d=*";
+        else
+           linkBack = "c=*";
       }
     }
 

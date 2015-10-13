@@ -9,7 +9,7 @@
     
 
     #content {
-      margin-top: 20px;
+      margin-top: 0px;
     }
 
     .paging_controls {
@@ -49,6 +49,18 @@
       border: 1px solid black;
       font-size: small;
     }
+
+    .xtime_table td {
+      border-left: 1px solid black;
+      border-bottom: 1px solid black;
+      border-collapse: collapse;
+      empty-cells: hide;
+      padding-left: 7px;
+      height: 25px;
+      width: 30px;
+      font-size: small;
+    }
+    
 
 
     .normal_header {

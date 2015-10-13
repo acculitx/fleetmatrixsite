@@ -2,8 +2,6 @@
 $mysql_host     = "localhost";
 $mysql_user     = "webserver";
 $mysql_password = "fleetmatrixdbpassword";
-//$mysql_user     = "root";
-//$mysql_password = "sectrends";
 $mysql_database = "fleetmatrix_test";
 
 // Connecting, selecting database
@@ -50,11 +48,11 @@ $c = "*";
 
 // Schemas of SQL tables used in this report.
 $table = $ds;
-if ($ds == "fleet_daily_total_score") {
+if ($ds == "total") {
   $aggregate_columns = array(
-    "totalScore",
-    "aggressiveScore",
-    "distractionScore"
+    "Total",
+    "Aggressive",
+    "Distraction"
   );
 } else if ($ds == "vigilance") {
   $table             = "vigilance";
@@ -146,7 +144,7 @@ function getDates($table, $date_column, $timeslice, $where)
   $query = "
 select distinct DATE_FORMAT($date_column, \"$timeslice\") as date_column
 from $table
-     LEFT JOIN giqwm_fleet_driver as driver on $table.driver_id = driver.id
+     LEFT JOIN giqwm_fleet_driver as driver on $table.id = driver.id
      LEFT JOIN giqwm_fleet_entity as dgroup on dgroup.id = driver.entity_id
      LEFT JOIN giqwm_fleet_entity as company on dgroup.parent_entity_id = company.id
      where driver.visible $where
@@ -198,7 +196,7 @@ foreach ($aggregate_columns as $aggcol) {
       DATE_FORMAT($date_column, \"$timeslice\") as time_period,
       avg(`$aggcol`) as `$aggcol`
      from $table
-     LEFT JOIN giqwm_fleet_driver as driver on $table.driver_id = driver.id
+     LEFT JOIN giqwm_fleet_driver as driver on $table.id = driver.id
      LEFT JOIN giqwm_fleet_entity as dgroup on dgroup.id = driver.entity_id
      LEFT JOIN giqwm_fleet_entity as company on dgroup.parent_entity_id = company.id
      where driver.visible $where
