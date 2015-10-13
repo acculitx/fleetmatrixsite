@@ -29,10 +29,10 @@ var Xtable = function() {
        var where = unescape(wheres[i]);
        var re = /`id`="(.*)"/;
        var matches = re.exec(where);
-       if (matches.length) {
+       if (matches && matches.length) {
           var id = matches[1];
           $("#trends_link").attr("href", "../index.html?d=" + id);
-       }
+       } 
        
      }
   }
