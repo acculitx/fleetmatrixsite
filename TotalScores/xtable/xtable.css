@@ -2,6 +2,12 @@
       font-family: sans-serif;
     }
 
+    H1 A {
+       text-decoration: none;
+       color: darkgray;
+    }
+    
+
     #content {
       margin-top: 20px;
     }
