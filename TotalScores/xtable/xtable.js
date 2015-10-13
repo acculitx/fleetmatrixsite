@@ -1,5 +1,5 @@
 var sources = ["trips", "vigilance", "total", "severe"];
-var commonFields = ["Date", "Driver", "Group", "Company"];
+var commonFields = ["Date", "id", "Driver", "Group", "Company"];
 
 $(document).ready(function() {
   refreshPage();
@@ -19,8 +19,23 @@ var Xtable = function() {
     var p = {};
     this.setupDatePicker();
     this.setupSource();
+    this.setupLinkToTrends();
     this.getData(p, "content");
   };
+
+  this.setupLinkToTrends = function () {
+     var wheres = this.urlParams.get("where[]", []);
+     for (var i=0; i<wheres.length; i++) {
+       var where = unescape(wheres[i]);
+       var re = /`id`="(.*)"/;
+       var matches = re.exec(where);
+       if (matches.length) {
+          var id = matches[1];
+          $("#trends_link").attr("href", "../index.html?d=" + id);
+       }
+       
+     }
+  }
 
   this.setupSource = function() {
     this.source = this.urlParams.get("table", "trips");
