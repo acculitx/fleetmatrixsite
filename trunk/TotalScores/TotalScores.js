@@ -155,15 +155,17 @@ var TotalScores = function() {
     var lines = data.split("\n");
     var lastName = "";
     var series = [];
+    var header = [];
     var total = [];
     var numAggCols = this.ds == "vigilance" ? 6 : 3;
     for (var i = 0; i < lines.length; i++) {
       var line = lines[i];
       var tr = (i == 0) ? "<tr class='dateline'>" : "<tr>";
       s += tr;
-      var cols = line.split("\t")
+      var cols = line.split("\t");
 
       // Use the left column expanded to 3 rows for names, rather than repeating them.
+      // Checking column 1, the second column.
       var name = cols[1];
       if (this.level == 'c' && divName == "top_content")
         name = "All Companies";
@@ -183,6 +185,9 @@ var TotalScores = function() {
       var end = (i == 0) ? cols.length - 1 : cols.length;
       var start = (divName == "top_content" && this.level == "c") ? 0 : 2;
       for (var j = start; j < end; j++) {
+
+        if (i == 0) 
+          header.push(cols[j]);
         s += "<td>" + cols[j] + "</td>";
         if (i >= 1 && i <= numAggCols) {
           var aggcol = cols[end - 1];
@@ -198,7 +203,7 @@ var TotalScores = function() {
     }
 
     if (divName == "top_content")
-      displayChart(lastName, series);
+      displayChart(lastName, header, series);
 
     return s;
   }
@@ -213,7 +218,7 @@ $.urlParam = function(name) {
   }
 }
 
-function displayChart(name, input_series) {
+function displayChart(name, header, input_series) {
 
   var colors = ["red", "yellow", "green", "blue", "orange", "purple"];
   var colorIdx = 0;
@@ -244,7 +249,8 @@ function displayChart(name, input_series) {
       }
     },
     xAxis: {
-      //        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      categories: header,
+     labels: { enabled: false },
       tickInterval: 0
     },
 
