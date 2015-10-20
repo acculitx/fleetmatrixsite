@@ -64,12 +64,19 @@ if ($ds == "total") {
     "Brake Hard",
     "Brake Severe"
   );
+} else if ($ds == "bellcurve") {
+   $table = "bellcurve";
+   $aggregate_columns = array(
+      Acceleration,
+      Deceleration,
+      Turns 
+  );
 } else {
-  $table             = "fleet_moving_daily_score";
+  $table             = "driver_trend";
   $aggregate_columns = array(
-    "accel",
-    "decel",
-    "hard_turns"
+      Acceleration,
+      Deceleration,
+      Turns 
   );
 }
 
