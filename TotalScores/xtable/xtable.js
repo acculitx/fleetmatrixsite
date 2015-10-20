@@ -169,6 +169,7 @@ var Xtable = function() {
     var thisSort = "`" + cellval + "`";
     var cellStyle = "normal_header";
     var urlParams = new UrlParams();
+    var nextUrlParams = new UrlParams();
     var sort = urlParams.get("sort[]", []);
     var found = false;
     var arrow = "";
@@ -178,22 +179,23 @@ var Xtable = function() {
         found = true;
         if (sort[i].indexOf(" DESC") != -1) {
           thisSort += " ASC";
-          urlParams.put("sort[]", thisSort);
+          nextUrlParams.put("sort[]", thisSort);
           arrow = "&#9661;";
         } else {
           arrow = "&#9651;";
         }
-        urlParams.removeElement("sort[]", sort[i]);
+
+        nextUrlParams.removeElement("sort[]", sort[i]);
         cellStyle = "selected_header";
       }
     }
 
     if (!found) {
       thisSort += " DESC";
-      urlParams.put("sort[]", thisSort);
+      nextUrlParams.put("sort[]", thisSort);
     }
 
-    var href = "index.html?" + urlParams.generateString()
+    var href = "index.html?" + nextUrlParams.generateString()
     return "<td class='" + cellStyle + "' onclick='navigateTo(\"" + href + "\");'>" + cellval + "<br>" + arrow + "</td>";
   }
 
