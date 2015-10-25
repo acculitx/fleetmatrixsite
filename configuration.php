@@ -15,7 +15,7 @@ class JConfig {
 	public $host = 'localhost';
 	public $user = 'webserver';
 	public $password = 'fleetmatrixdbpassword';
-	public $db = 'fleetmatrix_test';
+	public $db = 'fleetmatrix_celery';
 	public $dbprefix = 'giqwm_';
 	public $live_site = '';
 	public $secret = 'Vn7LDDHnf51tlBTX';
