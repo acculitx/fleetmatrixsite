@@ -1,13 +1,7 @@
 <?php
-$mysql_host     = "localhost";
-$mysql_user     = "webserver";
-$mysql_password = "fleetmatrixdbpassword";
-$mysql_database = "fleetmatrix_test";
+include '../db.php';
 
-// Connecting, selecting database
-$link = mysql_connect($mysql_host, $mysql_user, $mysql_password) or die('Could not connect: ' . mysql_error());
-mysql_select_db($mysql_database) or die('Could not select database');
-mysql_set_charset('utf8', $link);
+$conn  = dbInit();
 
 function param($name, $defaultValue)
 {
@@ -267,6 +261,5 @@ while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
 // Free resultset
 mysql_free_result($result);
 
-// Closing connection
-mysql_close($link);
+dbDone($conn);
 ?>

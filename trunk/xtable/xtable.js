@@ -31,7 +31,7 @@ var Xtable = function() {
        var matches = re.exec(where);
        if (matches && matches.length) {
           var id = matches[1];
-          $("#trends_link").attr("href", "../index.html?d=" + id);
+          $("#trends_link").attr("href", "../trends/index.html?d=" + id);
        } 
        
      }

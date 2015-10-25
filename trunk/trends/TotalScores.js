@@ -42,7 +42,7 @@ var TotalScores = function() {
       // Looks like we are double-escaping these params.  To fix! xxx
       var param = encodeURIComponent("`id`=\"" + d + "\"");
       param = escape(param);
-      $("#drivers_link").attr("href", "xtable/index.html?where[]=" + param);
+      $("#drivers_link").attr("href", "../xtable/index.html?where[]=" + param);
     }
 
     var ds = $.urlParam('ds');
