@@ -5,8 +5,8 @@ function dbInit()
   $mysql_host     = "localhost";
   $mysql_user = "webserver";
   $mysql_password = "fleetmatrixdbpassword";
-  // $mysql_database = "fleetmatrix_celery";
-  $mysql_database = "fleetmatrix_test";
+  $mysql_database = "fleetmatrix_celery";
+  // $mysql_database = "fleetmatrix_test";
   
   // Connecting, selecting database
   $connection = mysql_connect($mysql_host, $mysql_user, $mysql_password) or die('Could not connect: ' . mysql_error());

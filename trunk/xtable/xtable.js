@@ -1,4 +1,4 @@
-var sources = ["trips", "vigilance", "total", "severe", "bellcurve", "driver_trend"];
+var sources = ["trips", "vigilance", "total", "severe", "bellcurve", "tendency"];
 var commonFields = ["Date", "id", "Driver", "Group", "Company"];
 
 $(document).ready(function() {
