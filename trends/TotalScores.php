@@ -66,11 +66,11 @@ if ($ds == "total") {
       Turns 
   );
 } else {
-  $table             = "driver_trend";
+  $table             = "tendency";
   $aggregate_columns = array(
-      Acceleration,
-      Deceleration,
-      Turns 
+      "Acceleration Score",
+      "Deceleration Score",
+      "Hard Turns Score" 
   );
 }
 
