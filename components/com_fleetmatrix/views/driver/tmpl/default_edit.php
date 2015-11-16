@@ -50,13 +50,13 @@ JHtml::_('behavior.tooltip');
     <div class="clr"></div>
 
 <script>
-    function entityChange() {
-        var val = jQuery('#jform_entity_id').val();
-        url = "<?php echo JRoute::_($this->getRoute().'&layout=json&format=raw&task=company&cmd='); ?>"+val;
-        jQuery.getJSON(url, function(data) {
-            jQuery('#jform_company_nosave').html(data);
-        });
-    }
+//    function entityChange() {
+//        var val = jQuery('#jform_entity_id').val();
+//        url = "<?php echo JRoute::_($this->getRoute().'&layout=json&format=raw&task=company&cmd='); ?>"+val;
+//        jQuery.getJSON(url, function(data) {
+//            jQuery('#jform_company_nosave').html(data);
+//        });
+//    }
     jQuery.noConflict();
     jQuery(document).ready(function($) {
         $('#jform_company_nosave').change(function() {
