@@ -67,8 +67,8 @@ JHtml::_('behavior.tooltip');
             });
         });
     });
-    jQuery(document).ready(function($) {
-        $('#jform_entity_id').change(entityChange);
-        entityChange($);
-    });
+//    jQuery(document).ready(function($) {
+//        $('#jform_entity_id').change(entityChange);
+//        entityChange($);
+//    });
 </script>

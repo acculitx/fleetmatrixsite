@@ -15,7 +15,7 @@ class FleetMatrixModelSubscriptionEdit extends FleetMatrixModelBaseEdit
         return $data;
     }
 
-	public function updItem($data)
+    public function updItem($data)
 	{
         if (!parent::updItem($data)) {
             return false;
