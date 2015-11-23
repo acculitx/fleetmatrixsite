@@ -265,7 +265,11 @@ var UrlParams = function() {
     var paramString = window.location.href.slice(question + 1);
     if (paramString == "")
       return;
-    hashes = paramString.split('[&#]');
+    // Remove an anchor if it's there.
+    var hash = paramString.indexOf("#");
+    if (hash != -1)
+      paramString = paramString.substring(0, hash);
+    hashes = paramString.split('&');
     for (var i = 0; i < hashes.length; i++) {
       console.log("hashes=" + hashes[i]);
       var keyval = hashes[i].split('=');
