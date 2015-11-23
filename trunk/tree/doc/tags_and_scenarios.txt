@@ -1,0 +1,237 @@
+Tags and Scenarios
+AttackIQ, John Dimm, 7/2015
+
+Goal:  in angular, display a hierarchical file system.  Instead of files, we have scenarios.
+The scenarios in AttackIQ are tagged with one or more categories.  The categories are 
+arranged in a hierarchy, making it logically equivalent to a file system with symlinks.
+
+The AttackIQ tags and scenarios below are a quick sample selected for development.
+
+1.  The outline
+
+Security Control Validation
+    NIST
+    PCI
+Adversarial
+    Groups
+    Techniques
+        Point of Infection
+        Escalation of Privilege 
+        C&C = DNS-Changer
+        Asset Discovery = Search and Ex-Filtration
+        Ex-filtration = DNS-Changer, Search and Ex-Filtration
+    Events
+Validation
+    Operating Systems
+        Linux 
+            Hardening Scripts = Linux Temp Directory Checker
+        Windows
+    Networking
+    Technologies
+        Network Firewall
+        Host-based Firewall 
+        Web Filtering = Make HTTP Connection 
+        Anti-Virus = Download EICAR Files
+        DNS
+        
+2.  Adjacency table in mysql        
+
+table: tag
++----+-----------------------------+-----------+-----------+
+| id | name                        | id_parent | child_num |
++----+-----------------------------+-----------+-----------+
+|  0 | Security Control Validation |      NULL |         0 |
+|  1 | NIST                        |         0 |         0 |
+|  2 | PCI                         |         0 |         1 |
+|  3 | Adversarial                 |      NULL |         1 |
+|  4 | Groups                      |         3 |         0 |
+|  5 | Techniques                  |         3 |         1 |
+|  6 | Point of Infection          |         5 |         0 |
+|  7 | Escalation of Privilege     |         5 |         1 |
+|  8 | C&C                         |         5 |         2 |
+|  9 | Asset Discovery             |         5 |         3 |
+| 10 | Ex-filtration               |         5 |         4 |
+| 11 | Events                      |         3 |         2 |
+| 12 | Validation                  |      NULL |         2 |
+| 13 | Operating Systems           |        12 |         0 |
+| 14 | Linux                       |        13 |         0 |
+| 15 | Hardening Scripts           |        14 |         0 |
+| 16 | Windows                     |        13 |         1 |
+| 17 | Networking                  |        12 |         1 |
+| 18 | Technologies                |        12 |         2 |
+| 19 | Network Firewall            |        18 |         0 |
+| 20 | Host-based Firewall         |        18 |         1 |
+| 21 | Web Filtering               |        18 |         2 |
+| 22 | Anti-Virus                  |        18 |         3 |
+| 23 | DNS                         |        18 |         4 |
++----+-----------------------------+-----------+-----------+
+
+table: scenario
++------+------------------------------+-------------+
+| id   | name                         | description |
++------+------------------------------+-------------+
+|  337 | Make HTTP Connection         | description |
+|  550 | Search and Ex-Filtration     | description |
+|  560 | DNS-Changer                  | description |
+| 1232 | Linux Temp Directory Checker | description |
+| 5673 | Download EICAR Files         | description |
++------+------------------------------+-------------+
+
+table: scenario_tag
++-------------+--------+
+| id_scenario | id_tag |
++-------------+--------+
+|         337 |     18 |
+|         550 |      9 |
+|         560 |      8 |
+|         560 |     10 |
+|        5673 |     22 |
++-------------+--------+
+
+3. JSON constructed by client using recursion, for display in a hierarchy that itself uses recursion.
+
+[{
+  "name": "Security Control Validation",
+  "nodes": [{
+    "name": "NIST",
+    "nodes": [],
+    "id": "1",
+    "id_parent": "0",
+    "isOpen": true
+  }, {
+    "name": "PCI",
+    "nodes": [],
+    "id": "2",
+    "id_parent": "0",
+    "isOpen": true
+  }],
+  "id": "0",
+  "id_parent": null,
+  "isOpen": true
+}, {
+  "name": "Adversarial",
+  "nodes": [{
+    "name": "Groups",
+    "nodes": [],
+    "id": "4",
+    "id_parent": "3",
+    "isOpen": true
+  }, {
+    "name": "Techniques",
+    "nodes": [{
+      "name": "Point of Infection",
+      "nodes": [],
+      "id": "6",
+      "id_parent": "5",
+      "isOpen": true
+    }, {
+      "name": "Escalation of Privilege ",
+      "nodes": [],
+      "id": "7",
+      "id_parent": "5",
+      "isOpen": true
+    }, {
+      "name": "C&C ",
+      "nodes": [],
+      "id": "8",
+      "id_parent": "5",
+      "isOpen": true
+    }, {
+      "name": "Asset Discovery ",
+      "nodes": [],
+      "id": "9",
+      "id_parent": "5",
+      "isOpen": true
+    }, {
+      "name": "Ex-filtration ",
+      "nodes": [],
+      "id": "10",
+      "id_parent": "5",
+      "isOpen": true
+    }],
+    "id": "5",
+    "id_parent": "3",
+    "isOpen": true
+  }, {
+    "name": "Events",
+    "nodes": [],
+    "id": "11",
+    "id_parent": "3",
+    "isOpen": true
+  }],
+  "id": "3",
+  "id_parent": null,
+  "isOpen": true
+}, {
+  "name": "Validation",
+  "nodes": [{
+    "name": "Operating Systems",
+    "nodes": [{
+      "name": "Linux ",
+      "nodes": [{
+        "name": "Hardening Scripts ",
+        "nodes": [],
+        "id": "15",
+        "id_parent": "14",
+        "isOpen": true
+      }],
+      "id": "14",
+      "id_parent": "13",
+      "isOpen": true
+    }, {
+      "name": "Windows",
+      "nodes": [],
+      "id": "16",
+      "id_parent": "13",
+      "isOpen": true
+    }],
+    "id": "13",
+    "id_parent": "12",
+    "isOpen": true
+  }, {
+    "name": "Networking",
+    "nodes": [],
+    "id": "17",
+    "id_parent": "12",
+    "isOpen": true
+  }, {
+    "name": "Technologies",
+    "nodes": [{
+      "name": "Network Firewall",
+      "nodes": [],
+      "id": "19",
+      "id_parent": "18",
+      "isOpen": true
+    }, {
+      "name": "Host-based Firewall ",
+      "nodes": [],
+      "id": "20",
+      "id_parent": "18",
+      "isOpen": true
+    }, {
+      "name": "Web Filtering ",
+      "nodes": [],
+      "id": "21",
+      "id_parent": "18",
+      "isOpen": true
+    }, {
+      "name": "Anti-Virus ",
+      "nodes": [],
+      "id": "22",
+      "id_parent": "18",
+      "isOpen": true
+    }, {
+      "name": "DNS",
+      "nodes": [],
+      "id": "23",
+      "id_parent": "18",
+      "isOpen": true
+    }],
+    "id": "18",
+    "id_parent": "12",
+    "isOpen": true
+  }],
+  "id": "12",
+  "id_parent": null,
+  "isOpen": true
+}]

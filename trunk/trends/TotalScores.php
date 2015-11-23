@@ -140,7 +140,7 @@ $alias_columns   = join($array_alias, ",");
 
 // First query:  get the list of dates contained in the date column.
 // The query will transpose these dates, making a column for each time slice.
-function getDates($table, $date_column, $timeslice, $where)
+function getDates($table, $date_column, $timeslice, $where, $conn)
 {
   $query = "
 select distinct DATE_FORMAT($date_column, \"$timeslice\") as date_column
@@ -152,15 +152,14 @@ from $table
 order by $date_column
 ";
   
-  //  echo "<pre>" . $query;
-  //  return;
-  
   // Performing SQL query
   // file_put_contents("/tmp/mysqllog.txt", $query . "\n", FILE_APPEND);
-  $result = mysql_query($query) or die('Query failed: ' . mysql_error());
+  $sth = $conn->prepare($query);
+  $sth->execute();
+  $result = $sth->fetchAll(PDO::FETCH_ASSOC);
   
   $cols = array();
-  while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
+  foreach ($result as $line) {
     foreach ($line as $column) {
       array_push($cols, $column);
     }
@@ -168,7 +167,7 @@ order by $date_column
   return $cols;
 }
 
-$dateColumns = getDates($table, $date_column, $timeslice, $where);
+$dateColumns = getDates($table, $date_column, $timeslice, $where, $conn);
 
 // Second query:  do the transpose, average over values in each time slice.
 $query = "";
@@ -232,13 +231,16 @@ if ($alias_columns != "")
 
 // Perform SQL query
 //file_put_contents("/tmp/mysqllog.txt", $finalquery . "\n", FILE_APPEND);
-$result = mysql_query($finalquery) or die('Query failed: ' . mysql_error());
+
+  $sth = $conn->prepare($finalquery);
+  $sth->execute();
+  $result = $sth->fetchAll(PDO::FETCH_ASSOC);
 
 // First line has the headers.
-$num_fields = mysql_num_fields($result);
+  $num_fields = $sth->columnCount();
 for ($i = 0; $i < $num_fields; $i++) {
-  $field_info = mysql_fetch_field($result, $i);
-  echo "{$field_info->name}";
+  $field_info = $sth->getColumnMeta($i);
+  echo $field_info['name'];
   if ($i < $num_fields - 1) {
     echo "\t";
   }
@@ -246,7 +248,7 @@ for ($i = 0; $i < $num_fields; $i++) {
 echo "\n";
 
 // Print rows.
-while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
+foreach ($result as $line) {
   $firstCol = 1;
   foreach ($line as $col_value) {
     if (!$firstCol) {
@@ -257,9 +259,6 @@ while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
   }
   echo "\n";
 }
-
-// Free resultset
-mysql_free_result($result);
 
 dbDone($conn);
 ?>
