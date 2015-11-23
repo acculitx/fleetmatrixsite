@@ -1,4 +1,5 @@
-$(document).ready(function() {
+//$(document).ready(function() {
+function onLoad() {
   radioSubmitsForm("ds");
   radioSubmitsForm("dr");
   radioSubmitsForm("ts");
@@ -6,7 +7,7 @@ $(document).ready(function() {
   refreshPage();
 
   onresize();
-});
+}
 
 function radioSubmitsForm(rbName) {
   $('input[name=' + rbName + ']').change(function() {
@@ -32,11 +33,11 @@ var TotalScores = function() {
   this.nextLevel = "g";
   this.fixedParams = "";
 
-  this.init = function() {
+  this.init = function(_d) {
     var p = {};
     var c = $.urlParam('c');
     var g = $.urlParam('g');
-    var d = $.urlParam('d');
+    var d = _d == null ? $.urlParam('d') : _d
 
     if (d) {
       // Looks like we are double-escaping these params.  To fix! xxx
@@ -50,11 +51,11 @@ var TotalScores = function() {
     $("input[name=ds][value=" + ds + "]").attr('checked', 'checked');
 
     var dr = $.urlParam('dr');
-    if (!dr) dr = "month";
+    if (!dr) dr = "sixmonths";
     $("input[name=dr][value=" + dr + "]").attr('checked', 'checked');
 
     var ts = $.urlParam('ts');
-    if (!ts) ts = "day";
+    if (!ts) ts = "week";
     $("input[name=ts][value=" + ts + "]").attr('checked', 'checked');
 
 
@@ -88,13 +89,14 @@ var TotalScores = function() {
 
     if (!c && !g && !d) c = "*";
     var linkBack = "";
+
     if (c) {
       if (!g) this.getData(p, "top_content");
       p.c = c;
       if (c != "*") this.fixedParams += "&c=" + c;
     }
     if (g) {
-      if (!d) totalScores.getData(p, "top_content");
+      if (!d) this.getData(p, "top_content");
       this.level = "g";
       this.nextLevel = "d";
       p.g = g;
@@ -102,11 +104,11 @@ var TotalScores = function() {
       if (g != "*") this.fixedParams += "&g=" + g;
     }
     if (d) {
-      if (d == "*") totalScores.getData(p, "top_content");
+      if (d == "*") this.getData(p, "top_content");
       this.level = "d";
       this.nextLevel = "";
       p.d = d;
-      if (d != "*") totalScores.getData(p, "top_content");
+      if (d != "*") this.getData(p, "top_content");
       if (d == "*") linkBack = "c=" + c + "&g=*";
       if (d != "*") {
         this.fixedParams += "&d=" + d;
@@ -123,7 +125,7 @@ var TotalScores = function() {
     }
 
     if (!d || d == "*")
-      totalScores.getData(p, "content");
+      this.getData(p, "content");
   };
 
   this.getData = function(p, divName) {
@@ -133,7 +135,7 @@ var TotalScores = function() {
     p.t0 = this.start_date;
     p.t1 = this.end_date;
     $.ajax({
-      url: 'TotalScores.php',
+      url: '../trends/TotalScores.php',
       // url: 'DailyMoving.php',
       // url: 'Vigilance.php',
       data: p,

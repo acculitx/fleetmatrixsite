@@ -1,0 +1,24 @@
+Security Control Validation
+    NIST
+    PCI
+Adversarial
+    Groups
+    Techniques
+        Point of Infection
+        Escalation of Privilege 
+        C&C = DNS-Changer
+        Asset Discovery = Search and Ex-Filtration
+        Ex-filtration = DNS-Changer, Search and Ex-Filtration
+    Events
+Validation
+    Operating Systems
+        Linux 
+            Hardening Scripts = Linux Temp Directory Checker
+        Windows
+    Networking
+    Technologies
+        Network Firewall
+        Host-based Firewall 
+        Web Filtering = Make HTTP Connection 
+        Anti-Virus = Download EICAR Files
+        DNS

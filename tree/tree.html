@@ -1,0 +1,120 @@
+<html>
+<head>
+
+  <style>
+    body {
+      font-family: sans-serif
+    }
+
+    .vertical_stripes {
+      float:left;
+      width:400px;
+      height:100%;
+      overflow:auto
+    }
+    .tab_title {
+      width:400px;
+    }
+
+    li {
+      list-style-type: none;
+      cursor: hand;
+    }
+
+    .triangle {
+      font-size: 15pt;
+      cursor: hand;
+    }
+
+    .item_name {
+      font-size: 10pt;
+    }
+    .item_name_highlight {
+      font-size: 10pt;
+      background-color: black;
+      color: white;
+      padding: 2px;
+    }
+
+    .item_description {
+      font-size: 10pt;
+     // margin-bottom: 10px;
+    }
+
+    .tab_title {
+      background-color: gray;
+      color:white;
+      width:400px;
+      margin: 10px;
+      padding: 5px;
+    }
+    .nav_column {
+      float: left;
+    }
+  </style>
+
+  <script type="text/ng-template" id="tree_item_renderer.html">
+    <span ng-show="data.nodes.length > 0">
+      <span class="triangle" ng-show="!data.isOpen" ng-click="toggle(data)">&#9656;</span>
+      <span class="triangle" ng-show="data.isOpen" ng-click="toggle(data)">&#9662;</span>
+    </span>
+    <span ng-click="getItemsAndDrivers(data);">
+      <span class="item_name_highlight" ng-show="selectedNode == data.id">{{data.name}}</span>
+      <span class="item_name" ng-show="selectedNode != data.id">{{data.name}}</span>
+    </span>
+    <ul ng-show="data.isOpen">
+      <li id="{{data.id}}" ng-repeat="data in data.nodes" ng-include="'tree_item_renderer.html'"></li>
+    </ul>
+  </script>
+    
+</head>
+
+<div ng-app="app" ng-controller="TreeController">
+
+  <div class="nav_column">
+    <div class="tab_title">Company</div>
+    <div class="vertical_stripes">
+    <ul>
+      <li ng-repeat="data in tree" ng-include="'tree_item_renderer.html'"></li>
+    </ul>
+    </div>
+  </div>
+
+  <div class="nav_column">
+    <div class="tab_title"> Vehicle</div>
+    <div class="vertical_stripes">
+
+    <ul>
+      <li ng-repeat="item in items">
+        <input type="checkbox" id="driver_id_list" style="display:none"/>
+        <span ng-click="setDriverId(item.driver_id, item.id)">
+          <span class="item_name" ng-show="item.id != selectedVehicleId">
+            {{item.name}}
+          </span>
+          <span class="item_name_highlight" ng-show="item.id == selectedVehicleId">
+            {{item.name}}
+          </span>
+        </span>
+      </li>
+    </ul>
+
+    </div>
+  </div>
+
+  <div class="nav_column" id="driver_list">
+    <div class="tab_title">Driver</div>
+   <div class="vertical_stripes">
+
+    <ul>
+      <li ng-repeat="item in drivers" id="driver_div_{{item.id}}">
+
+          <div class="item_name" ng-show="item.id != selectedDriverId">{{item.name}}</div>
+          <div class="item_name_highlight" ng-show="item.id == selectedDriverId">{{item.name}}</div>
+
+      </li>
+    </ul>
+    </div>
+  </div>
+
+</body>
+</html>

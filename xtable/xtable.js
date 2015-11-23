@@ -1,11 +1,8 @@
 var sources = ["trips", "vigilance", "total", "severe", "bellcurve", "tendency"];
 var commonFields = ["Date", "id", "Driver", "Group", "Company"];
 
-$(document).ready(function() {
-  refreshPage();
-});
 
-function refreshPage() {
+function onLoadXtable() {
   xtable = new Xtable;
   xtable.init();
 }
@@ -15,12 +12,13 @@ var Xtable = function() {
   this.globalRowcount = 0;
   this.urlParams = new UrlParams();
 
-  this.init = function() {
-    var p = {};
+  this.init = function(_p, _row_count) {
+
+    var p = _p == null ?  {} : _p;
     this.setupDatePicker();
     this.setupSource();
     this.setupLinkToTrends();
-    this.getData(p, "content");
+    this.getData(p, "xtable_content", _row_count);
   };
 
   this.setupLinkToTrends = function () {
@@ -97,7 +95,7 @@ var Xtable = function() {
     var t0 = this.urlParams.get("t0", "");
     if (t0 == "") {
       this.t0 = new Date();
-      this.t0.setDate(this.t0.getDate() - 7);
+      this.t0.setDate(this.t0.getDate() - 180); // XXX was - 7
     } else
       this.t0 = new Date(t0);
 
@@ -110,18 +108,20 @@ var Xtable = function() {
     $("#date-range0").val(this.t0.yyyymmdd() + " to " + this.t1.yyyymmdd());
   }
 
-  this.getData = function(p, divName) {
+  this.getData = function(p, divName, _row_count) {
     var me = this;
     p.table = this.source;
     p.start_row = parseInt(this.urlParams.get("start_row", 0));
-    p.row_count = parseInt(this.urlParams.get("row_count", 20));
+    p.row_count = (_row_count == null)
+      ? parseInt(this.urlParams.get("row_count", 20))
+      : _row_count;
     p["where"] = this.urlParams.get("where[]", []);
     p["sort"] = this.urlParams.get("sort[]", []);
     p["t0"] = this.t0.yyyymmdd();
     p["t1"] = this.t1.yyyymmdd();
 
     $.ajax({
-      url: 'xtable.php',
+      url: '../xtable/xtable.php',
       data: p,
       success: function(data) {
         me.displayData(data, divName);
@@ -265,8 +265,9 @@ var UrlParams = function() {
     var paramString = window.location.href.slice(question + 1);
     if (paramString == "")
       return;
-    hashes = paramString.split('&');
+    hashes = paramString.split('[&#]');
     for (var i = 0; i < hashes.length; i++) {
+      console.log("hashes=" + hashes[i]);
       var keyval = hashes[i].split('=');
       var key = keyval[0];
       var val = unescape(keyval[1]);

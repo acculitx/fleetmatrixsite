@@ -1,0 +1,43 @@
+<html>
+
+<script src="https://code.angularjs.org/angular-1.0.0rc8.js"></script>
+<script src="app.js"></script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="../trends/TotalScores.js"></script>
+
+  <script src="../xtable/drp/moment.min.js"></script>
+  <script src="../xtable/drp/jquery.daterangepicker.js"></script>
+  <link rel="stylesheet" href="../xtable/drp/daterangepicker.css" />
+
+  <script src="../xtable/xtable.js" language="javascript"></script>
+  <link rel="stylesheet" href="../xtable/xtable.css " />
+
+<script src="../xtable/xtable.js"></script>
+
+<body ng-app="app" >
+<div style="height:100%;margin-bottom:100px">
+  <tree ng-controller="TreeController"></tree>    
+</div>
+
+<div style="display:none">
+<div style="margin-bottom:20px">
+   <div id="top_content"></div>
+   <div id="graph_container" style="height:200px;margin-bottom:20px;width:80%;background-color:lightgray;padding:0px"></div>
+</div>
+
+<div>
+    Date Range:
+    <input id="date-range0" size="40" value="">
+    <div class="paging_controls"></div>
+    <div id="source_selector"></div>
+  </div>
+  <div id="xtable_content"></div>
+<div class="paging_controls"></div>
+
+</div>
+
+</body>
+
+</html>

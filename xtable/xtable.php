@@ -6,7 +6,7 @@ $conn  = dbInit();
 $query = composeQuery();
 #echo "<pre>";
 #echo ($query);
-executeQuery($query);
+executeQuery($conn, $query);
 dbDone($conn);
 
 
@@ -57,20 +57,24 @@ function composeQuery()
   
   
   $query = "SELECT * FROM $table $where $sort LIMIT $start_row, $row_count";
+//  echo "======" . $query . "=====<br>";
   return $query;
 }
 
-function executeQuery($query)
+function executeQuery($conn, $query)
 {
   // Perform SQL query
   // file_put_contents("/tmp/mysqllog.txt", $query . "\n", FILE_APPEND);
-  $result = mysql_query($query) or die('Query failed: ' . mysql_error());
-  
+
+  $sth = $conn->prepare($query);
+  $sth->execute();
+  $result = $sth->fetchAll(PDO::FETCH_ASSOC);
+
   // First line has the headers.
-  $num_fields = mysql_num_fields($result);
+  $num_fields = $sth->columnCount();
   for ($i = 0; $i < $num_fields; $i++) {
-    $field_info = mysql_fetch_field($result, $i);
-    echo "{$field_info->name}";
+    $field_info = $sth->getColumnMeta($i);
+    echo $field_info['name'];
     if ($i < $num_fields - 1) {
       echo "\t";
     }
@@ -78,7 +82,7 @@ function executeQuery($query)
   echo "\n";
   
   // Print rows.
-  while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
+  foreach ($result as $line) {
     $firstCol = 1;
     foreach ($line as $col_value) {
       if (!$firstCol) {
@@ -89,9 +93,6 @@ function executeQuery($query)
     }
     echo "\n";
   }
-  
-  // Free resultset
-  mysql_free_result($result);
 }
 
 ?>
