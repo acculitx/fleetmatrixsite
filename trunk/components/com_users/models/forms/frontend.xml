@@ -29,4 +29,24 @@
 
 		</fieldset>
 	</fields>
+        
+       <!-- <fields name="report">-->
+            <!-- Email report subscription. -->
+            <fieldset name="report" label="COM_USERS_SETTINGS_REPORT_FIELDSET_LABEL">
+
+                    <field name="reportEmail" type="reportEmail" label="COM_USERS_USER_FIELD_EMAIL_LABEL" description="COM_USERS_USER_FIELD_EMAIL_LABEL">
+                    </field>
+                    <field name="sendReport" type="checkbox" label="COM_USERS_USER_FIELD_EMAILENABLED_LABEL" description="COM_USERS_USER_FIELD_EMAILENABLED_LABEL" value="1" >
+                    </field>
+                    <field name="reportType" type="checkboxes" default="Total" label="COM_USERS_USER_FIELD_REPORT_LABEL" description="COM_USERS_USER_FIELD_REPORT_LABEL" required="true">
+                        <option value="Total"> Total Score </option>
+                    </field>
+                    <field name="frequency" type="radio" default="Daily" label="COM_USERS_USER_FIELD_FREQUENCY_LABEL" description="COM_USERS_USER_FIELD_FREQUENCY_LABEL" value="1"  required="true"> 
+                        <option value="1"> Every Day </option>  
+                        <option value="7"> Every Week </option>   
+                        <option value="30"> Every Month </option>                 
+                    </field>
+            </fieldset>
+                
+       <!-- </fields>-->
 </form>
