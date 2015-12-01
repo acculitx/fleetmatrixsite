@@ -247,6 +247,13 @@ class UsersModelProfile extends JModelForm
 
 		// Unset the sendEmail so it does not get overwritten
 		unset($data['sendEmail']);
+                
+                $reportTypes = implode(",", $data['reportType']);
+                $data['reportType'] = $reportTypes;
+                
+                if(!isset($data['sendReport'])) {
+                    $data['sendReport'] = '0';
+                }
 
 		// Bind the data.
 		if (!$user->bind($data)) {
