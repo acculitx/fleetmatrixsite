@@ -30,6 +30,7 @@ angular.module("app", [])
     // Create hash of children and empty nodes.  
     data.forEach(function(currentValue, index, array) {
       var id = currentValue.id;
+      $scope.nextId = id + 1;
       var id_parent = currentValue.id_parent;
       hNodes[currentValue.id] = { 
           name: currentValue.name, 
@@ -108,6 +109,7 @@ angular.module("app", [])
   $scope.getItemsAndDrivers = function(data) {
     $scope.items = [];
     $scope.selectedNode = data.id;
+    $scope.selectedData = data;
     $scope.selectedVehicleId = -1;
     $scope.selectedDriverId = -1;
       
@@ -139,7 +141,7 @@ angular.module("app", [])
 //    alert(angular.element('#driver_list')[0].scrollTop)
 //    $anchorScroll.yOffset = 200;
 //    $anchorScroll();
-    return;
+//    return;
     // Show total score trend graph.
     $scope.totalScores.init(driver_id);
 
@@ -149,6 +151,21 @@ angular.module("app", [])
     p2["where[]"] = thisWhere;
     $scope.xtable.init(p2, 5);
   };
+
+  $scope.newNode = function (data) {
+    var newId = $scope.nextId++;
+    var newNode = {
+      id: newId,
+      id_parent: data.id,
+      name:"new node",
+      nodes:[]
+      };
+    data.nodes.push(newNode);
+  };
+
+  $scope.deleteNode = function(data) {
+
+  }
      
 }]);
 
