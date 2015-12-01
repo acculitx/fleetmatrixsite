@@ -51,17 +51,29 @@
     .nav_column {
       float: left;
     }
+    .edit_icons {
+      font-size:20px;
+      float:right;
+      color:gray;
+    }
   </style>
 
   <script type="text/ng-template" id="tree_item_renderer.html">
-    <span ng-show="data.nodes.length > 0">
-      <span class="triangle" ng-show="!data.isOpen" ng-click="toggle(data)">&#9656;</span>
-      <span class="triangle" ng-show="data.isOpen" ng-click="toggle(data)">&#9662;</span>
-    </span>
-    <span ng-click="getItemsAndDrivers(data);">
-      <span class="item_name_highlight" ng-show="selectedNode == data.id">{{data.name}}</span>
-      <span class="item_name" ng-show="selectedNode != data.id">{{data.name}}</span>
-    </span>
+    <div  style="width:100%" ng-click="getItemsAndDrivers(data);" ng-mouseenter="hoverNode = data.id" ng-mouseleave="hoverNode = -1">
+      <span  class="triangle" ng-show="data.nodes.length > 0">
+        <span ng-show="!data.isOpen" ng-click="toggle(data)">&#9656;</span>
+        <spans ng-show="data.isOpen" ng-click="toggle(data)">&#9662;</spans>
+      </span>
+
+        <span class="item_name_highlight" ng-show="selectedNode == data.id">{{data.name}}</span>
+        <span class="item_name" ng-show="selectedNode != data.id">{{data.name}}</span>
+
+      <span class="edit_icons" ng-show="hoverNode == data.id">
+         <span ng-click="newNode(data)" title="new">+</span>
+         <span ng-click="deleteNode(data)" title="delete">-</span>         -
+         &#x270D;
+      </span>
+    </div>
     <ul ng-show="data.isOpen">
       <li id="{{data.id}}" ng-repeat="data in data.nodes" ng-include="'tree_item_renderer.html'"></li>
     </ul>

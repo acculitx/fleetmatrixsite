@@ -1,13 +1,12 @@
-AttackIQ, July 2015, John Dimm
+Accuscore, Nov 2015, John Dimm
 
 Files to create and browse a tree of tags and associated scenarios.
 
 Demo: 
  
-  http://intel.attackiq.com/tree/
+  http://localhost/fleetmatrixsite/tree/
 
-  - click a tag to display all scenarios with that tag or any of its children.
-    Note:  the test data used here is very sparse.  Click on "Adversarial" or "Validation".
+  - click a company or group to display all drivers with that company or group or any of its children.
 
   - click the triangle next to a parent node to open or close it.
 
